@@ -19,26 +19,27 @@
     'hero.github': 'GitHub’da yıldızla',
     'mb.file': 'Dosya', 'mb.edit': 'Düzen', 'mb.view': 'Görüntü', 'mb.go': 'Git', 'mb.window': 'Pencere',
     'note.t': 'Dene',
-    'note.d': 'Bu masaüstünde bir dosya sürükle ve ⇧, ⌘ ya da ⌃ tuşuna bas (ya da aşağıdan bir çark seç). Bir dilimin üstüne bırak; vazgeçmek için ortaya bırak.',
+    'note.d': 'Bir dosyayı sürükle ve tüm araçları görmek için sağa sola salla, ya da tek bir çark için ⇧, ⌘, ⌃ tuşuna bas (veya aşağıdan seç). Bir aracın üstüne bırak.',
     'k.convert': 'Dönüştür', 'k.tools': 'Araçlar', 'k.actions': 'Eylemler',
-    'demo.hint': 'Gerçekten çalışıyor: sürüklerken bir tuşa bas ya da önce buradan bir çark seç. Dock’ta yalnızca Harbor uygulamaları var; her simge kendi sitesine götürür.',
+    'demo.hint': 'Gerçekten çalışıyor: sürüklerken dosyayı salla, bir tuşa bas ya da önce buradan bir çark seç. Kes’i dene, sonra rafı Projects’in üstüne sürükle. Dock’ta yalnızca Harbor uygulamaları var.',
     'how.title': 'Dosyaların, gitmeleri gereken yere.',
     'f1.t': 'Zaten olduğun yerde', 'f1.d': 'Finder’da ya da masaüstünde sürüklemeye başla ve bir tuşa bas. Açılacak uygulama, aranacak pencere yok.',
-    'f2.t': 'Üç çark', 'f2.d': '⇧ dönüştürür, ⌘ araçları getirir, ⌃ paylaşır ve zip’ler. Her biri yalnızca tuttuğun dosyalara uyanları gösterir.',
-    'f3.t': 'İzin yok', 'f3.d': 'Helm yalnızca sürüklemeyi ve bastığın tuşları okur. Orijinallere dokunulmaz; sonuçlar yanlarına gelir.',
-    'f4.t': 'Çevrimdışı ve hafif', 'f4.d': 'Her şey macOS’te zaten olanla saniyeler içinde çalışır; sürüklemeler arasında hiçbir şey çalışmaz.',
+    'f2.t': 'Her şey için salla', 'f2.d': 'Uyan tüm araçları görmek için sürüklerken salla, ya da yalnızca Dönüştür, Araçlar veya Eylemler için ⇧, ⌘, ⌃ tuşuna bas.',
+    'f3.t': 'Sonunda Kes', 'f3.d': 'Finder’da hiç olmadı. Kesilen dosyalar, sen rafı bir klasöre sürükleyene ya da orada ⌥⌘V’ye basana kadar rafta bekler.',
+    'f4.t': 'İzin yok, çevrimdışı', 'f4.d': 'Helm yalnızca sürüklemeyi ve bastığın tuşları okur. Her şey Mac’inde çalışır; sürüklemeler arasında hiçbir şey çalışmaz.',
     'list.title': 'Çarklarda neler var',
     'list.convert': 'Fotoğrafları JPG, PNG, HEIC, PDF ya da TIFF’e. PDF sayfalarını PNG ya da JPG’ye. Videoları MP4, MOV, GIF’e ya da seslerine. Sesleri M4A, WAV ya da AIFF’e.',
-    'list.tools': 'Fotoğrafları sıkıştır, yarıya indir ya da bilgilerini sil, tek PDF yap, QR kod oku. PDF’leri birleştir, böl ya da sıkıştır. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.',
-    'list.actions': 'AirDrop, yolu kopyala, orada Terminal aç ya da zip’le.',
+    'list.tools': 'Fotoğrafları sıkıştır, yarıya indir ya da bilgilerini sil, arka planı sil, metnini kopyala, tek PDF yap, QR kod oku. PDF’leri birleştir, böl, sıkıştır ya da metnini kopyala. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.',
+    'list.actions': 'Kes, AirDrop, yolu kopyala, Mail, zip’le, orada Terminal aç ya da bir görseli her yere yapıştırmak için kopyala.',
     'cta.title': 'Ücretsiz. Hızlı. Elinin altında.',
     'cta.lead': 'Hesap yok, takip yok, izin yok.',
     'cta.note': 'macOS 15 veya üstü. Zip’i aç, Helm’i Uygulamalar’a taşı; ilk seferde sağ tıklayıp Aç’ı seç.',
     'faq.title': 'Sorular',
     'q1.q': '⌘’ye basmak dosyayı taşımaz mı?', 'q1.a': 'Yalnızca başka bir Finder klasörüne bırakırsan. Helm’in çarkına bırakılan dosya yalnızca okunur; orijinal yerinde kalır, sonuç yanına gelir.',
     'q2.q': 'Helm hangi izinleri istiyor?', 'q2.a': 'Hiçbirini. Sürüklemeyi sistemin sürükleme panosundan ve değiştirici tuşlardan fark eder; bunları her uygulama okuyabilir. Erişilebilirlik, Ekran Kaydı ya da Tam Disk Erişimi yok.',
-    'q3.q': 'Başka uygulamaların yoluna çıkar mı?', 'q3.a': 'Çark yalnızca bir dosya sürüklerken çark tuşuna bastığında açılır. Tam ekran uygulamalarda hiç açılmaz; sürükleme kısayolları çakışan uygulamalar için kapatabilir, tuşları değiştirebilir ya da menü çubuğundan Helm’i duraklatabilirsin.',
-    'q4.q': 'Neden bulut yükleme ya da yapay zekâyla arka plan silme yok?', 'q4.a': 'Bunlar bir sunucu, hesap ya da büyük bir indirme ister. Helm, macOS’te zaten olanla çevrimdışı ve saniyeler içinde çalışanlarla yetinir.',
+    'q3.q': 'Başka uygulamaların yoluna çıkar mı?', 'q3.a': 'Menü yalnızca bir dosya sürüklemesini salladığında ya da sürüklerken çark tuşuna bastığında açılır. Tam ekran uygulamalarda hiç açılmaz; sürükleme kısayolları çakışan uygulamalar için kapatabilir, tuşları değiştirebilir ya da menü çubuğundan Helm’i duraklatabilirsin.',
+    'q7.q': 'Kes nasıl çalışıyor?', 'q7.a': 'Dosyaları Kes’e bırak, köşedeki küçük bir rafta dokunulmadan beklesinler. Rafı herhangi bir klasöre sürükleyince oraya taşınırlar, ya da o klasörde ⌥⌘V’ye bas. Rafı kapatırsan hiçbir şey taşınmaz.',
+    'q4.q': 'Buluta bir şey gidiyor mu?', 'q4.a': 'Hayır. Arka plan silme ve metin okuma, Mac’inde zaten olan modelleri kullanır; Önizleme ve Fotoğraflar’ın kullandıklarının aynısı. Helm’in hesabı yok, hiçbir yere bir şey göndermez.',
     'q5.q': 'Fotoğraflar’dan sürükleyince çark açılmıyor.', 'q5.a': 'Fotoğraflar ve Mail, yalnızca bırakılınca oluşan söz verilmiş dosyalar sürükler. Önce masaüstüne sürükle, sonra Helm’i onlarda kullan.',
     'q6.q': 'macOS açılamıyor diyor.', 'q6.a': 'Sürümler henüz notarize edilmedi. Helm’e sağ tıklayıp Aç’ı seç ya da şunu çalıştır: <code>xattr -dr com.apple.quarantine /Applications/Helm.app</code>',
     'footer.license': 'MIT Lisansı',
@@ -52,7 +53,11 @@
       merge: 'Merge', split: 'Split Pages', mute: 'Mute', extract: 'Extract', copyPath: 'Copy Path', terminal: 'Terminal', zip: 'Zip',
       sCompressed: 'compressed', sHalf: 'half', sClean: 'clean', sMuted: 'muted', sPages: 'pages', images: 'Images',
       noQR: 'No QR code found', pathCopied: 'Path copied', airdrop: 'AirDrop opens with', termOpen: 'Terminal opens on the Desktop',
-      pick: 'Hold ⇧, ⌘ or ⌃', desktop: 'Desktop',
+      pick: 'Shake it, or hold ⇧, ⌘ or ⌃', desktop: 'Desktop',
+      cut: 'Cut', mail: 'Mail', copyImage: 'Copy Image', copyText: 'Copy Text', removeBG: 'Remove Background', sCutout: 'cutout',
+      mailOpen: 'Mail opens a new message', imageCopied: 'Image copied', textCopied: 'Text copied, 3 lines',
+      cutDone: 'Drag the shelf onto a folder', items: 'items', itemsMoved: 'items moved', moved: 'Moved', shelfHint: 'Drag onto a folder to move',
+      narrow: 'Hold a key to narrow it down', outside: 'Drop outside to cancel',
     },
     tr: {
       convert: 'Dönüştür', tools: 'Araçlar', actions: 'Eylemler', nothing: 'Burada araç yok',
@@ -60,7 +65,11 @@
       merge: 'Birleştir', split: 'Sayfalara Böl', mute: 'Sesi Kaldır', extract: 'Aç', copyPath: 'Yolu Kopyala', terminal: 'Terminal', zip: 'Zip’le',
       sCompressed: 'sıkıştırılmış', sHalf: 'yarım', sClean: 'temiz', sMuted: 'sessiz', sPages: 'sayfaları', images: 'Görseller',
       noQR: 'QR kod bulunamadı', pathCopied: 'Yol kopyalandı', airdrop: 'AirDrop şununla açılır:', termOpen: 'Terminal Masaüstü’nde açılır',
-      pick: '⇧, ⌘ ya da ⌃ tuşuna bas', desktop: 'Masaüstü',
+      pick: 'Salla ya da ⇧, ⌘, ⌃ tuşuna bas', desktop: 'Masaüstü',
+      cut: 'Kes', mail: 'Mail', copyImage: 'Görseli Kopyala', copyText: 'Metni Kopyala', removeBG: 'Arka Planı Sil', sCutout: 'dekupe',
+      mailOpen: 'Mail yeni bir ileti açar', imageCopied: 'Görsel kopyalandı', textCopied: 'Metin kopyalandı, 3 satır',
+      cutDone: 'Rafı bir klasörün üstüne sürükle', items: 'öğe', itemsMoved: 'öğe taşındı', moved: 'Taşındı', shelfHint: 'Taşımak için bir klasöre sürükle',
+      narrow: 'Daraltmak için bir tuşa bas', outside: 'Vazgeçmek için dışarı bırak',
     },
   };
 
@@ -118,6 +127,7 @@
     { name: 'Beach', ext: 'heic', type: 'image' },
     { name: 'Report', ext: 'pdf', type: 'pdf' },
     { name: 'Trip', ext: 'mov', type: 'video' },
+    { name: 'Projects', ext: '', type: 'folder' },
   ];
   const ROWS = 5;
   const slot = (i) => ({ x: 960 - 62 - Math.floor(i / ROWS) * 100, y: 82 + (i % ROWS) * 92 });
@@ -130,7 +140,7 @@
   function render() {
     desk.innerHTML = files.map((f, i) => {
       const p = slot(i);
-      return `<button class="desk-file${f.fresh ? ' fresh' : ''}" type="button" role="listitem" data-i="${i}" style="left:${p.x}px;top:${p.y}px" aria-label="${fullName(f)}">${iconHTML(f)}<span class="fname">${fullName(f)}</span></button>`;
+      return `<button class="desk-file${f.fresh ? ' fresh' : ''}${f.cut ? ' cut' : ''}" type="button" role="listitem" data-i="${i}" style="left:${p.x}px;top:${p.y}px" aria-label="${fullName(f)}">${iconHTML(f)}<span class="fname">${fullName(f)}</span></button>`;
     }).join('');
   }
   function unique(name, ext) {
@@ -148,11 +158,13 @@
     const list = (() => {
       if (kind === 'actions') {
         return [
+          T('cut', w('cut'), 'g-scissors', () => ({ cut: true })),
           T('airdrop', 'AirDrop', 'g-airdrop', (x) => ({ msg: `${w('airdrop')} ${fullName(x)}` })),
           T('path', w('copyPath'), 'g-link', () => ({ msg: w('pathCopied') })),
-          T('term', w('terminal'), 'g-term', () => ({ msg: w('termOpen') })),
+          T('mail', w('mail'), 'g-mail', () => ({ msg: w('mailOpen') })),
           T('zip', w('zip'), 'g-zip', (x) => ({ out: [{ name: x.name, ext: 'zip', type: 'zip' }] })),
-        ];
+          T('term', w('terminal'), 'g-term', () => ({ msg: w('termOpen') })),
+        ].concat(f.type === 'image' ? [T('copyimg', w('copyImage'), 'g-photos', () => ({ msg: w('imageCopied') }))] : []);
       }
       const suffix = (x, s, ext = x.ext, type = x.type) => ({ out: [{ name: `${x.name} ${w(s)}`, ext, type }] });
       if (kind === 'convert') {
@@ -164,17 +176,21 @@
           default: return [];
         }
       }
+      const copyText = T('text', w('copyText'), 'g-text', () => ({ msg: w('textCopied') }));
       switch (f.type) {
         case 'image': return [
           T('compress', w('compress'), 'g-shrink', (x) => suffix(x, 'sCompressed', x.ext === 'png' ? 'jpg' : x.ext)),
           T('half', w('half'), 'g-half', (x) => suffix(x, 'sHalf')),
           T('clean', w('clean'), 'g-clean', (x) => suffix(x, 'sClean')),
+          T('cutout', w('removeBG'), 'g-subject', (x) => suffix(x, 'sCutout', 'png', 'cutout')),
+          copyText,
           T('makepdf', w('makePDF'), 'g-doc', () => ({ out: [{ name: w('images'), ext: 'pdf', type: 'pdf' }] })),
           T('qr', w('readQR'), 'g-qr', () => ({ msg: w('noQR') })),
         ];
         case 'pdf': return [
           T('compress', w('compress'), 'g-shrink', (x) => suffix(x, 'sCompressed')),
-          T('split', w('split'), 'g-scissors', (x) => ({ out: [{ name: x.name, ext: '', type: 'folder' }] })),
+          T('split', w('split'), 'g-split', (x) => ({ out: [{ name: x.name, ext: '', type: 'folder' }] })),
+          copyText,
         ];
         case 'video': return [
           T('compress', w('compress'), 'g-shrink', (x) => suffix(x, 'sCompressed', 'mp4')),
@@ -187,15 +203,17 @@
     // Never offer the format the file is already in.
     return list.filter((t) => !(kind === 'convert' && t.id === `to-${f.ext}`));
   }
+  const KINDS = ['convert', 'tools', 'actions'];
+  const KEYS = { convert: '⇧', tools: '⌘', actions: '⌃' };
 
-  // ---------- The wheel ----------
+  // ---------- The menu: a wheel, or every tool after a shake ----------
 
   const OUTER = 150, INNER = 54;
   const wheel = $('#wheel');
   const sectors = $('#wheelSectors');
   const labels = $('#wheelLabels');
-  const KEYS = { convert: '⇧', tools: '⌘', actions: '⌃' };
-  let wheelState = null; // { kind, tools, cx, cy, hovered }
+  const palette = $('#palette');
+  let menu = null; // { mode: 'wheel'|'palette', kind, tools, file, cx, cy, hovered }
 
   function arc(i, n, r0, r1) {
     const width = (2 * Math.PI) / n;
@@ -205,8 +223,9 @@
     const large = width > Math.PI ? 1 : 0;
     return `M${p(r1, a0)} A${r1} ${r1} 0 ${large} 1 ${p(r1, a1)} L${p(r0, a1)} A${r0} ${r0} 0 ${large} 0 ${p(r0, a0)} Z`;
   }
+  const legendHTML = (kind) => KINDS.map((key) => `<span class="${key === kind ? 'on' : ''}"><kbd>${KEYS[key]}</kbd>${w(key)}</span>`).join('');
   function drawWheel() {
-    const { kind, tools, file } = wheelState;
+    const { kind, tools, file } = menu;
     const n = tools.length;
     sectors.innerHTML = `<path class="ring" fill-rule="evenodd" d="M${OUTER} 0A${OUTER} ${OUTER} 0 1 1 -${OUTER} 0A${OUTER} ${OUTER} 0 1 1 ${OUTER} 0ZM${INNER} 0A${INNER} ${INNER} 0 1 0 -${INNER} 0A${INNER} ${INNER} 0 1 0 ${INNER} 0Z"/>`
       + tools.map((_, i) => `<path class="sector" data-i="${i}" d="${arc(i, n, INNER + 4, OUTER - 4)}"/>`).join('')
@@ -219,49 +238,83 @@
       const a = -Math.PI / 2 + i * (2 * Math.PI) / n;
       return `<span class="wl" data-i="${i}" style="left:${160 + radius * Math.cos(a)}px;top:${160 + radius * Math.sin(a)}px"><svg><use href="#${t.glyph}"/></svg>${t.label}</span>`;
     }).join('');
-    $('#hubTop').textContent = n ? (file.ext || 'DIR').toUpperCase() : '';
+    $('#hubTop').textContent = n ? (file.ext || '').toUpperCase() || '—' : '';
     $('#hubSub').textContent = n ? w(kind) : w('nothing');
-    $('#legend').innerHTML = Object.keys(KEYS).map((key) => `<span class="${key === kind ? 'on' : ''}"><kbd>${KEYS[key]}</kbd>${w(key)}</span>`).join('');
-    highlight();
+    $('#legend').innerHTML = legendHTML(kind);
+  }
+  function drawPalette() {
+    let index = 0;
+    const sections = KINDS.map((kind) => ({ kind, tools: toolsFor(kind, menu.file) })).filter((s) => s.tools.length);
+    menu.tools = sections.flatMap((s) => s.tools);
+    palette.innerHTML = sections.map((s) => `<div class="pal-head">${w(s.kind)} <kbd>${KEYS[s.kind]}</kbd></div><div class="pal-grid">${s.tools.map((t) => `<span class="pal-tile" data-i="${index++}"><svg><use href="#${t.glyph}"/></svg>${t.label}</span>`).join('')}</div>`).join('')
+      + `<div class="pal-foot">${w('narrow')} · ${w('outside')}</div>`;
   }
   function highlight() {
-    const h = wheelState?.hovered;
+    const h = menu?.hovered;
     $$('.sector', sectors).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
     $$('.wl', labels).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
+    $$('.pal-tile', palette).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
   }
-  function openWheel(kind, file, at) {
-    const fresh = !wheelState;
-    // Centred on the pointer, kept inside the screen.
-    const cx = fresh ? Math.min(Math.max(at.x, 170), 960 - 170) : wheelState.cx;
-    const cy = fresh ? Math.min(Math.max(at.y, 190), 600 - 275) : wheelState.cy;
-    wheelState = { kind, file, tools: toolsFor(kind, file), cx, cy, hovered: null };
-    if (fresh) {
-      wheel.style.left = `${cx}px`;
-      wheel.style.top = `${cy}px`;
-      // Blooms from the pointer.
-      wheel.style.transformOrigin = `${160 + at.x - cx}px ${160 + at.y - cy}px`;
+  // `kind` is a wheel, or 'all' for the palette.
+  function openMenu(kind, file, at) {
+    const mode = kind === 'all' ? 'palette' : 'wheel';
+    const reseat = !menu || menu.mode !== mode;
+    menu = { mode, kind, file, tools: mode === 'wheel' ? toolsFor(kind, file) : [], cx: menu?.cx, cy: menu?.cy, hovered: null };
+    if (mode === 'wheel') {
+      drawWheel();
+      if (reseat) {
+        // Centred on the pointer, kept inside the screen.
+        menu.cx = Math.min(Math.max(at.x, 170), 960 - 170);
+        menu.cy = Math.min(Math.max(at.y, 190), 600 - 275);
+        wheel.style.left = `${menu.cx}px`;
+        wheel.style.top = `${menu.cy}px`;
+        wheel.style.transformOrigin = `${160 + at.x - menu.cx}px ${160 + at.y - menu.cy}px`;
+      }
+      palette.classList.remove('open');
+      wheel.classList.add('open');
+    } else {
+      drawPalette();
+      // Just above the pointer (below it near the top), so letting go where it opened cancels.
+      const width = palette.offsetWidth, height = palette.offsetHeight;
+      const left = Math.min(Math.max(at.x - width / 2, 12), 960 - width - 12);
+      let top = at.y - 18 - height;
+      if (top < 36) top = Math.min(at.y + 18, 600 - height - 8);
+      palette.style.left = `${left}px`;
+      palette.style.top = `${top}px`;
+      palette.style.transformOrigin = `${at.x - left}px ${at.y - top}px`;
+      wheel.classList.remove('open');
+      palette.classList.add('open');
     }
-    drawWheel();
-    wheel.classList.add('open');
+    highlight();
   }
-  function closeWheel() {
+  function closeMenu() {
     wheel.classList.remove('open');
-    wheelState = null;
+    palette.classList.remove('open');
+    menu = null;
   }
-  function sliceAt(p) {
-    if (!wheelState || !wheelState.tools.length) return null;
-    const dx = p.x - wheelState.cx, dy = p.y - wheelState.cy;
+  function indexAt(p, client) {
+    if (!menu || !menu.tools.length) return null;
+    if (menu.mode === 'palette') {
+      // The palette ignores the pointer (the drag owns it), so hit-test by its tiles' boxes.
+      const hit = $$('.pal-tile', palette).find((t) => {
+        const r = t.getBoundingClientRect();
+        return client.x >= r.left - 3 && client.x <= r.right + 3 && client.y >= r.top - 3 && client.y <= r.bottom + 3;
+      });
+      return hit ? Number(hit.dataset.i) : null;
+    }
+    const dx = p.x - menu.cx, dy = p.y - menu.cy;
     const d = Math.hypot(dx, dy);
     if (d <= INNER || d >= OUTER + 24) return null;
     let a = Math.atan2(dx, -dy);
     if (a < 0) a += 2 * Math.PI;
-    const width = (2 * Math.PI) / wheelState.tools.length;
-    return Math.floor((a + width / 2) / width) % wheelState.tools.length;
+    const width = (2 * Math.PI) / menu.tools.length;
+    return Math.floor((a + width / 2) / width) % menu.tools.length;
   }
 
-  // ---------- Which wheel ----------
+  // ---------- Which menu ----------
 
-  // A key held on the keyboard wins; otherwise the wheel picked below.
+  // A key held on the keyboard wins, then the wheel picked below; after a
+  // shake, every tool; a wheel opened by a key stays open after it.
   let picked = null;
   const held = { shift: false, meta: false, ctrl: false };
   function heldKind() {
@@ -269,7 +322,6 @@
     if (down.length !== 1) return null;
     return { shift: 'convert', meta: 'tools', ctrl: 'actions' }[down[0]];
   }
-  const kindNow = () => heldKind() ?? picked;
   function syncKeys(e) {
     held.shift = e.shiftKey; held.meta = e.metaKey; held.ctrl = e.ctrlKey;
   }
@@ -280,10 +332,30 @@
     });
   });
 
+  // Three quick turns, each after 40 points of travel, within a second.
+  function shakeDetector() {
+    let extreme = null, direction = 0, turns = [];
+    return (x, t) => {
+      if (extreme === null) { extreme = x; return false; }
+      const travel = x - extreme;
+      if (direction === 0) {
+        if (Math.abs(travel) > 40) { direction = Math.sign(travel); extreme = x; }
+      } else if (travel * direction > 0) {
+        extreme = x;
+      } else if (Math.abs(travel) > 40) {
+        direction = -direction;
+        extreme = x;
+        turns.push(t);
+      }
+      turns = turns.filter((s) => t - s < 1000);
+      return turns.length >= 3;
+    };
+  }
+
   // ---------- Dragging ----------
 
   const ghost = $('#ghost');
-  let drag = null; // { file, index, el, start, offset, moved, home }
+  let drag = null; // { file, el, start, offset, moved, home, pointer, client, shaken, shake }
 
   desk.addEventListener('contextmenu', (e) => e.preventDefault());
   desk.addEventListener('pointerdown', (e) => {
@@ -297,13 +369,14 @@
     const home = slot(index);
     $$('.desk-file.selected').forEach((x) => x.classList.remove('selected'));
     el.classList.add('selected');
-    drag = { file: files[index], index, el, start: p, offset: { x: p.x - home.x, y: p.y - home.y }, moved: false, home, pointer: p };
+    drag = { file: files[index], el, start: p, offset: { x: p.x - home.x, y: p.y - home.y }, moved: false, home, pointer: p, client: { x: e.clientX, y: e.clientY }, shaken: false, shake: shakeDetector() };
   });
   desk.addEventListener('pointermove', (e) => {
     if (!drag) return;
     syncKeys(e);
     const p = local(e);
     drag.pointer = p;
+    drag.client = { x: e.clientX, y: e.clientY };
     if (!drag.moved) {
       // A little hysteresis before it counts as a drag.
       if (Math.hypot(p.x - drag.start.x, p.y - drag.start.y) < 5) return;
@@ -315,21 +388,20 @@
       drag.el.classList.add('dragging');
       $('#noteCard').classList.add('done');
     }
+    if (!drag.shaken && drag.shake(p.x, e.timeStamp)) drag.shaken = true;
     // The ghost stays where it was grabbed, 1:1 with the pointer.
     ghost.style.transform = `translate(${p.x - drag.offset.x}px, ${p.y - drag.offset.y}px)`;
     update();
   });
   function update() {
     if (!drag?.moved) return;
-    const kind = kindNow();
-    // Opens once a wheel key is down; another key switches it; it stays
-    // open after the key comes up, as in the app.
-    if (kind && (!wheelState || wheelState.kind !== kind)) openWheel(kind, drag.file, drag.pointer);
-    if (wheelState) {
-      const h = sliceAt(drag.pointer);
-      if (h !== wheelState.hovered) { wheelState.hovered = h; highlight(); }
+    const kind = heldKind() ?? picked ?? (drag.shaken ? 'all' : menu?.kind);
+    if (kind && (!menu || menu.kind !== kind)) openMenu(kind, drag.file, drag.pointer);
+    if (menu) {
+      const h = indexAt(drag.pointer, drag.client);
+      if (h !== menu.hovered) { menu.hovered = h; highlight(); }
     }
-    mac.classList.toggle('want-key', !wheelState);
+    mac.classList.toggle('want-key', !menu);
   }
   addEventListener('keydown', (e) => { if (drag) { syncKeys(e); update(); } });
   addEventListener('keyup', (e) => { if (drag) { syncKeys(e); update(); } });
@@ -342,10 +414,10 @@
     drag = null;
     mac.classList.remove('want-key');
     if (!d.moved) return;
-    const index = e ? sliceAt(local(e)) : null;
-    const tool = index != null ? wheelState.tools[index] : null;
     const at = e ? local(e) : d.pointer;
-    closeWheel();
+    const index = e ? indexAt(at, { x: e.clientX, y: e.clientY }) : null;
+    const tool = index != null ? menu.tools[index] : null;
+    closeMenu();
     if (!tool) {
       // Cancelled: back the way it came.
       ghost.classList.add('back');
@@ -363,9 +435,23 @@
 
   const toast = $('#htoast');
   let toastTimer;
+  function say(glyph, title, detail) {
+    clearTimeout(toastTimer);
+    $('#htIcon').innerHTML = `<use href="#${glyph}"/>`;
+    $('#htTitle').textContent = title;
+    $('#htDetail').textContent = detail;
+    toast.classList.remove('working');
+    toast.classList.add('show', 'done');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+  }
   function run(tool, file, at) {
     clearTimeout(toastTimer);
     const result = tool.run(file);
+    if (result.cut) {
+      cutFiles(file);
+      say('g-scissors', tool.label, w('cutDone'));
+      return;
+    }
     $('#htIcon').innerHTML = `<use href="#${tool.glyph}"/>`;
     $('#htTitle').textContent = tool.label;
     toast.classList.remove('done');
@@ -380,20 +466,19 @@
     setTimeout(() => {
       let detail = result.msg ?? '';
       if (result.out) {
-        const made = result.out.map((o) => ({ ...o, name: unique(o.name, o.ext), fresh: true }));
+        const made = result.out.map((o) => ({ ...o, name: unique(o.name, o.ext), fresh: true, made: true }));
         files.forEach((f) => { delete f.fresh; });
         files.push(...made);
         // Keep the desktop tidy: the oldest results make room.
-        while (files.length > 15) files.splice(3, 1);
+        while (files.length > 15) files.splice(files.findIndex((f) => f.made), 1);
         detail = made.map(fullName).join(', ');
         render();
-        // Each result comes out of the slice it was dropped on.
+        // Each result comes out of the tool it was dropped on.
         $$('.desk-file.fresh').forEach((el) => {
           if (reduceMotion.matches) return;
-          const i = Number(el.dataset.i);
-          const p = slot(i);
+          const p = slot(Number(el.dataset.i));
           el.style.transition = 'none';
-          el.style.transform = `translate(${at.x - p.x - 45}px, ${at.y - p.y - 36}px) scale(0.5)`;
+          el.style.transform = `translate(${at.x - p.x}px, ${at.y - p.y - 36}px) scale(0.5)`;
           el.style.opacity = '0';
           requestAnimationFrame(() => requestAnimationFrame(() => {
             el.style.transition = '';
@@ -402,13 +487,82 @@
           }));
         });
       }
-      $('#htIcon').innerHTML = '<use href="#g-check"/>';
-      $('#htDetail').textContent = detail;
-      toast.classList.remove('working');
-      toast.classList.add('done');
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+      say('g-check', tool.label, detail);
     }, reduceMotion.matches ? 150 : 760);
   }
+
+  // ---------- The Cut shelf ----------
+
+  const shelf = $('#shelf');
+  function cutFiles(file) {
+    file.cut = true;
+    render();
+    const cut = files.filter((f) => f.cut);
+    shelf.querySelector('.sh-icons').innerHTML = cut.slice(-3).map(iconHTML).join('');
+    shelf.querySelector('.sh-name').textContent = cut.length === 1 ? fullName(cut[0]) : `${cut.length} ${w('items')}`;
+    shelf.querySelector('.sh-hint').textContent = w('shelfHint');
+    shelf.classList.add('open');
+  }
+  function clearShelf() {
+    files.forEach((f) => { delete f.cut; });
+    render();
+    shelf.classList.remove('open');
+  }
+  shelf.querySelector('.sh-close').addEventListener('click', clearShelf);
+  // Dragging the shelf onto a folder moves what's on it there.
+  let shelfDrag = null;
+  shelf.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.sh-close') || e.button > 0) return;
+    e.preventDefault();
+    shelf.setPointerCapture(e.pointerId);
+    const p = local(e);
+    shelfDrag = { start: p, moved: false };
+  });
+  shelf.addEventListener('pointermove', (e) => {
+    if (!shelfDrag) return;
+    const p = local(e);
+    if (!shelfDrag.moved) {
+      if (Math.hypot(p.x - shelfDrag.start.x, p.y - shelfDrag.start.y) < 5) return;
+      shelfDrag.moved = true;
+      ghost.innerHTML = shelf.querySelector('.sh-icons').innerHTML;
+      delete ghost.dataset.hint;
+      ghost.hidden = false;
+      ghost.classList.remove('back', 'gone');
+    }
+    ghost.style.transform = `translate(${p.x - 26}px, ${p.y - 30}px)`;
+    const target = folderAt(e);
+    $$('.desk-file.target').forEach((x) => x.classList.toggle('target', x === target));
+    target?.classList.add('target');
+  });
+  function folderAt(e) {
+    ghost.hidden = true;
+    const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('.desk-file');
+    ghost.hidden = !shelfDrag?.moved;
+    return el && files[Number(el.dataset.i)]?.type === 'folder' && !files[Number(el.dataset.i)].cut ? el : null;
+  }
+  shelf.addEventListener('pointerup', (e) => {
+    const d = shelfDrag;
+    shelfDrag = null;
+    if (!d?.moved) return;
+    const target = folderAt(e);
+    $$('.desk-file.target').forEach((x) => x.classList.remove('target'));
+    if (!target) {
+      // Back onto the shelf.
+      const box = shelf.getBoundingClientRect(), macBox = mac.getBoundingClientRect();
+      ghost.classList.add('back');
+      ghost.style.transform = `translate(${(box.left - macBox.left) / k + 40}px, ${(box.top - macBox.top) / k + 16}px)`;
+      setTimeout(() => { ghost.hidden = true; }, reduceMotion.matches ? 0 : 320);
+      return;
+    }
+    const folder = files[Number(target.dataset.i)];
+    const count = files.filter((f) => f.cut).length;
+    ghost.classList.add('gone');
+    setTimeout(() => { ghost.hidden = true; }, 240);
+    for (let i = files.length - 1; i >= 0; i--) if (files[i].cut) files.splice(i, 1);
+    render();
+    shelf.classList.remove('open');
+    say('g-check', w('cut'), `${count === 1 ? w('moved') : `${count} ${w('itemsMoved')}`} → ${fullName(folder)}`);
+  });
 
   // ---------- The Harbor Dock ----------
 

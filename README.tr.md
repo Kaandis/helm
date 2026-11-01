@@ -27,9 +27,12 @@
 
 Finder'da ya da masaüstünde dosyaları sürüklemeye başla ve bir tuşa bas. İşaretçinin altında bir çark açılır; dosyaları bir dilimin üstüne bırak, sonuç orijinalin yanına gelir. Vazgeçmek için ortaya bırak.
 
+Ya da sürüklerken dosyaları sağa sola salla: uyan tüm araçların olduğu bir palet açılır; bir tuşa basınca o çarka daralır.
+
 - **⇧ Dönüştür.** Fotoğrafları JPG, PNG, HEIC, PDF ya da TIFF'e. PDF sayfalarını PNG ya da JPG'ye. Videoları MP4, MOV, GIF'e ya da yalnızca seslerine. Sesleri M4A, WAV ya da AIFF'e.
-- **⌘ Araçlar.** Fotoğrafları sıkıştır ya da yarıya indir, konum ve kamera bilgilerini sil, hepsini tek PDF yap ya da QR kodu oku. PDF'leri birleştir, sayfalara böl ya da sıkıştır. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.
-- **⌃ Eylemler.** AirDrop, yolu kopyala, orada Terminal aç ya da zip'le.
+- **⌘ Araçlar.** Fotoğrafları sıkıştır ya da yarıya indir, konum ve kamera bilgilerini sil, arka planı sil, içindeki metni kopyala, hepsini tek PDF yap ya da QR kodu oku. PDF'leri birleştir, sayfalara böl, sıkıştır ya da metnini kopyala. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.
+- **⌃ Eylemler.** Kes, AirDrop, yolu kopyala, Mail, zip'le, orada Terminal aç ya da bir görseli her yere yapıştırmak için kopyala.
+- **Sonunda Kes.** Finder'da Kes yok. Dosyaları Kes'e bırak, köşedeki küçük bir rafta dokunulmadan beklesinler; rafı herhangi bir klasöre sürükleyince oraya taşınırlar, ya da o klasörde ⌥⌘V'ye bas. Rafı kapatırsan unutulurlar.
 - **Yalnızca uyanlar.** Her çark yalnızca tuttuğun dosyalara uyan araçları gösterir; dosyaların zaten olduğu biçimi hiç önermez.
 - **Senin tuşların.** Her çarka istediğin tuşu ver (⇧, ⌘, ⌃ ya da ⌥), kendi sürükleme kısayolları çakışan uygulamalarda Helm'i kapat ya da menü çubuğundan duraklat.
 - **Harbor ile çalışır.** [Harbor](https://kaandis.github.io/harbor/) kuruluysa Helm'in ayarları orada da görünür ve hemen uygulanır.
@@ -40,8 +43,8 @@ Finder'da ya da masaüstünde dosyaları sürüklemeye başla ve bir tuşa bas. 
 - **Sürüklemeler arasında hiçbir şey çalışmaz.** Fareye basınca kısa bir kontrol başlar, düğme bırakılınca biter. Geri kalan zamanda Helm boşta bekler.
 - **macOS'te zaten olanla yapılmış.** İşi ImageIO, PDFKit ve AVFoundation yapar; ayrıca indirilecek bir şey ya da içine gömülü komut satırı aracı yoktur.
 - **Asla üzerine yazmaz.** Sonuçlar orijinalin yanına (ya da istersen İndirilenler'e) yeni bir adla kaydedilir, orijinal olduğu gibi kalır.
-- **Bilerek kısa bir liste.** Sunucu, hesap ya da büyük bir indirme gerektirenler yok (bulut yüklemeleri, yapay zekâyla arka plan silme, OCR modelleri). Sunduğu her şey çevrimdışı, saniyeler içinde çalışır.
-- **Yoluna çıkmaz.** Bir uygulama tam ekranken, hariç tuttuğun uygulamalarda ya da çark tuşuna basılmadığında çark açılmaz; sıradan sürüklemeler eskisi gibi davranır.
+- **Bilerek kısa bir liste.** Bulut yüklemeleri gibi sunucu, hesap ya da büyük bir indirme gerektirenler yok. Arka plan silme ve metin okuma, Mac'inde zaten olan modelleri (Önizleme ve Fotoğraflar'ın kullandıklarını) kullanır; her şey çevrimdışı, saniyeler içinde çalışır.
+- **Yoluna çıkmaz.** Bir uygulama tam ekranken, hariç tuttuğun uygulamalarda ya da çark tuşuna basmadıkça veya sallamadıkça çark açılmaz; sıradan sürüklemeler eskisi gibi davranır. Sallama üç hızlı dönüş demek; gezinen bir sürükleme sayılmaz.
 
 Helm gerçek dosyaları alır. Bunun yerine *söz verilmiş* dosya sürükleyen uygulamalar (Fotoğraflar, Mail ekleri) henüz çark açmaz; önce onları masaüstüne sürükle.
 

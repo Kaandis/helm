@@ -3,6 +3,7 @@ import CoreImage
 import ImageIO
 import PDFKit
 import UniformTypeIdentifiers
+import Vision
 
 /// Images through ImageIO: convert, compress, shrink and clean, with the
 /// photo's orientation baked in.
@@ -71,5 +72,43 @@ enum ImageTools {
         guard let image = CIImage(contentsOf: source) else { throw ToolError.unreadable(source.lastPathComponent) }
         let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
         return (detector?.features(in: image) ?? []).compactMap { ($0 as? CIQRCodeFeature)?.messageString }
+    }
+
+    /// The subject on a transparent background, as a PNG the size of the
+    /// original, using the same on-device model as Preview and Photos.
+    static func removeBackground(_ source: URL, to destination: URL) throws {
+        let handler = VNImageRequestHandler(url: source)
+        let request = VNGenerateForegroundInstanceMaskRequest()
+        try handler.perform([request])
+        guard let result = request.results?.first, !result.allInstances.isEmpty else {
+            throw ToolError.failed(String(localized: "No subject found in \(source.lastPathComponent)."))
+        }
+        let masked = try result.generateMaskedImage(ofInstances: result.allInstances, from: handler,
+                                                    croppedToInstancesExtent: false)
+        let image = CIImage(cvPixelBuffer: masked)
+        guard let space = CGColorSpace(name: CGColorSpace.sRGB) else { return }
+        do {
+            try CIContext().writePNGRepresentation(of: image, to: destination, format: .RGBA8, colorSpace: space)
+        } catch {
+            throw ToolError.failed(String(localized: "Couldn’t save \(destination.lastPathComponent)."))
+        }
+    }
+
+    /// The text in a picture, read on this Mac in whatever language it's in.
+    static func recognizeText(_ source: URL) throws -> String {
+        try recognizeText(VNImageRequestHandler(url: source))
+    }
+
+    static func recognizeText(_ image: CGImage) throws -> String {
+        try recognizeText(VNImageRequestHandler(cgImage: image))
+    }
+
+    private static func recognizeText(_ handler: VNImageRequestHandler) throws -> String {
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = true
+        request.automaticallyDetectsLanguage = true
+        try handler.perform([request])
+        return (request.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined(separator: "\n")
     }
 }

@@ -27,9 +27,12 @@
 
 Start dragging files in Finder or on the desktop and hold a key. A wheel opens under the pointer; drop the files on a slice and the result lands next to the original. Drop on the middle to cancel.
 
+Or just shake the files side to side while you drag: a palette opens with every tool that fits, and holding a key narrows it down to that wheel.
+
 - **⇧ Convert.** Photos to JPG, PNG, HEIC, PDF or TIFF. PDF pages to PNG or JPG. Videos to MP4, MOV, a GIF or just their sound. Audio to M4A, WAV or AIFF.
-- **⌘ Tools.** Compress or halve photos, strip their location and camera data, put them in one PDF, or read a QR code. Merge, split or compress PDFs. Compress or mute videos. Extract archives.
-- **⌃ Actions.** AirDrop, copy the path, open Terminal there, or zip.
+- **⌘ Tools.** Compress or halve photos, strip their location and camera data, remove the background, copy the text in them, put them in one PDF, or read a QR code. Merge, split, compress or copy the text of PDFs. Compress or mute videos. Extract archives.
+- **⌃ Actions.** Cut, AirDrop, copy the path, Mail, zip, open Terminal there, or copy a picture to paste it anywhere.
+- **Cut, at last.** Finder has no Cut. Drop files on Cut and they wait on a small shelf in the corner, untouched; drag the shelf into any folder to move them there, or press ⌥⌘V in that folder. Close the shelf to forget them.
 - **Only what fits.** Each wheel shows just the tools for the files you’re holding, and never offers a format they’re already in.
 - **Your keys.** Give each wheel the key you like (⇧, ⌘, ⌃ or ⌥), turn Helm off for apps whose own drag shortcuts clash, or pause it from the menu bar.
 - **Works with Harbor.** With [Harbor](https://kaandis.github.io/harbor/) installed, Helm’s settings appear there and apply at once.
@@ -40,8 +43,8 @@ Start dragging files in Finder or on the desktop and hold a key. A wheel opens u
 - **Nothing runs between drags.** A mouse press starts a short check that ends when the button comes up. The rest of the time Helm sits idle.
 - **Built on what macOS already has.** ImageIO, PDFKit and AVFoundation do the work, so there’s nothing extra to download and no command-line tools bundled inside.
 - **Never overwrites.** Results get a new name next to the original (or in Downloads, if you prefer), and the original stays as it was.
-- **A short list on purpose.** Helm leaves out what needs a server, an account or a big download (cloud uploads, AI background removal, OCR models). Everything it offers works offline, in seconds.
-- **Stays out of the way.** No wheel while an app is full screen, in apps you exclude, or when no wheel key is held, so ordinary drags behave exactly as before.
+- **A short list on purpose.** Helm leaves out what needs a server, an account or a big download, like cloud uploads. Removing backgrounds and reading text use the models already on your Mac, the same ones Preview and Photos use, so everything works offline, in seconds.
+- **Stays out of the way.** No wheel while an app is full screen, in apps you exclude, or unless you hold a wheel key or shake, so ordinary drags behave exactly as before. A shake means three quick turns; a drag that wanders doesn't count.
 
 Helm takes real files. Apps that drag *promised* files instead (Photos, Mail attachments) don’t open a wheel yet; drag those to the desktop first.
 
@@ -74,8 +77,8 @@ Releases are built with `scripts/release.sh`, which signs them with the “Harbo
 Helm/
   App/          app entry, menu bar and launch
   Core/         drag watching and preferences
-  Wheel/        the wheel, its drop target and the progress toast
-  Tools/        conversions and tools (ImageIO, PDFKit, AVFoundation)
+  Wheel/        the wheel, the palette, the Cut shelf and the progress toast
+  Tools/        conversions and tools (ImageIO, PDFKit, AVFoundation, Vision)
   Settings/     the settings window
   Onboarding/   the guide
   Resources/    Info.plist, icon, strings, settings-schema.json

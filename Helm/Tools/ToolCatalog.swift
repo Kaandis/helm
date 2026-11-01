@@ -9,12 +9,12 @@ enum Tool: String, CaseIterable, Sendable {
     case pagesToPNG, pagesToJPG
     case toMP4, toMOV, toGIF, toM4A, toWAV, toAIFF
     // Tools
-    case compressImage, halveImage, stripMetadata, makePDF, readQR
+    case compressImage, halveImage, stripMetadata, removeBackground, extractText, makePDF, readQR
     case mergePDF, splitPDF, compressPDF
     case compressVideo, removeAudio
     case unzip
     // Actions
-    case airDrop, copyPath, openTerminal, zip
+    case cut, airDrop, copyPath, copyImage, mail, openTerminal, zip
 
     var title: String {
         switch self {
@@ -32,14 +32,19 @@ enum Tool: String, CaseIterable, Sendable {
         case .compressImage, .compressPDF, .compressVideo: String(localized: "Compress")
         case .halveImage: String(localized: "Half Size")
         case .stripMetadata: String(localized: "Strip Metadata")
+        case .removeBackground: String(localized: "Remove Background")
+        case .extractText: String(localized: "Copy Text")
         case .makePDF: String(localized: "Make PDF")
         case .readQR: String(localized: "Read QR")
         case .mergePDF: String(localized: "Merge")
         case .splitPDF: String(localized: "Split Pages")
         case .removeAudio: String(localized: "Mute")
         case .unzip: String(localized: "Extract")
+        case .cut: String(localized: "Cut")
         case .airDrop: "AirDrop"
         case .copyPath: String(localized: "Copy Path")
+        case .copyImage: String(localized: "Copy Image")
+        case .mail: String(localized: "Mail")
         case .openTerminal: String(localized: "Terminal")
         case .zip: String(localized: "Zip")
         }
@@ -55,13 +60,18 @@ enum Tool: String, CaseIterable, Sendable {
         case .compressImage, .compressPDF, .compressVideo: "arrow.down.right.and.arrow.up.left"
         case .halveImage: "rectangle.compress.vertical"
         case .stripMetadata: "location.slash"
+        case .removeBackground: "person.and.background.dotted"
+        case .extractText: "text.viewfinder"
         case .readQR: "qrcode.viewfinder"
         case .mergePDF: "doc.on.doc"
-        case .splitPDF: "scissors"
+        case .splitPDF: "square.split.2x1"
         case .removeAudio: "speaker.slash"
         case .unzip: "archivebox"
+        case .cut: "scissors"
         case .airDrop: "dot.radiowaves.left.and.right"
         case .copyPath: "link"
+        case .copyImage: "photo.on.rectangle"
+        case .mail: "envelope"
         case .openTerminal: "terminal"
         case .zip: "doc.zipper"
         }
@@ -106,15 +116,20 @@ enum Tool: String, CaseIterable, Sendable {
             }
         case .tools:
             switch one {
-            case .image: return [.compressImage, .halveImage, .stripMetadata, .makePDF, .readQR]
-            case .pdf: return many ? [.mergePDF, .compressPDF, .splitPDF] : [.compressPDF, .splitPDF]
+            case .image: return [.compressImage, .halveImage, .stripMetadata, .removeBackground, .extractText, .makePDF, .readQR]
+            case .pdf: return (many ? [.mergePDF] : []) + [.compressPDF, .splitPDF, .extractText]
             case .video: return [.compressVideo, .removeAudio]
             case .archive: return [.unzip]
             default: return []
             }
         case .actions:
-            return [.airDrop, .copyPath, .openTerminal, .zip]
+            return [.cut, .airDrop, .copyPath, .mail, .zip, .openTerminal] + (one == .image ? [.copyImage] : [])
         }
+    }
+
+    /// Every tool that fits, by wheel: what a shaken drag shows.
+    static func sections(for files: [URL]) -> [(kind: WheelKind, tools: [Tool])] {
+        WheelKind.allCases.map { ($0, tools(for: $0, files: files)) }.filter { !$0.tools.isEmpty }
     }
 }
 

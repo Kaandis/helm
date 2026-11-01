@@ -65,6 +65,23 @@ enum ToolRunner {
             }
             return Outcome(message: texts.joined(separator: "\n"))
 
+        case .removeBackground:
+            return try each(files, progress: progress) { source in
+                let destination = Output.file(for: source, ext: "png", suffix: String(localized: "cutout"))
+                try ImageTools.removeBackground(source, to: destination)
+                return destination
+            }
+        case .extractText:
+            let text = try files.map { FileKind(url: $0) == .pdf ? try PDFTools.text($0) : try ImageTools.recognizeText($0) }
+                .filter { !$0.isEmpty }.joined(separator: "\n\n")
+            guard !text.isEmpty else { return Outcome(message: String(localized: "No text found")) }
+            await MainActor.run {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(text, forType: .string)
+            }
+            let lines = text.split(whereSeparator: \.isNewline).count
+            return Outcome(message: String(localized: "Text copied, \(lines) lines"))
+
         // PDF
         case .pagesToPNG, .pagesToJPG:
             let type: UTType = tool == .pagesToPNG ? .png : .jpeg
@@ -168,6 +185,19 @@ enum ToolRunner {
             return Outcome(outputs: [destination])
 
         // Actions
+        case .cut:
+            // The shelf takes these; see AppDelegate.
+            return Outcome()
+        case .copyImage:
+            await MainActor.run {
+                let images = files.compactMap(NSImage.init(contentsOf:))
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.writeObjects(images)
+            }
+            return Outcome(message: files.count == 1 ? String(localized: "Image copied") : String(localized: "\(files.count) images copied"))
+        case .mail:
+            await MainActor.run { NSSharingService(named: .composeEmail)?.perform(withItems: files) }
+            return Outcome()
         case .airDrop:
             await MainActor.run { NSSharingService(named: .sendViaAirDrop)?.perform(withItems: files) }
             return Outcome()

@@ -54,8 +54,8 @@ struct GuideView: View {
 
             VStack(alignment: .leading, spacing: 14) {
                 Step(number: 1, text: "Start dragging files in Finder or on the desktop.")
-                Step(number: 2, text: "Hold ⇧ to convert, ⌘ for tools, or ⌃ for actions. A wheel opens under the pointer.")
-                Step(number: 3, text: "Drop on a slice. The result lands next to the original; drop on the middle to cancel.")
+                Step(number: 2, text: "Hold ⇧ to convert, ⌘ for tools, or ⌃ for actions. A wheel opens under the pointer. Or shake the files side to side to see every tool at once.")
+                Step(number: 3, text: "Drop on a tool. The result lands next to the original; drop in the middle, or outside, to cancel.")
             }
             .padding(.top, 18)
 

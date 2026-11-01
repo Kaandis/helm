@@ -42,6 +42,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let watcher = DragWatcher()
     private let wheel = WheelController()
     private let toast = Toast()
+    private let shelf = Shelf()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         Prefs.registerDefaults()
@@ -63,11 +64,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             return
         }
-        // `Helm --wheel <kind> <hovered> <file>…` shows a wheel mid-screen, for screenshots.
-        if let i = args.firstIndex(of: "--wheel"), i + 3 < args.count, let kind = WheelKind(rawValue: args[i + 1]) {
+        // `Helm --cut <file>…` puts files on the shelf, as the Cut tool does.
+        if let i = args.firstIndex(of: "--cut"), i + 1 < args.count {
+            run(.cut, on: args[(i + 1)...].map { URL(fileURLWithPath: $0) })
+        }
+        // `Helm --wheel <kind|all> <hovered> <file>…` shows a menu at the pointer, for screenshots.
+        if let i = args.firstIndex(of: "--wheel"), i + 3 < args.count {
             let files = args[(i + 3)...].map { URL(fileURLWithPath: $0) }
-            let frame = (NSScreen.main ?? NSScreen.screens[0]).frame
-            wheel.show(DragWatcher.Drag(kind: kind, files: files, location: CGPoint(x: frame.midX, y: frame.midY)))
+            let menu = WheelKind(rawValue: args[i + 1]).map(DragWatcher.Menu.wheel) ?? .all
+            wheel.show(DragWatcher.Drag(menu: menu, files: files, location: NSEvent.mouseLocation))
             wheel.model.hovered = Int(args[i + 2])
             return
         }
@@ -76,13 +81,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         watcher.onDrag = { [weak self] drag in
             guard let self else { return }
             if let drag {
-                log.notice("Wheel \(drag.kind.rawValue, privacy: .public) for \(drag.files.count) files")
+                log.notice("Menu \(String(describing: drag.menu), privacy: .public) for \(drag.files.count) files")
                 self.wheel.show(drag)
             } else {
                 self.wheel.hide()
             }
         }
         wheel.onRun = { [weak self] tool, files in self?.run(tool, on: files) }
+        shelf.onMoved = { [weak self] count in
+            self?.toast.start(.cut)
+            self?.toast.finish(ToolRunner.Outcome(message: count == 1 ? String(localized: "Moved")
+                                                                      : String(localized: "\(count) items moved")))
+        }
         watcher.start()
 
         if !Prefs.bool(Prefs.hasCompletedOnboarding) { Guide.show() }
@@ -95,6 +105,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func run(_ tool: Tool, on files: [URL]) {
+        if tool == .cut {
+            shelf.add(files)
+            toast.start(tool)
+            toast.finish(ToolRunner.Outcome(message: String(localized: "Drag the shelf into a folder, or press ⌥⌘V there.")))
+            return
+        }
         // Copy Path and the like finish at once; only real work shows progress.
         let quiet: Set<Tool> = [.airDrop, .openTerminal]
         if !quiet.contains(tool) { toast.start(tool) }

@@ -1,8 +1,21 @@
 import HarborKit
 import SwiftUI
 
-/// The helm: a ring of tools around a hub, with the wheel keys below.
+/// The helm: a ring of tools around a hub, with the wheel keys below; or,
+/// after a shake, the palette of every tool.
 struct WheelView: View {
+    let model: WheelModel
+
+    var body: some View {
+        if model.kind == nil {
+            PaletteView(model: model)
+        } else {
+            RingView(model: model)
+        }
+    }
+}
+
+private struct RingView: View {
     let model: WheelModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -45,7 +58,7 @@ struct WheelView: View {
 
             ForEach(Array(model.tools.enumerated()), id: \.element) { index, tool in
                 ToolLabel(tool: tool, highlighted: model.hovered == index)
-                    .offset(Self.offset(index: index, count: count, radius: (WheelMetrics.inner + WheelMetrics.outer) / 2))
+                    .offset(WheelView.offset(index: index, count: count, radius: (WheelMetrics.inner + WheelMetrics.outer) / 2))
             }
 
             hub
@@ -65,7 +78,7 @@ struct WheelView: View {
                     .font(.system(size: 15, weight: .bold).monospacedDigit())
                     .foregroundStyle(Theme.ink)
                     .lineLimit(1)
-                Text(model.kind.title)
+                Text(model.kind?.title ?? "")
                     .font(.system(size: 10.5, weight: .medium))
                     .foregroundStyle(Theme.ink3)
             }
@@ -78,6 +91,32 @@ struct WheelView: View {
 
     /// Which key opens which wheel, the open one stronger.
     private var legend: some View {
+        KeyLegend(selected: model.kind)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(Capsule().fill(Theme.card))
+            .overlay(Capsule().strokeBorder(Theme.hairline))
+            .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+        .transaction { $0.animation = nil }
+    }
+
+    static func offset(index: Int, count: Int, radius: CGFloat) -> CGSize {
+        WheelView.offset(index: index, count: count, radius: radius)
+    }
+}
+
+extension WheelView {
+    static func offset(index: Int, count: Int, radius: CGFloat) -> CGSize {
+        let angle = Double(index) / Double(max(count, 1)) * 2 * .pi
+        return CGSize(width: sin(angle) * radius, height: -cos(angle) * radius)
+    }
+}
+
+/// Which key opens which wheel, the open one stronger.
+private struct KeyLegend: View {
+    let selected: WheelKind?
+
+    var body: some View {
         HStack(spacing: 14) {
             ForEach(WheelKind.allCases, id: \.self) { kind in
                 HStack(spacing: 5) {
@@ -87,28 +126,77 @@ struct WheelView: View {
                         .background(RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Theme.raised))
                         .overlay(RoundedRectangle(cornerRadius: 5, style: .continuous).strokeBorder(Theme.hairline))
                     Text(kind.title)
-                        .font(.system(size: 11.5, weight: kind == model.kind ? .semibold : .regular))
+                        .font(.system(size: 11.5, weight: kind == selected ? .semibold : .regular))
                 }
-                .foregroundStyle(kind == model.kind ? Theme.ink : Theme.ink2)
+                .foregroundStyle(kind == selected ? Theme.ink : Theme.ink2)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
-        .background(Capsule().fill(Theme.card))
-        .overlay(Capsule().strokeBorder(Theme.hairline))
-        .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
-        .transaction { $0.animation = nil }
     }
+}
 
-    static func offset(index: Int, count: Int, radius: CGFloat) -> CGSize {
-        let angle = Double(index) / Double(max(count, 1)) * 2 * .pi
-        return CGSize(width: sin(angle) * radius, height: -cos(angle) * radius)
+/// Every tool that fits, grouped under the key that narrows to it. The card
+/// sits just off the pointer, so letting go where it opened cancels.
+private struct PaletteView: View {
+    let model: WheelModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        let layout = model.palette
+        let card = layout.card
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(.regularMaterial)
+                .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(Theme.surfaceTint))
+                .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(Theme.hairline))
+                .shadow(color: .black.opacity(0.18), radius: 22, y: 10)
+                .frame(width: card.width, height: card.height)
+                .offset(x: card.minX, y: card.minY)
+
+            ForEach(Array(model.sections.enumerated()), id: \.offset) { index, section in
+                if layout.headers.indices.contains(index) {
+                    HStack(spacing: 6) {
+                        Text(section.kind.title)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Theme.ink2)
+                        Text(WheelKind.symbol(for: Prefs.string(section.kind.prefKey)))
+                            .font(.system(size: 10.5, weight: .semibold))
+                            .foregroundStyle(Theme.ink3)
+                    }
+                    .offset(x: layout.headers[index].x, y: layout.headers[index].y + 2)
+                }
+            }
+
+            ForEach(Array(model.tools.enumerated()), id: \.offset) { index, tool in
+                if layout.tiles.indices.contains(index) {
+                    let rect = layout.tiles[index]
+                    let on = model.hovered == index
+                    ToolLabel(tool: tool, highlighted: on, lines: 2)
+                        .frame(width: rect.width, height: rect.height)
+                        .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(on ? Theme.ink.opacity(0.1) : Theme.ink.opacity(0.035)))
+                        .offset(x: rect.minX, y: rect.minY)
+                }
+            }
+
+            HStack(spacing: 8) {
+                Text("Hold a key to narrow it down")
+                Text("·")
+                Text("Drop outside to cancel")
+            }
+            .font(.system(size: 11))
+            .foregroundStyle(Theme.ink3)
+            .frame(width: card.width, height: PaletteMetrics.footer)
+            .offset(x: card.minX, y: card.maxY - PaletteMetrics.footer - 6)
+        }
+        .frame(width: layout.size.width, height: layout.size.height, alignment: .topLeading)
+        .animation(reduceMotion ? nil : .harborSelect, value: model.hovered)
     }
 }
 
 private struct ToolLabel: View {
     let tool: Tool
     let highlighted: Bool
+    var lines = 2
 
     var body: some View {
         VStack(spacing: 4) {
@@ -117,10 +205,12 @@ private struct ToolLabel: View {
                 .frame(height: 22)
             Text(tool.title)
                 .font(.system(size: 11, weight: .semibold))
-                .lineLimit(1)
+                .lineLimit(lines)
+                .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.8)
+                .fixedSize(horizontal: false, vertical: lines > 1)
         }
-        .frame(width: 74)
+        .frame(width: lines > 1 ? 80 : 74)
         .foregroundStyle(highlighted ? Theme.ink : Theme.ink2)
         .scaleEffect(highlighted ? 1.08 : 1)
     }

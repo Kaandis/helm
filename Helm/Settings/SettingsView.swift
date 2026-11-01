@@ -24,6 +24,7 @@ private struct GeneralSettings: View {
     @AppStorage(Prefs.saveLocation) private var saveLocation = "nextToOriginal"
     @AppStorage(Prefs.revealResults) private var revealResults = false
     @AppStorage(Prefs.skipFullScreen) private var skipFullScreen = true
+    @AppStorage(Prefs.shakeToOpen) private var shakeToOpen = true
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var language = AppLanguage.current
     private let launchLanguage = AppLanguage.current
@@ -46,6 +47,7 @@ private struct GeneralSettings: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                Toggle("Shake a drag to see every tool", isOn: $shakeToOpen)
             } header: {
                 Text("Hold while dragging")
             }

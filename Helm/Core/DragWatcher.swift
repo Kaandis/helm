@@ -1,7 +1,7 @@
 import AppKit
 
 /// Notices when files are being dragged anywhere on the Mac while one of the
-/// wheel keys is held.
+/// wheel keys is held, or when the drag is shaken.
 ///
 /// Nothing runs between drags. A mouse-down anywhere starts a short check
 /// that lasts only while the button stays down; it watches the system's drag
@@ -9,8 +9,14 @@ import AppKit
 /// modifier keys. Reading those needs no permission.
 @MainActor
 final class DragWatcher {
+    /// What opens: every tool that fits (after a shake), or one wheel.
+    enum Menu: Equatable {
+        case all
+        case wheel(WheelKind)
+    }
+
     struct Drag: Equatable {
-        let kind: WheelKind
+        let menu: Menu
         let files: [URL]
         /// Where the pointer is, in screen coordinates.
         let location: CGPoint
@@ -24,7 +30,8 @@ final class DragWatcher {
     private var timer: Timer?
     private var baseline = 0
     private var files: [URL]?
-    private var current: WheelKind?
+    private var current: Menu?
+    private var shake = ShakeDetector()
 
     func start() {
         guard downMonitor == nil else { return }
@@ -44,6 +51,7 @@ final class DragWatcher {
         baseline = NSPasteboard(name: .drag).changeCount
         files = nil
         current = nil
+        shake = ShakeDetector()
         timer?.invalidate()
         let timer = Timer(timeInterval: 1.0 / 30, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.tick() }
@@ -69,11 +77,23 @@ final class DragWatcher {
             }
         }
         guard let files, !files.isEmpty else { return }
-        // The wheel stays open once shown; another key switches it.
-        guard let kind = WheelKind.held(NSEvent.modifierFlags) else { return }
-        guard kind != current else { return }
-        current = kind
-        onDrag?(Drag(kind: kind, files: files, location: NSEvent.mouseLocation))
+        let location = NSEvent.mouseLocation
+        if Prefs.bool(Prefs.shakeToOpen) { shake.add(location.x, at: ProcessInfo.processInfo.systemUptime) }
+        // A held key picks its wheel. Otherwise a shaken drag shows every
+        // tool, and a wheel opened by a key stays open after the key is let go.
+        let menu: Menu
+        if let kind = WheelKind.held(NSEvent.modifierFlags) {
+            menu = .wheel(kind)
+        } else if shake.isShaken {
+            menu = .all
+        } else if let current {
+            menu = current
+        } else {
+            return
+        }
+        guard menu != current else { return }
+        current = menu
+        onDrag?(Drag(menu: menu, files: files, location: location))
     }
 
     private func endCheck() {
@@ -104,6 +124,32 @@ final class DragWatcher {
                   let frame = CGRect(dictionaryRepresentation: bounds) else { return false }
             return screens.contains { $0 == frame.size }
         }
+    }
+}
+
+/// Tells a deliberate side-to-side shake from an ordinary drag: three quick
+/// turns, each after at least 40 points of travel, within a second.
+struct ShakeDetector {
+    private(set) var isShaken = false
+    private var extreme: CGFloat?
+    private var direction: CGFloat = 0
+    private var turns: [TimeInterval] = []
+
+    mutating func add(_ x: CGFloat, at time: TimeInterval) {
+        guard !isShaken else { return }
+        guard let last = extreme else { extreme = x; return }
+        let travel = x - last
+        if direction == 0 {
+            if abs(travel) > 40 { direction = travel > 0 ? 1 : -1; extreme = x }
+        } else if travel * direction > 0 {
+            extreme = x
+        } else if abs(travel) > 40 {
+            direction = -direction
+            extreme = x
+            turns.append(time)
+        }
+        turns.removeAll { time - $0 > 1 }
+        if turns.count >= 3 { isShaken = true }
     }
 }
 

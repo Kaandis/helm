@@ -65,6 +65,21 @@ enum PDFTools {
         return folder.map { [$0] } ?? written
     }
 
+    /// The PDF's text; scanned pages without any are read like pictures.
+    static func text(_ source: URL) throws -> String {
+        let document = try open(source)
+        if let text = document.string?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty { return text }
+        var pages: [String] = []
+        for index in 0..<document.pageCount {
+            guard let page = document.page(at: index) else { continue }
+            let bounds = page.bounds(for: .mediaBox)
+            let image = page.thumbnail(of: CGSize(width: bounds.width * 2, height: bounds.height * 2), for: .mediaBox)
+            guard let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { continue }
+            pages.append(try ImageTools.recognizeText(cg))
+        }
+        return pages.filter { !$0.isEmpty }.joined(separator: "\n\n")
+    }
+
     private static func save(_ document: PDFDocument, to destination: URL) throws {
         guard document.write(to: destination) else {
             throw ToolError.failed(String(localized: "Couldn’t save \(destination.lastPathComponent)."))

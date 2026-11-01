@@ -14,6 +14,8 @@ enum Prefs {
     static let revealResults = "revealResults"
     /// No wheel while an app is full screen (games, video).
     static let skipFullScreen = "skipFullScreen"
+    /// Shaking a drag side to side shows every tool that fits.
+    static let shakeToOpen = "shakeToOpen"
     /// Bundle identifiers where wheels never open, for apps whose own
     /// drag shortcuts would clash (Photoshop, games).
     static let excludedApps = "excludedApps"
@@ -28,6 +30,7 @@ enum Prefs {
             saveLocation: "nextToOriginal",
             revealResults: false,
             skipFullScreen: true,
+            shakeToOpen: true,
             excludedApps: [String](),
             isPaused: false,
             hasCompletedOnboarding: false,

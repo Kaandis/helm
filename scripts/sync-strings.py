@@ -11,7 +11,7 @@ for path in glob.glob('build/dd/Build/Intermediates.noindex/Helm.build/Debug/Hel
             keys[entry['key']] = entry.get('comment')
 
 tr = json.load(open('scripts/translations-tr.json'))
-plural_en = {'%lld files': ('%lld file', '%lld files'), '%lld paths copied': ('%lld path copied', '%lld paths copied')}
+plural_en = {'%lld files': ('%lld file', '%lld files'), '%lld paths copied': ('%lld path copied', '%lld paths copied'), '%lld items': ('%lld item', '%lld items'), '%lld items moved': ('%lld item moved', '%lld items moved'), '%lld images copied': ('%lld image copied', '%lld images copied')}
 missing = [k for k in keys if k not in tr]
 strings = {}
 for key in sorted(keys):
