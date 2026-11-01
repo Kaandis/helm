@@ -27,7 +27,7 @@
 
 Start dragging files in Finder or on the desktop and hold a key. A wheel opens under the pointer; drop the files on a slice and the result lands next to the original. Drop on the middle to cancel.
 
-Or just shake the files side to side while you drag: a big helm opens with every tool that fits, grouped by wheel, and holding a key narrows it down to that wheel.
+Or just shake the files side to side while you drag: a bigger helm opens with every tool that fits as icons, grouped by wheel, naming the one under the pointer in its hub; holding a key narrows it down to that wheel.
 
 - **⇧ Convert.** Photos to JPG, PNG, HEIC, PDF or TIFF. PDF pages to PNG or JPG. Videos to MP4, MOV, a GIF or just their sound. Audio to M4A, WAV or AIFF.
 - **⌘ Tools.** Compress or halve photos, strip their location and camera data, remove the background, copy the text in them, put them in one PDF, or read a QR code. Merge, split, compress or copy the text of PDFs. Compress or mute videos. Extract archives.
@@ -35,6 +35,7 @@ Or just shake the files side to side while you drag: a big helm opens with every
 - **Cut, at last.** Finder has no Cut. Drop files on Cut and they wait on a small shelf in the corner, untouched; drag the shelf into any folder to move them there, or press ⌥⌘V in that folder. Close the shelf to forget them.
 - **Only what fits.** Each wheel shows just the tools for the files you’re holding, and never offers a format they’re already in.
 - **Your keys.** Give each wheel the key you like (⇧, ⌘, ⌃ or ⌥), turn Helm off for apps whose own drag shortcuts clash, or pause it from the menu bar.
+- **Your look.** Liquid Glass or Harbor’s cream, the rim in any of eight colours, and as much see-through as you like.
 - **Works with Harbor.** With [Harbor](https://kaandis.github.io/harbor/) installed, Helm’s settings appear there and apply at once.
 
 ## Why it works this way

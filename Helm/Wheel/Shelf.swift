@@ -92,7 +92,7 @@ final class Shelf {
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         let view = ShelfDragView(frame: CGRect(origin: .zero, size: Self.size))
         view.shelf = self
-        let hosting = NSHostingView(rootView: ShelfView(model: model))
+        let hosting = NSHostingView(rootView: Styled { ShelfView(model: model) })
         hosting.frame = view.bounds
         hosting.autoresizingMask = [.width, .height]
         view.addSubview(hosting)

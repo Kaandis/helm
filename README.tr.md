@@ -35,6 +35,7 @@ Ya da sürüklerken dosyaları sağa sola salla: uyan tüm araçların çarklara
 - **Sonunda Kes.** Finder'da Kes yok. Dosyaları Kes'e bırak, köşedeki küçük bir rafta dokunulmadan beklesinler; rafı herhangi bir klasöre sürükleyince oraya taşınırlar, ya da o klasörde ⌥⌘V'ye bas. Rafı kapatırsan unutulurlar.
 - **Yalnızca uyanlar.** Her çark yalnızca tuttuğun dosyalara uyan araçları gösterir; dosyaların zaten olduğu biçimi hiç önermez.
 - **Senin tuşların.** Her çarka istediğin tuşu ver (⇧, ⌘, ⌃ ya da ⌥), kendi sürükleme kısayolları çakışan uygulamalarda Helm'i kapat ya da menü çubuğundan duraklat.
+- **Senin görünümün.** Liquid Glass ya da Harbor'ın kremi, çember sekiz renkten biri, şeffaflık istediğin kadar.
 - **Harbor ile çalışır.** [Harbor](https://kaandis.github.io/harbor/) kuruluysa Helm'in ayarları orada da görünür ve hemen uygulanır.
 
 ## Neden böyle çalışır

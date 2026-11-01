@@ -19,6 +19,12 @@ enum Prefs {
     /// Bundle identifiers where wheels never open, for apps whose own
     /// drag shortcuts would clash (Photoshop, games).
     static let excludedApps = "excludedApps"
+    /// "cream" or "glass" (Liquid Glass, macOS 26 and later), as in Ferry.
+    static let panelStyle = "panelStyle"
+    /// The helm's rim and handles: one of HarborKit's accents.
+    static let accentColor = "accentColor"
+    /// How see-through the helm's ring is, 0 (solid) to 0.8.
+    static let helmTransparency = "helmTransparency"
     static let isPaused = "isPaused"
     static let hasCompletedOnboarding = "hasCompletedOnboarding"
 
@@ -31,10 +37,17 @@ enum Prefs {
             revealResults: false,
             skipFullScreen: true,
             shakeToOpen: true,
+            panelStyle: Self.glassAvailable ? "glass" : "cream",
+            accentColor: "graphite",
+            helmTransparency: 0.3,
             excludedApps: [String](),
             isPaused: false,
             hasCompletedOnboarding: false,
         ])
+    }
+
+    static var glassAvailable: Bool {
+        if #available(macOS 26, *) { true } else { false }
     }
 
     static func bool(_ key: String) -> Bool { UserDefaults.standard.bool(forKey: key) }

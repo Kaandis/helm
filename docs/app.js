@@ -208,9 +208,8 @@
 
   // ---------- The helm: one wheel, or every tool after a shake ----------
 
-  // The big helm is scaled down from the app's to fit this little screen.
-  const SIZES = { wheel: { outer: 150, inner: 54 }, all: { outer: 186, inner: 60 } };
-  const HANDLE = 22;
+  const SIZES = { wheel: { outer: 138, inner: 50 }, all: { outer: 168, inner: 62 } };
+  const HANDLE = 13;
   const wheel = $('#wheel');
   const ringSvg = $('#wheelRing');
   const sectors = $('#wheelSectors');
@@ -234,7 +233,7 @@
   function drawWheel() {
     const { mode, kind, tools, file, groups } = menu;
     const { outer, inner } = menu.size;
-    const R = outer + HANDLE + 6;
+    const R = outer + HANDLE + 4;
     const n = tools.length;
     wheel.style.width = wheel.style.height = `${R * 2}px`;
     wheel.style.margin = `${-R}px 0 0 ${-R}px`;
@@ -242,31 +241,38 @@
     ringSvg.setAttribute('viewBox', `${-R} ${-R} ${R * 2} ${R * 2}`);
     // Handles past the rim: one per gap on a small wheel, eight on the big helm.
     const spots = mode === 'all' || n < 3
-      ? Array.from({ length: mode === 'all' ? 8 : 4 }, (_, i) => ({ a: -Math.PI / 2 + i * (mode === 'all' ? Math.PI / 4 : Math.PI / 2) + (mode === 'all' ? 0 : Math.PI / 4), major: mode === 'all' && i === 0 }))
+      ? Array.from({ length: 8 }, (_, i) => ({ a: -Math.PI / 2 + i * Math.PI / 4, major: i === 0 }))
       : tools.map((_, i) => ({ a: boundary(i, n), major: false }));
-    sectors.innerHTML = spots.map((s) => `<line class="handle${s.major ? ' major' : ''}" x1="${(outer - 2) * Math.cos(s.a)}" y1="${(outer - 2) * Math.sin(s.a)}" x2="${(outer + HANDLE - (s.major ? 0 : 5)) * Math.cos(s.a)}" y2="${(outer + HANDLE - (s.major ? 0 : 5)) * Math.sin(s.a)}"/>`).join('')
+    sectors.innerHTML = spots.map((s) => `<line class="handle${s.major ? ' major' : ''}" x1="${outer * Math.cos(s.a)}" y1="${outer * Math.sin(s.a)}" x2="${(outer + HANDLE - (s.major ? 0 : 3)) * Math.cos(s.a)}" y2="${(outer + HANDLE - (s.major ? 0 : 3)) * Math.sin(s.a)}"/>`).join('')
       + `<path class="ring" fill-rule="evenodd" d="M${outer} 0A${outer} ${outer} 0 1 1 -${outer} 0A${outer} ${outer} 0 1 1 ${outer} 0ZM${inner} 0A${inner} ${inner} 0 1 0 -${inner} 0A${inner} ${inner} 0 1 0 ${inner} 0Z"/>`
-      + (mode === 'all' ? groups.filter((_, i) => i % 2 === 1).map((g) => `<path class="group" d="${arc(g.first, g.last, n, inner + 2, outer - 4)}"/>`).join('') : '')
-      + tools.map((_, i) => `<path class="sector" data-i="${i}" d="${arc(i, i, n, inner + 4, outer - 7)}"/>`).join('')
-      + (n > 1 ? tools.map((_, i) => `<line class="spoke" x1="${(inner + 10) * Math.cos(boundary(i, n))}" y1="${(inner + 10) * Math.sin(boundary(i, n))}" x2="${(outer - 12) * Math.cos(boundary(i, n))}" y2="${(outer - 12) * Math.sin(boundary(i, n))}"/>`).join('') : '')
-      + `<circle class="rim" r="${outer - 2.5}"/>`;
-    const radius = (inner + outer) / 2 + (mode === 'all' ? 4 : 0);
+      + (mode === 'all' ? groups.filter((_, i) => i % 2 === 1).map((g) => `<path class="group" d="${arc(g.first, g.last, n, inner + 1, outer - 2)}"/>`).join('') : '')
+      + tools.map((_, i) => `<path class="sector" data-i="${i}" d="${arc(i, i, n, inner + 4, outer - 5)}"/>`).join('')
+      + (n > 1 ? tools.map((_, i) => `<line class="spoke" x1="${(inner + 10) * Math.cos(boundary(i, n))}" y1="${(inner + 10) * Math.sin(boundary(i, n))}" x2="${(outer - 10) * Math.cos(boundary(i, n))}" y2="${(outer - 10) * Math.sin(boundary(i, n))}"/>`).join('') : '')
+      + `<circle class="rim" r="${outer - 1.25}"/>`;
+    const radius = (inner + outer) / 2 + (mode === 'all' ? 2 : 0);
     labels.innerHTML = tools.map((t, i) => {
       const a = -Math.PI / 2 + i * (2 * Math.PI) / n;
-      return `<span class="wl" data-i="${i}" style="left:${R + radius * Math.cos(a)}px;top:${R + radius * Math.sin(a)}px"><svg><use href="#${t.glyph}"/></svg>${t.label}</span>`;
+      // The big helm shows icons only; the hub names the one you're on.
+      return `<span class="wl" data-i="${i}" style="left:${R + radius * Math.cos(a)}px;top:${R + radius * Math.sin(a)}px" aria-label="${t.label}"><svg><use href="#${t.glyph}"/></svg>${mode === 'all' ? '' : t.label}</span>`;
     }).join('');
     const hub = $('.hub', wheel);
     hub.style.width = hub.style.height = `${inner * 2}px`;
     hub.style.margin = `${-inner}px 0 0 ${-inner}px`;
-    $('#hubTop').textContent = n ? (file.ext || '').toUpperCase() || '—' : '';
-    $('#hubSub').textContent = n ? (mode === 'all' ? w('allTools') : w(kind)) : w('nothing');
     $('#legend').innerHTML = legendHTML(kind);
+    drawHub();
+  }
+  function drawHub() {
+    const { mode, kind, tools, file } = menu;
+    const on = mode === 'all' && menu.hovered != null ? tools[menu.hovered] : null;
+    $('.hub', wheel).classList.toggle('naming', !!on);
+    $('#hubTop').textContent = on ? on.label : tools.length ? (file.ext || '').toUpperCase() || '—' : '';
+    $('#hubSub').textContent = on ? w(hoveredGroup()) : tools.length ? (mode === 'all' ? w('allTools') : w(kind)) : w('nothing');
   }
   function highlight() {
     const h = menu?.hovered;
     $$('.sector', sectors).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
     $$('.wl', labels).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
-    if (menu?.mode === 'all') $('#legend').innerHTML = legendHTML(hoveredGroup());
+    if (menu?.mode === 'all') { $('#legend').innerHTML = legendHTML(hoveredGroup()); drawHub(); }
   }
   // `kind` is a wheel, or 'all' for the big helm.
   function openMenu(kind, file, at) {
@@ -286,7 +292,7 @@
     drawWheel();
     if (reseat) {
       // Centred on the pointer, kept inside the screen.
-      const R = menu.size.outer + HANDLE + 6;
+      const R = menu.size.outer + HANDLE + 4;
       menu.cx = Math.min(Math.max(at.x, R + 8), 960 - R - 8);
       menu.cy = Math.min(Math.max(at.y, 28 + R), 600 - R - 44);
       wheel.style.left = `${menu.cx}px`;

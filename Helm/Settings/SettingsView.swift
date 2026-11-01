@@ -25,6 +25,9 @@ private struct GeneralSettings: View {
     @AppStorage(Prefs.revealResults) private var revealResults = false
     @AppStorage(Prefs.skipFullScreen) private var skipFullScreen = true
     @AppStorage(Prefs.shakeToOpen) private var shakeToOpen = true
+    @AppStorage(Prefs.panelStyle) private var panelStyle = "glass"
+    @AppStorage(Prefs.accentColor) private var accentColor = "graphite"
+    @AppStorage(Prefs.helmTransparency) private var transparency = 0.3
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var language = AppLanguage.current
     private let launchLanguage = AppLanguage.current
@@ -50,6 +53,34 @@ private struct GeneralSettings: View {
                 Toggle("Shake a drag to see every tool", isOn: $shakeToOpen)
             } header: {
                 Text("Hold while dragging")
+            }
+
+            Section {
+                Picker("Appearance", selection: $panelStyle) {
+                    Text("Cream").tag("cream")
+                    if Prefs.glassAvailable {
+                        Text("Liquid Glass").tag("glass")
+                    }
+                }
+                .pickerStyle(.segmented)
+                LabeledContent("Rim") {
+                    AccentPicker(selection: $accentColor)
+                }
+                LabeledContent("Transparency") {
+                    Slider(value: $transparency, in: 0...0.8) {
+                        EmptyView()
+                    } minimumValueLabel: {
+                        Image(systemName: "circle.fill").font(.caption2)
+                    } maximumValueLabel: {
+                        Image(systemName: "circle.dotted").font(.caption2)
+                    }
+                    .frame(width: 220)
+                }
+                Text("How the helm looks, and how much shows through its ring.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Helm")
             }
 
             Section {

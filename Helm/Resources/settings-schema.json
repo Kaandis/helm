@@ -172,6 +172,126 @@
       ]
     },
     {
+      "id": "look",
+      "title": {
+        "en": "Helm",
+        "tr": "Dümen"
+      },
+      "settings": [
+        {
+          "key": "panelStyle",
+          "type": "enum",
+          "default": "glass",
+          "options": [
+            {
+              "value": "cream",
+              "title": {
+                "en": "Cream",
+                "tr": "Krem"
+              }
+            },
+            {
+              "value": "glass",
+              "title": {
+                "en": "Liquid Glass",
+                "tr": "Liquid Glass"
+              },
+              "requires": {
+                "macOS": "26.0"
+              }
+            }
+          ],
+          "title": {
+            "en": "Appearance",
+            "tr": "Görünüm"
+          }
+        },
+        {
+          "key": "accentColor",
+          "type": "enum",
+          "default": "graphite",
+          "options": [
+            {
+              "value": "pebble",
+              "title": {
+                "en": "Pebble",
+                "tr": "Çakıl"
+              }
+            },
+            {
+              "value": "sky",
+              "title": {
+                "en": "Sky",
+                "tr": "Gök"
+              }
+            },
+            {
+              "value": "mint",
+              "title": {
+                "en": "Mint",
+                "tr": "Nane"
+              }
+            },
+            {
+              "value": "lilac",
+              "title": {
+                "en": "Lilac",
+                "tr": "Leylak"
+              }
+            },
+            {
+              "value": "sun",
+              "title": {
+                "en": "Sun",
+                "tr": "Güneş"
+              }
+            },
+            {
+              "value": "coral",
+              "title": {
+                "en": "Coral",
+                "tr": "Mercan"
+              }
+            },
+            {
+              "value": "graphite",
+              "title": {
+                "en": "Graphite",
+                "tr": "Grafit"
+              }
+            },
+            {
+              "value": "system",
+              "title": {
+                "en": "System",
+                "tr": "Sistem"
+              }
+            }
+          ],
+          "title": {
+            "en": "Rim",
+            "tr": "Çember"
+          }
+        },
+        {
+          "key": "helmTransparency",
+          "type": "number",
+          "default": 0.3,
+          "min": 0,
+          "max": 0.8,
+          "step": 0.05,
+          "title": {
+            "en": "Transparency",
+            "tr": "Şeffaflık"
+          },
+          "description": {
+            "en": "How much shows through the helm's ring.",
+            "tr": "Dümenin halkasından ne kadarının görüneceği."
+          }
+        }
+      ]
+    },
+    {
       "id": "results",
       "title": {
         "en": "Results",

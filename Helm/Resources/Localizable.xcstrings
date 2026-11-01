@@ -211,6 +211,16 @@
         }
       }
     },
+    "Appearance": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünüm"
+          }
+        }
+      }
+    },
     "Archive": {
       "localizations": {
         "tr": {
@@ -307,6 +317,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ kaydedilemedi."
+          }
+        }
+      }
+    },
+    "Cream": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krem"
           }
         }
       }
@@ -441,6 +461,16 @@
         }
       }
     },
+    "Helm": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dümen"
+          }
+        }
+      }
+    },
     "Helm stays out of full-screen apps, and you can turn it off for apps whose own drag shortcuts clash, or pause it from the menu bar.": {
       "localizations": {
         "tr": {
@@ -477,6 +507,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dönüştürmek için ⇧, araçlar için ⌘, eylemler için ⌃ tuşuna bas; işaretçinin altında bir çark açılır. Ya da tüm araçları birden görmek için dosyaları sağa sola salla."
+          }
+        }
+      }
+    },
+    "How the helm looks, and how much shows through its ring.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dümenin görünümü ve halkasından ne kadarının göründüğü."
           }
         }
       }
@@ -537,6 +577,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Girişte başlat"
+          }
+        }
+      }
+    },
+    "Liquid Glass": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liquid Glass"
           }
         }
       }
@@ -741,6 +791,16 @@
         }
       }
     },
+    "Rim": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çember"
+          }
+        }
+      }
+    },
     "Save results": {
       "localizations": {
         "tr": {
@@ -887,6 +947,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Araçlar"
+          }
+        }
+      }
+    },
+    "Transparency": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şeffaflık"
           }
         }
       }

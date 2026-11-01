@@ -29,10 +29,10 @@ struct WheelMetrics {
     let outer: CGFloat
     let inner: CGFloat
 
-    static let keyed = WheelMetrics(outer: 150, inner: 54)
-    static let full = WheelMetrics(outer: 250, inner: 76)
+    static let keyed = WheelMetrics(outer: 138, inner: 50)
+    static let full = WheelMetrics(outer: 168, inner: 62)
     /// How far the handles reach past the rim.
-    static let handle: CGFloat = 26
+    static let handle: CGFloat = 13
     /// Room around the helm for its shadow, and for the key legend below.
     private static let room: CGFloat = 20, legend: CGFloat = 50
 

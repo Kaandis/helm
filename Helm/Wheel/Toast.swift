@@ -92,7 +92,7 @@ final class Toast {
         panel.isOpaque = false
         panel.hasShadow = false
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
-        let host = NSHostingView(rootView: ToastView(model: model, reveal: { [weak self] in self?.revealOutputs() }))
+        let host = NSHostingView(rootView: Styled { ToastView(model: model, reveal: { [weak self] in self?.revealOutputs() }) })
         host.frame = CGRect(origin: .zero, size: Self.size)
         host.wantsLayer = true
         panel.contentView = host
