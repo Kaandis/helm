@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "app": {
+    "id": "app.helm.Helm",
+    "name": "Helm",
+    "site": "https://kaandis.github.io/helm/",
+    "repository": "https://github.com/Kaandis/helm"
+  },
+  "defaultsDomain": "app.helm.Helm",
+  "notes": "Every setting is a plain UserDefaults key in defaultsDomain and Helm reads them as it needs them, so changes apply at once. Launch at login is not listed: it is an SMAppService login item that only Helm itself can register. Helm needs no permissions.",
+  "groups": [
+    {
+      "id": "wheels",
+      "title": {
+        "en": "Wheels",
+        "tr": "Çarklar"
+      },
+      "settings": [
+        {
+          "key": "convertKey",
+          "type": "enum",
+          "default": "shift",
+          "options": [
+            {
+              "value": "shift",
+              "title": {
+                "en": "⇧ Shift",
+                "tr": "⇧ Shift"
+              }
+            },
+            {
+              "value": "command",
+              "title": {
+                "en": "⌘ Command",
+                "tr": "⌘ Command"
+              }
+            },
+            {
+              "value": "control",
+              "title": {
+                "en": "⌃ Control",
+                "tr": "⌃ Control"
+              }
+            },
+            {
+              "value": "option",
+              "title": {
+                "en": "⌥ Option",
+                "tr": "⌥ Option"
+              }
+            }
+          ],
+          "title": {
+            "en": "Convert",
+            "tr": "Dönüştür"
+          }
+        },
+        {
+          "key": "toolsKey",
+          "type": "enum",
+          "default": "command",
+          "options": [
+            {
+              "value": "shift",
+              "title": {
+                "en": "⇧ Shift",
+                "tr": "⇧ Shift"
+              }
+            },
+            {
+              "value": "command",
+              "title": {
+                "en": "⌘ Command",
+                "tr": "⌘ Command"
+              }
+            },
+            {
+              "value": "control",
+              "title": {
+                "en": "⌃ Control",
+                "tr": "⌃ Control"
+              }
+            },
+            {
+              "value": "option",
+              "title": {
+                "en": "⌥ Option",
+                "tr": "⌥ Option"
+              }
+            }
+          ],
+          "title": {
+            "en": "Tools",
+            "tr": "Araçlar"
+          }
+        },
+        {
+          "key": "actionsKey",
+          "type": "enum",
+          "default": "control",
+          "options": [
+            {
+              "value": "shift",
+              "title": {
+                "en": "⇧ Shift",
+                "tr": "⇧ Shift"
+              }
+            },
+            {
+              "value": "command",
+              "title": {
+                "en": "⌘ Command",
+                "tr": "⌘ Command"
+              }
+            },
+            {
+              "value": "control",
+              "title": {
+                "en": "⌃ Control",
+                "tr": "⌃ Control"
+              }
+            },
+            {
+              "value": "option",
+              "title": {
+                "en": "⌥ Option",
+                "tr": "⌥ Option"
+              }
+            }
+          ],
+          "title": {
+            "en": "Actions",
+            "tr": "Eylemler"
+          }
+        },
+        {
+          "key": "skipFullScreen",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Stay out of full-screen apps",
+            "tr": "Tam ekran uygulamalarda açılma"
+          }
+        },
+        {
+          "key": "excludedApps",
+          "type": "appList",
+          "itemType": "bundleIdentifier",
+          "default": [],
+          "title": {
+            "en": "Excluded apps",
+            "tr": "Hariç tutulan uygulamalar"
+          },
+          "description": {
+            "en": "Wheels never open while dragging in these apps, for apps whose own drag shortcuts clash.",
+            "tr": "Bu uygulamalarda sürüklerken çark hiç açılmaz; kendi sürükleme kısayolları çakışan uygulamalar için."
+          }
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Results",
+        "tr": "Sonuçlar"
+      },
+      "settings": [
+        {
+          "key": "saveLocation",
+          "type": "enum",
+          "default": "nextToOriginal",
+          "options": [
+            {
+              "value": "nextToOriginal",
+              "title": {
+                "en": "Next to the original",
+                "tr": "Orijinalin yanına"
+              }
+            },
+            {
+              "value": "downloads",
+              "title": {
+                "en": "Downloads",
+                "tr": "İndirilenler"
+              }
+            }
+          ],
+          "title": {
+            "en": "Save results",
+            "tr": "Sonuçları kaydet"
+          }
+        },
+        {
+          "key": "revealResults",
+          "type": "bool",
+          "default": false,
+          "title": {
+            "en": "Show results in Finder",
+            "tr": "Sonuçları Finder'da göster"
+          }
+        },
+        {
+          "key": "AppleLanguages",
+          "type": "language",
+          "default": null,
+          "options": [
+            {
+              "value": null,
+              "title": {
+                "en": "System",
+                "tr": "Sistem"
+              }
+            },
+            {
+              "value": [
+                "en"
+              ],
+              "title": {
+                "en": "English",
+                "tr": "English"
+              }
+            },
+            {
+              "value": [
+                "tr"
+              ],
+              "title": {
+                "en": "Türkçe",
+                "tr": "Türkçe"
+              }
+            }
+          ],
+          "restartRequired": true,
+          "title": {
+            "en": "Language",
+            "tr": "Dil"
+          },
+          "description": {
+            "en": "Remove the key to follow the system language.",
+            "tr": "Sistem dilini izlemek için anahtarı kaldır."
+          }
+        }
+      ]
+    }
+  ]
+}
