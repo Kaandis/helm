@@ -338,24 +338,29 @@
     });
   });
 
-  // Three quick turns, each after 40 points of travel, within a second.
-  function shakeDetector() {
+  // There and back and there again, on either axis: two quick turns, each
+  // after 32 points of travel, as in the app.
+  function axisDetector() {
     let extreme = null, direction = 0, turns = [];
-    return (x, t) => {
-      if (extreme === null) { extreme = x; return false; }
-      const travel = x - extreme;
+    return (v, t) => {
+      if (extreme === null) { extreme = v; return false; }
+      const travel = v - extreme;
       if (direction === 0) {
-        if (Math.abs(travel) > 40) { direction = Math.sign(travel); extreme = x; }
+        if (Math.abs(travel) > 32) { direction = Math.sign(travel); extreme = v; }
       } else if (travel * direction > 0) {
-        extreme = x;
-      } else if (Math.abs(travel) > 40) {
+        extreme = v;
+      } else if (Math.abs(travel) > 32) {
         direction = -direction;
-        extreme = x;
+        extreme = v;
         turns.push(t);
       }
-      turns = turns.filter((s) => t - s < 1000);
-      return turns.length >= 3;
+      turns = turns.filter((s) => t - s < 900);
+      return turns.length >= 2;
     };
+  }
+  function shakeDetector() {
+    const x = axisDetector(), y = axisDetector();
+    return (p, t) => x(p.x, t) || y(p.y, t);
   }
 
   // ---------- Dragging ----------
@@ -394,7 +399,7 @@
       drag.el.classList.add('dragging');
       $('#noteCard').classList.add('done');
     }
-    if (!drag.shaken && drag.shake(p.x, e.timeStamp)) drag.shaken = true;
+    if (!drag.shaken && drag.shake(p, e.timeStamp)) drag.shaken = true;
     // The ghost stays where it was grabbed, 1:1 with the pointer.
     ghost.style.transform = `translate(${p.x - drag.offset.x}px, ${p.y - drag.offset.y}px)`;
     update();

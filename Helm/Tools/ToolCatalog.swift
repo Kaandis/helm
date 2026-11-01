@@ -77,6 +77,31 @@ enum Tool: String, CaseIterable, Sendable {
         }
     }
 
+    /// The wheel a tool belongs to.
+    var wheel: WheelKind {
+        switch self {
+        case .toJPG, .toPNG, .toHEIC, .toTIFF, .toPDF, .pagesToPNG, .pagesToJPG,
+             .toMP4, .toMOV, .toGIF, .toM4A, .toWAV, .toAIFF: .convert
+        case .cut, .airDrop, .copyPath, .copyImage, .mail, .openTerminal, .zip: .actions
+        default: .tools
+        }
+    }
+
+    /// A name that stands on its own in a list, where the wheel doesn't say
+    /// what kind of file it's for.
+    var longTitle: String {
+        switch self {
+        case .toJPG, .toPNG, .toHEIC, .toTIFF, .toPDF: String(localized: "Photo → \(title)")
+        case .pagesToPNG, .pagesToJPG: String(localized: "PDF pages → \(title)")
+        case .toMP4, .toMOV, .toGIF: String(localized: "Video → \(title)")
+        case .toM4A, .toWAV, .toAIFF: String(localized: "Audio → \(title)")
+        case .compressImage: String(localized: "Compress photo")
+        case .compressPDF: String(localized: "Compress PDF")
+        case .compressVideo: String(localized: "Compress video")
+        default: title
+        }
+    }
+
     /// File extensions a conversion would produce; files already in that
     /// format aren't offered it.
     private var produces: Set<String> {

@@ -34,8 +34,10 @@ private struct HelmView: View {
     @Environment(\.palette) private var palette
     @Environment(\.accent) private var accent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AppStorage(Prefs.showHandles) private var showHandles = true
 
     private var metrics: WheelMetrics { model.metrics }
+    private var square: Bool { metrics.square }
     private var isFull: Bool { model.kind == nil }
     private var rim: Color { accent.color }
 
@@ -59,47 +61,55 @@ private struct HelmView: View {
         let count = model.tools.count
         let outer = metrics.outer, inner = metrics.inner
         return ZStack {
-            // Handles past the rim, as on a ship's wheel.
-            ForEach(handles, id: \.self) { handle in
-                Handle(angle: handle.angle, from: outer, to: outer + WheelMetrics.handle - (handle.major ? 0 : 3))
-                    .stroke(rim, style: StrokeStyle(lineWidth: handle.major ? 5 : 3.5, lineCap: .round))
+            // Handles past the rim, as on a ship's wheel, unless turned off.
+            if showHandles {
+                ForEach(handles, id: \.self) { handle in
+                    let edge = edge(at: handle.angle, of: outer)
+                    Handle(angle: handle.angle, from: edge - 1, to: edge + WheelMetrics.handle - (handle.major ? 0 : 3))
+                        .stroke(rim, style: StrokeStyle(lineWidth: handle.major ? 5 : 3.5, lineCap: .round))
+                }
             }
 
-            HelmSurface(inner: inner, transparency: transparency)
+            HelmSurface(inner: inner, square: square, transparency: transparency)
                 .frame(width: outer * 2, height: outer * 2)
 
             // On the big helm, every other wheel's tools sit a shade darker.
             if isFull {
                 ForEach(Array(groups.enumerated()), id: \.offset) { index, group in
                     if index % 2 == 1 {
-                        Arc(first: group.first, last: group.last, count: count, inner: inner + 1, outer: outer - 2)
+                        Wedge(first: group.first, last: group.last, count: count)
                             .fill(palette.ink.opacity(0.05))
+                            .clipShape(HelmRing(inner: inner + 1, square: square, inset: 2))
                             .frame(width: outer * 2, height: outer * 2)
                     }
                 }
             }
 
             if let hovered = model.hovered, count > 0 {
-                Arc(first: hovered, last: hovered, count: count, inner: inner + 4, outer: outer - 5)
+                Wedge(first: hovered, last: hovered, count: count, gap: 1)
                     .fill(rim.opacity(0.2))
+                    .clipShape(HelmRing(inner: inner + 4, square: square, inset: 5))
                     .frame(width: outer * 2, height: outer * 2)
                     .transition(.opacity)
             }
 
             // Spokes between the tools.
             ForEach(0..<count, id: \.self) { index in
-                Handle(angle: WheelView.boundary(index, count), from: inner + 10, to: outer - 10)
+                let angle = WheelView.boundary(index, count)
+                Handle(angle: angle, from: edge(at: angle, of: inner) + 10, to: edge(at: angle, of: outer) - 10)
                     .stroke(palette.hairline, lineWidth: 1)
             }
 
             // The rim.
-            Circle()
+            HelmOutline(square: square, cornerRadius: outer * HelmRing.corner)
                 .strokeBorder(rim, lineWidth: 2.5)
                 .frame(width: outer * 2, height: outer * 2)
 
             ForEach(Array(model.tools.enumerated()), id: \.offset) { index, tool in
+                let angle = Double(index) / Double(max(count, 1)) * 2 * .pi - .pi / 2
+                let radius = edge(at: angle, of: (inner + outer) / 2 + (isFull ? 2 : 0))
                 ToolLabel(tool: tool, highlighted: model.hovered == index, iconOnly: isFull)
-                    .offset(WheelView.offset(index: index, count: count, radius: (inner + outer) / 2 + (isFull ? 2 : 0)))
+                    .offset(x: cos(angle) * radius, y: sin(angle) * radius)
             }
 
             hub
@@ -139,8 +149,8 @@ private struct HelmView: View {
         }
         .padding(.horizontal, 8)
         .frame(width: metrics.inner * 2, height: metrics.inner * 2)
-        .background(HubSurface())
-        .overlay(Circle().strokeBorder(rim, lineWidth: 2.5))
+        .background(HubSurface(square: square, cornerRadius: metrics.inner * HelmRing.hubCorner))
+        .overlay(HelmOutline(square: square, cornerRadius: metrics.inner * HelmRing.hubCorner).strokeBorder(rim, lineWidth: 2.5))
     }
 
     /// Which key opens which wheel: the open one, or on the big helm the
@@ -168,6 +178,20 @@ private struct HelmView: View {
         return groups.first { (it) in (it.first...it.last).contains(hovered) }?.kind
     }
 
+    /// How far the helm's edge is from the centre along `angle`, for a
+    /// helm `half` across from the centre: `half` for a circle, more toward
+    /// a rounded square's corners.
+    private func edge(at angle: Double, of half: CGFloat) -> CGFloat {
+        guard square else { return half }
+        let c = abs(cos(angle)), s = abs(sin(angle))
+        let flat = half / max(c, s)
+        let r = half * HelmRing.corner, k = half - r
+        guard flat * c > k, flat * s > k else { return flat }
+        // On the rounded corner: where the ray meets the corner's circle.
+        let b = k * (c + s)
+        return b + sqrt(max(b * b - (2 * k * k - r * r), 0))
+    }
+
     private struct HandleSpot: Hashable {
         let angle: Double
         let major: Bool
@@ -188,14 +212,17 @@ private struct HelmView: View {
 /// The hub stays readable whatever the ring's transparency: a solid card,
 /// or a denser Liquid Glass.
 private struct HubSurface: View {
+    let square: Bool
+    let cornerRadius: CGFloat
     @Environment(\.palette) private var palette
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     var body: some View {
+        let shape = HelmOutline(square: square, cornerRadius: cornerRadius)
         if palette.isGlass, !reduceTransparency, #available(macOS 26, *) {
-            Color.clear.glassEffect(.regular.tint(Theme.surfaceTint.opacity(0.55)), in: Circle())
+            Color.clear.glassEffect(.regular.tint(Theme.surfaceTint.opacity(0.55)), in: shape)
         } else {
-            Circle().fill(palette.isGlass ? Color(nsColor: .windowBackgroundColor) : Theme.card)
+            shape.fill(palette.isGlass ? Color(nsColor: .windowBackgroundColor) : Theme.card)
         }
     }
 }
@@ -204,12 +231,13 @@ private struct HubSurface: View {
 /// see-through as the setting asks; solid when Reduce Transparency is on.
 private struct HelmSurface: View {
     let inner: CGFloat
+    let square: Bool
     let transparency: Double
     @Environment(\.palette) private var palette
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     var body: some View {
-        let ring = Annulus(inner: inner)
+        let ring = HelmRing(inner: inner, square: square)
         if reduceTransparency {
             ring.fill(palette.isGlass ? Color(nsColor: .windowBackgroundColor) : Theme.background)
         } else if palette.isGlass, #available(macOS 26, *) {
@@ -286,38 +314,60 @@ extension WheelKind {
 }
 
 /// A ring: the full circle minus the hub (fill it even-odd).
-private struct Annulus: Shape {
-    let inner: CGFloat
+/// The helm's body: a circle or a rounded square, open in the middle for
+/// the hub under any fill rule (Liquid Glass's included). `inset` pulls the
+/// outside in, for fills that sit inside the rim.
+struct HelmRing: Shape {
+    var inner: CGFloat
+    var square: Bool
+    var inset: CGFloat = 0
+    /// Corner radii as a share of the half-width.
+    static let corner: CGFloat = 0.34, hubCorner: CGFloat = 0.42
 
-    // Outer circle one way, hub the other, so the hub stays open under any
-    // fill rule, Liquid Glass's included.
     func path(in rect: CGRect) -> Path {
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        var path = Path()
-        path.addArc(center: center, radius: rect.width / 2, startAngle: .zero, endAngle: .degrees(360), clockwise: false)
-        path.closeSubpath()
-        path.addArc(center: center, radius: inner, startAngle: .degrees(360), endAngle: .zero, clockwise: true)
-        path.closeSubpath()
-        return path
+        let outer = rect.insetBy(dx: inset, dy: inset)
+        let hole = CGRect(x: rect.midX - inner, y: rect.midY - inner, width: inner * 2, height: inner * 2)
+        let body = HelmOutline(square: square, cornerRadius: rect.width / 2 * Self.corner - inset).path(in: outer)
+        let hub = HelmOutline(square: square, cornerRadius: inner * Self.hubCorner).path(in: hole)
+        return body.subtracting(hub)
     }
 }
 
-/// A run of slices, from tool `first` to tool `last`, centred on them.
-private struct Arc: Shape {
+/// A circle, or a rounded square with the given corner radius.
+struct HelmOutline: InsettableShape {
+    var square: Bool
+    var cornerRadius: CGFloat
+    var insetAmount: CGFloat = 0
+
+    func path(in rect: CGRect) -> Path {
+        let rect = rect.insetBy(dx: insetAmount, dy: insetAmount)
+        return square ? Path(roundedRect: rect, cornerRadius: max(cornerRadius - insetAmount, 0), style: .circular)
+                      : Path(ellipseIn: rect)
+    }
+
+    func inset(by amount: CGFloat) -> HelmOutline {
+        var copy = self
+        copy.insetAmount += amount
+        return copy
+    }
+}
+
+/// The slices from tool `first` to tool `last`, as a wedge reaching past
+/// the frame; clip it to the ring.
+private struct Wedge: Shape {
     let first: Int
     let last: Int
     let count: Int
-    let inner: CGFloat
-    let outer: CGFloat
+    var gap: Double = 0
 
     func path(in rect: CGRect) -> Path {
         let center = CGPoint(x: rect.midX, y: rect.midY)
         let width = 360 / Double(max(count, 1))
-        let start = Angle.degrees(-90 + (Double(first) - 0.5) * width + 1)
-        let end = Angle.degrees(-90 + (Double(last) + 0.5) * width - 1)
+        let start = Angle.degrees(-90 + (Double(first) - 0.5) * width + gap)
+        let end = Angle.degrees(-90 + (Double(last) + 0.5) * width - gap)
         var path = Path()
-        path.addArc(center: center, radius: outer, startAngle: start, endAngle: end, clockwise: false)
-        path.addArc(center: center, radius: inner, startAngle: end, endAngle: start, clockwise: true)
+        path.move(to: center)
+        path.addArc(center: center, radius: rect.width, startAngle: start, endAngle: end, clockwise: false)
         path.closeSubpath()
         return path
     }

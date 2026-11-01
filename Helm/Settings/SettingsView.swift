@@ -10,24 +10,23 @@ struct SettingsView: View {
         TabView {
             GeneralSettings()
                 .tabItem { Label("General", systemImage: "gearshape") }
+            WheelSettings()
+                .tabItem { Label("Opening", systemImage: "hand.draw") }
+            LookSettings()
+                .tabItem { Label("Look", systemImage: "paintbrush") }
+            BigHelmTools()
+                .tabItem { Label("Big Helm", systemImage: "circle.grid.cross") }
             ExcludedApps()
                 .tabItem { Label("Excluded Apps", systemImage: "nosign") }
         }
-        .frame(width: 480)
+        .frame(width: 520)
     }
 }
 
 private struct GeneralSettings: View {
-    @AppStorage(Prefs.convertKey) private var convertKey = "shift"
-    @AppStorage(Prefs.toolsKey) private var toolsKey = "command"
-    @AppStorage(Prefs.actionsKey) private var actionsKey = "control"
     @AppStorage(Prefs.saveLocation) private var saveLocation = "nextToOriginal"
     @AppStorage(Prefs.revealResults) private var revealResults = false
     @AppStorage(Prefs.skipFullScreen) private var skipFullScreen = true
-    @AppStorage(Prefs.shakeToOpen) private var shakeToOpen = true
-    @AppStorage(Prefs.panelStyle) private var panelStyle = "glass"
-    @AppStorage(Prefs.accentColor) private var accentColor = "graphite"
-    @AppStorage(Prefs.helmTransparency) private var transparency = 0.3
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var language = AppLanguage.current
     private let launchLanguage = AppLanguage.current
@@ -39,48 +38,6 @@ private struct GeneralSettings: View {
                     .onChange(of: launchAtLogin) { _, enabled in
                         try? enabled ? SMAppService.mainApp.register() : SMAppService.mainApp.unregister()
                     }
-            }
-
-            Section {
-                KeyPicker(title: "Convert", selection: $convertKey)
-                KeyPicker(title: "Tools", selection: $toolsKey)
-                KeyPicker(title: "Actions", selection: $actionsKey)
-                if Set([convertKey, toolsKey, actionsKey]).count < 3 {
-                    Text("Give each wheel its own key.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Toggle("Shake a drag to see every tool", isOn: $shakeToOpen)
-            } header: {
-                Text("Hold while dragging")
-            }
-
-            Section {
-                Picker("Appearance", selection: $panelStyle) {
-                    Text("Cream").tag("cream")
-                    if Prefs.glassAvailable {
-                        Text("Liquid Glass").tag("glass")
-                    }
-                }
-                .pickerStyle(.segmented)
-                LabeledContent("Rim") {
-                    AccentPicker(selection: $accentColor)
-                }
-                LabeledContent("Transparency") {
-                    Slider(value: $transparency, in: 0...0.8) {
-                        EmptyView()
-                    } minimumValueLabel: {
-                        Image(systemName: "circle.fill").font(.caption2)
-                    } maximumValueLabel: {
-                        Image(systemName: "circle.dotted").font(.caption2)
-                    }
-                    .frame(width: 220)
-                }
-                Text("How the helm looks, and how much shows through its ring.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } header: {
-                Text("Helm")
             }
 
             Section {
@@ -109,6 +66,159 @@ private struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
+    }
+}
+
+/// How the helm opens: the wheel keys, and the shake.
+private struct WheelSettings: View {
+    @AppStorage(Prefs.convertKey) private var convertKey = "shift"
+    @AppStorage(Prefs.toolsKey) private var toolsKey = "command"
+    @AppStorage(Prefs.actionsKey) private var actionsKey = "control"
+    @AppStorage(Prefs.keyMode) private var keyMode = "hold"
+    @AppStorage(Prefs.shakeToOpen) private var shakeToOpen = true
+    @AppStorage(Prefs.shakeSensitivity) private var sensitivity = "normal"
+
+    var body: some View {
+        Form {
+            Section {
+                KeyPicker(title: "Convert", selection: $convertKey)
+                KeyPicker(title: "Tools", selection: $toolsKey)
+                KeyPicker(title: "Actions", selection: $actionsKey)
+                if Set([convertKey, toolsKey, actionsKey]).count < 3 {
+                    Text("Give each wheel its own key.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Picker("Keys", selection: $keyMode) {
+                    Text("Hold to show").tag("hold")
+                    Text("Press to switch").tag("toggle")
+                }
+                .pickerStyle(.segmented)
+                Text(keyMode == "hold"
+                     ? "A wheel shows while you hold its key. After a shake, letting go brings the big helm back."
+                     : "Press a key once and its wheel stays; press it again to go back.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("While dragging")
+            }
+
+            Section {
+                Toggle("Shake a drag to see every tool", isOn: $shakeToOpen)
+                Picker("Sensitivity", selection: $sensitivity) {
+                    Text("Low").tag("low")
+                    Text("Normal").tag("normal")
+                    Text("High").tag("high")
+                }
+                .pickerStyle(.segmented)
+                .disabled(!shakeToOpen)
+                Text("There and back and there again, side to side or up and down. Higher sensitivity takes a smaller, slower shake.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Shake")
+            }
+        }
+        .formStyle(.grouped)
+    }
+}
+
+/// How the helm looks.
+private struct LookSettings: View {
+    @AppStorage(Prefs.panelStyle) private var panelStyle = "glass"
+    @AppStorage(Prefs.accentColor) private var accentColor = "graphite"
+    @AppStorage(Prefs.helmTransparency) private var transparency = 0.3
+    @AppStorage(Prefs.helmSize) private var size = "medium"
+    @AppStorage(Prefs.helmShape) private var shape = "round"
+    @AppStorage(Prefs.showHandles) private var showHandles = true
+
+    var body: some View {
+        Form {
+            Section {
+                Picker("Appearance", selection: $panelStyle) {
+                    Text("Cream").tag("cream")
+                    if Prefs.glassAvailable {
+                        Text("Liquid Glass").tag("glass")
+                    }
+                }
+                .pickerStyle(.segmented)
+                LabeledContent("Rim") {
+                    AccentPicker(selection: $accentColor)
+                }
+                LabeledContent("Transparency") {
+                    Slider(value: $transparency, in: 0...0.8) {
+                        EmptyView()
+                    } minimumValueLabel: {
+                        Image(systemName: "circle.fill").font(.caption2)
+                    } maximumValueLabel: {
+                        Image(systemName: "circle.dotted").font(.caption2)
+                    }
+                    .frame(width: 220)
+                }
+            }
+
+            Section {
+                Picker("Size", selection: $size) {
+                    Text("Small").tag("small")
+                    Text("Medium").tag("medium")
+                    Text("Large").tag("large")
+                }
+                .pickerStyle(.segmented)
+                Picker("Shape", selection: $shape) {
+                    Text("Round").tag("round")
+                    Text("Square").tag("square")
+                }
+                .pickerStyle(.segmented)
+                Toggle("Handles around the rim", isOn: $showHandles)
+            }
+        }
+        .formStyle(.grouped)
+    }
+}
+
+/// Which tools the big helm shows when you shake: everything that fits, or
+/// your own pick.
+private struct BigHelmTools: View {
+    @AppStorage(Prefs.bigHelmShowsAll) private var showsAll = true
+    @State private var chosen = Set(UserDefaults.standard.stringArray(forKey: Prefs.bigHelmTools) ?? [])
+
+    var body: some View {
+        Form {
+            Section {
+                Picker("The big helm shows", selection: $showsAll) {
+                    Text("Every tool that fits").tag(true)
+                    Text("Only the tools I pick").tag(false)
+                }
+                .pickerStyle(.radioGroup)
+                Text("Only tools that fit the files you drag ever show. The wheels a key opens always show all of theirs.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if !showsAll {
+                ForEach(WheelKind.allCases, id: \.self) { kind in
+                    Section {
+                        ForEach(Tool.allCases.filter { $0.wheel == kind }, id: \.self) { tool in
+                            Toggle(isOn: binding(for: tool)) {
+                                Label(tool.longTitle, systemImage: tool.symbol)
+                            }
+                        }
+                    } header: {
+                        Text(kind.title)
+                    }
+                }
+            }
+        }
+        .formStyle(.grouped)
+    }
+
+    private func binding(for tool: Tool) -> Binding<Bool> {
+        Binding {
+            chosen.contains(tool.rawValue)
+        } set: { on in
+            if on { chosen.insert(tool.rawValue) } else { chosen.remove(tool.rawValue) }
+            UserDefaults.standard.set(Tool.allCases.map(\.rawValue).filter(chosen.contains), forKey: Prefs.bigHelmTools)
+        }
     }
 }
 

@@ -7,7 +7,7 @@
     "repository": "https://github.com/Kaandis/helm"
   },
   "defaultsDomain": "app.helm.Helm",
-  "notes": "Every setting is a plain UserDefaults key in defaultsDomain and Helm reads them as it needs them, so changes apply at once. Launch at login is not listed: it is an SMAppService login item that only Helm itself can register. Helm needs no permissions.",
+  "notes": "Every setting is a plain UserDefaults key in defaultsDomain and Helm reads them as it needs them, so changes apply at once. Launch at login is not listed: it is an SMAppService login item that only Helm itself can register. Helm needs no permissions. bigHelmTools is an array of tool identifiers that Helm's own settings window edits.",
   "groups": [
     {
       "id": "wheels",
@@ -134,6 +134,35 @@
           }
         },
         {
+          "key": "keyMode",
+          "type": "enum",
+          "default": "hold",
+          "options": [
+            {
+              "value": "hold",
+              "title": {
+                "en": "Hold to show",
+                "tr": "Basılı tutunca göster"
+              }
+            },
+            {
+              "value": "toggle",
+              "title": {
+                "en": "Press to switch",
+                "tr": "Basınca geç"
+              }
+            }
+          ],
+          "title": {
+            "en": "Keys",
+            "tr": "Tuşlar"
+          },
+          "description": {
+            "en": "Hold: a wheel shows while its key is down. Press: a press picks the wheel until pressed again.",
+            "tr": "Basılı tut: tuş basılıyken çark görünür. Bas: bir basış çarkı seçer, yeniden basana kadar kalır."
+          }
+        },
+        {
           "key": "shakeToOpen",
           "type": "bool",
           "default": true,
@@ -142,8 +171,43 @@
             "tr": "Tüm araçlar için sürüklerken salla"
           },
           "description": {
-            "en": "Shake the files side to side while dragging to open a big helm with every tool that fits; hold a wheel key to narrow it down.",
-            "tr": "Sürüklerken dosyaları sağa sola salla, uyan tüm araçların olduğu büyük dümen açılsın; daraltmak için bir çark tuşuna bas."
+            "en": "There and back and there again, side to side or up and down, opens a big helm with every tool that fits.",
+            "tr": "Sağa sola ya da yukarı aşağı, gidip gelip yeniden gidince, uyan tüm araçların olduğu büyük dümen açılır."
+          }
+        },
+        {
+          "key": "shakeSensitivity",
+          "type": "enum",
+          "default": "normal",
+          "options": [
+            {
+              "value": "low",
+              "title": {
+                "en": "Low",
+                "tr": "Düşük"
+              }
+            },
+            {
+              "value": "normal",
+              "title": {
+                "en": "Normal",
+                "tr": "Normal"
+              }
+            },
+            {
+              "value": "high",
+              "title": {
+                "en": "High",
+                "tr": "Yüksek"
+              }
+            }
+          ],
+          "title": {
+            "en": "Shake sensitivity",
+            "tr": "Sallama hassasiyeti"
+          },
+          "visibleWhen": {
+            "shakeToOpen": true
           }
         },
         {
@@ -287,6 +351,94 @@
           "description": {
             "en": "How much shows through the helm's ring.",
             "tr": "Dümenin halkasından ne kadarının görüneceği."
+          }
+        },
+        {
+          "key": "helmSize",
+          "type": "enum",
+          "default": "medium",
+          "options": [
+            {
+              "value": "small",
+              "title": {
+                "en": "Small",
+                "tr": "Küçük"
+              }
+            },
+            {
+              "value": "medium",
+              "title": {
+                "en": "Medium",
+                "tr": "Orta"
+              }
+            },
+            {
+              "value": "large",
+              "title": {
+                "en": "Large",
+                "tr": "Büyük"
+              }
+            }
+          ],
+          "title": {
+            "en": "Size",
+            "tr": "Boyut"
+          }
+        },
+        {
+          "key": "helmShape",
+          "type": "enum",
+          "default": "round",
+          "options": [
+            {
+              "value": "round",
+              "title": {
+                "en": "Round",
+                "tr": "Yuvarlak"
+              }
+            },
+            {
+              "value": "square",
+              "title": {
+                "en": "Square",
+                "tr": "Kare"
+              }
+            }
+          ],
+          "title": {
+            "en": "Shape",
+            "tr": "Şekil"
+          }
+        },
+        {
+          "key": "showHandles",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Handles around the rim",
+            "tr": "Çemberin etrafında tutamaklar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bighelm",
+      "title": {
+        "en": "Big Helm",
+        "tr": "Büyük Dümen"
+      },
+      "settings": [
+        {
+          "key": "bigHelmShowsAll",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Show every tool that fits",
+            "tr": "Uyan tüm araçları göster"
+          },
+          "description": {
+            "en": "Turn off to choose the tools in Helm's settings (Big Helm).",
+            "tr": "Araçları Helm'in ayarlarından (Büyük Dümen) seçmek için kapat."
           }
         }
       ]

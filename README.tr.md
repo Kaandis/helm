@@ -27,7 +27,7 @@
 
 Finder'da ya da masaüstünde dosyaları sürüklemeye başla ve bir tuşa bas. İşaretçinin altında bir çark açılır; dosyaları bir dilimin üstüne bırak, sonuç orijinalin yanına gelir. Vazgeçmek için ortaya bırak.
 
-Ya da sürüklerken dosyaları sağa sola salla: uyan tüm araçların çarklara göre gruplandığı büyük bir dümen açılır; bir tuşa basınca o çarka daralır.
+Ya da sürüklerken dosyaları git-gel-git şeklinde, sağa sola ya da yukarı aşağı salla: uyan tüm araçların çarklara göre gruplandığı büyük bir dümen açılır; bir tuşa basınca o çarka daralır.
 
 - **⇧ Dönüştür.** Fotoğrafları JPG, PNG, HEIC, PDF ya da TIFF'e. PDF sayfalarını PNG ya da JPG'ye. Videoları MP4, MOV, GIF'e ya da yalnızca seslerine. Sesleri M4A, WAV ya da AIFF'e.
 - **⌘ Araçlar.** Fotoğrafları sıkıştır ya da yarıya indir, konum ve kamera bilgilerini sil, arka planı sil, içindeki metni kopyala, hepsini tek PDF yap ya da QR kodu oku. PDF'leri birleştir, sayfalara böl, sıkıştır ya da metnini kopyala. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.
@@ -35,7 +35,7 @@ Ya da sürüklerken dosyaları sağa sola salla: uyan tüm araçların çarklara
 - **Sonunda Kes.** Finder'da Kes yok. Dosyaları Kes'e bırak, köşedeki küçük bir rafta dokunulmadan beklesinler; rafı herhangi bir klasöre sürükleyince oraya taşınırlar, ya da o klasörde ⌥⌘V'ye bas. Rafı kapatırsan unutulurlar.
 - **Yalnızca uyanlar.** Her çark yalnızca tuttuğun dosyalara uyan araçları gösterir; dosyaların zaten olduğu biçimi hiç önermez.
 - **Senin tuşların.** Her çarka istediğin tuşu ver (⇧, ⌘, ⌃ ya da ⌥), kendi sürükleme kısayolları çakışan uygulamalarda Helm'i kapat ya da menü çubuğundan duraklat.
-- **Senin görünümün.** Liquid Glass ya da Harbor'ın kremi, çember sekiz renkten biri, şeffaflık istediğin kadar.
+- **Senin tarzın.** Liquid Glass ya da Harbor'ın kremi, çember sekiz renkten biri, istediğin kadar şeffaf, küçükten büyüğe, yuvarlak ya da kare, tutamaklı ya da tutamaksız. Süzmek için tuşu basılı tut ya da bir kez bas; büyük dümende hangi araçların görüneceğini seç; sallamanın ne kadar hafif ya da sert olacağını ayarla.
 - **Harbor ile çalışır.** [Harbor](https://kaandis.github.io/harbor/) kuruluysa Helm'in ayarları orada da görünür ve hemen uygulanır.
 
 ## Neden böyle çalışır
@@ -45,7 +45,7 @@ Ya da sürüklerken dosyaları sağa sola salla: uyan tüm araçların çarklara
 - **macOS'te zaten olanla yapılmış.** İşi ImageIO, PDFKit ve AVFoundation yapar; ayrıca indirilecek bir şey ya da içine gömülü komut satırı aracı yoktur.
 - **Asla üzerine yazmaz.** Sonuçlar orijinalin yanına (ya da istersen İndirilenler'e) yeni bir adla kaydedilir, orijinal olduğu gibi kalır.
 - **Bilerek kısa bir liste.** Bulut yüklemeleri gibi sunucu, hesap ya da büyük bir indirme gerektirenler yok. Arka plan silme ve metin okuma, Mac'inde zaten olan modelleri (Önizleme ve Fotoğraflar'ın kullandıklarını) kullanır; her şey çevrimdışı, saniyeler içinde çalışır.
-- **Yoluna çıkmaz.** Bir uygulama tam ekranken, hariç tuttuğun uygulamalarda ya da çark tuşuna basmadıkça veya sallamadıkça çark açılmaz; sıradan sürüklemeler eskisi gibi davranır. Sallama üç hızlı dönüş demek; gezinen bir sürükleme sayılmaz.
+- **Yoluna çıkmaz.** Bir uygulama tam ekranken, hariç tuttuğun uygulamalarda ya da çark tuşuna basmadıkça veya sallamadıkça çark açılmaz; sıradan sürüklemeler eskisi gibi davranır. Sallama iki hızlı geri dönüş demek; gezinen bir sürükleme sayılmaz.
 
 Helm gerçek dosyaları alır. Bunun yerine *söz verilmiş* dosya sürükleyen uygulamalar (Fotoğraflar, Mail ekleri) henüz çark açmaz; önce onları masaüstüne sürükle.
 

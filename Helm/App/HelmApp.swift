@@ -13,12 +13,24 @@ struct HelmApp: App {
         MenuBarExtra {
             MenuContent(isPaused: $isPaused)
         } label: {
-            Image(systemName: isPaused ? "pause.circle" : "helm")
+            MenuBarLabel(isPaused: isPaused)
         }
 
         Settings {
             SettingsView()
         }
+    }
+}
+
+/// The menu bar icon. It is always drawn, so it also keeps SwiftUI's way of
+/// opening the Settings window at hand for code outside any view.
+private struct MenuBarLabel: View {
+    let isPaused: Bool
+    @Environment(\.openSettings) private var openSettings
+
+    var body: some View {
+        Image(systemName: isPaused ? "pause.circle" : "helm")
+            .onAppear { AppDelegate.openSettingsWindow = { openSettings() } }
     }
 }
 
@@ -64,6 +76,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             return
         }
+        // `Helm --settings <tab>` opens Helm's own settings window on a tab.
+        if let i = args.firstIndex(of: "--settings") {
+            if i + 1 < args.count { UserDefaults.standard.set(Int(args[i + 1]) ?? 0, forKey: "com_apple_SwiftUI_Settings_selectedTabIndex") }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { Self.showOwnSettings() }
+        }
         // `Helm --cut <file>…` puts files on the shelf, as the Cut tool does.
         if let i = args.firstIndex(of: "--cut"), i + 1 < args.count {
             run(.cut, on: args[(i + 1)...].map { URL(fileURLWithPath: $0) })
@@ -94,6 +111,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                                                                       : String(localized: "\(count) items moved")))
         }
         watcher.start()
+        wheel.prepare()
 
         if !Prefs.bool(Prefs.hasCompletedOnboarding) { Guide.show() }
         log.notice("Launched")
@@ -135,10 +153,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    /// Opens Helm's Settings window; set once the menu bar icon is drawn.
+    static var openSettingsWindow: (() -> Void)?
+
     /// With Harbor installed, settings live there; otherwise in Helm's own window.
     static func showSettings() {
         guard !HarborLink.openSettings(appID: "helm") else { return }
+        showOwnSettings()
+    }
+
+    static func showOwnSettings() {
         NSApp.activate()
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        openSettingsWindow?()
     }
 }

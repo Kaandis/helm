@@ -7,5 +7,5 @@
 - Cut: files wait on a shelf until you drag it into a folder or press ⌥⌘V there. Plus Remove Background, Copy Text (photos and PDFs), Copy Image and Mail.
 - Convert photos, PDF pages, videos and audio; compress, halve, clean, merge, split and mute; extract and zip; AirDrop, copy paths and open Terminal. All with ImageIO, PDFKit and AVFoundation, offline.
 - No permissions. Stays out of full-screen apps and apps you exclude, and can be paused from the menu bar.
-- A slim helm in Liquid Glass or cream, with the rim's colour and the ring's transparency up to you.
+- A slim helm in Liquid Glass or cream; colour, transparency, size, round or square, and handles are all settings. So are hold-or-press keys, which tools the big helm shows, and how firm a shake must be.
 - Settings in Helm or in Harbor; English and Turkish.

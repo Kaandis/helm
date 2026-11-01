@@ -27,7 +27,7 @@
 
 Start dragging files in Finder or on the desktop and hold a key. A wheel opens under the pointer; drop the files on a slice and the result lands next to the original. Drop on the middle to cancel.
 
-Or just shake the files side to side while you drag: a bigger helm opens with every tool that fits as icons, grouped by wheel, naming the one under the pointer in its hub; holding a key narrows it down to that wheel.
+Or just shake the files while you drag, there and back and there again, side to side or up and down: a bigger helm opens with every tool that fits as icons, grouped by wheel, naming the one under the pointer in its hub; holding a key narrows it down to that wheel.
 
 - **⇧ Convert.** Photos to JPG, PNG, HEIC, PDF or TIFF. PDF pages to PNG or JPG. Videos to MP4, MOV, a GIF or just their sound. Audio to M4A, WAV or AIFF.
 - **⌘ Tools.** Compress or halve photos, strip their location and camera data, remove the background, copy the text in them, put them in one PDF, or read a QR code. Merge, split, compress or copy the text of PDFs. Compress or mute videos. Extract archives.
@@ -35,7 +35,7 @@ Or just shake the files side to side while you drag: a bigger helm opens with ev
 - **Cut, at last.** Finder has no Cut. Drop files on Cut and they wait on a small shelf in the corner, untouched; drag the shelf into any folder to move them there, or press ⌥⌘V in that folder. Close the shelf to forget them.
 - **Only what fits.** Each wheel shows just the tools for the files you’re holding, and never offers a format they’re already in.
 - **Your keys.** Give each wheel the key you like (⇧, ⌘, ⌃ or ⌥), turn Helm off for apps whose own drag shortcuts clash, or pause it from the menu bar.
-- **Your look.** Liquid Glass or Harbor’s cream, the rim in any of eight colours, and as much see-through as you like.
+- **Your way.** Liquid Glass or Harbor’s cream, the rim in any of eight colours, as see-through as you like, small to large, round or square, with or without handles. Hold a key to filter or press it once; pick which tools the big helm shows; make the shake as gentle or as firm as you like.
 - **Works with Harbor.** With [Harbor](https://kaandis.github.io/harbor/) installed, Helm’s settings appear there and apply at once.
 
 ## Why it works this way
@@ -45,7 +45,7 @@ Or just shake the files side to side while you drag: a bigger helm opens with ev
 - **Built on what macOS already has.** ImageIO, PDFKit and AVFoundation do the work, so there’s nothing extra to download and no command-line tools bundled inside.
 - **Never overwrites.** Results get a new name next to the original (or in Downloads, if you prefer), and the original stays as it was.
 - **A short list on purpose.** Helm leaves out what needs a server, an account or a big download, like cloud uploads. Removing backgrounds and reading text use the models already on your Mac, the same ones Preview and Photos use, so everything works offline, in seconds.
-- **Stays out of the way.** No wheel while an app is full screen, in apps you exclude, or unless you hold a wheel key or shake, so ordinary drags behave exactly as before. A shake means three quick turns; a drag that wanders doesn't count.
+- **Stays out of the way.** No wheel while an app is full screen, in apps you exclude, or unless you hold a wheel key or shake, so ordinary drags behave exactly as before. A shake means two quick turns back; a drag that wanders doesn't count.
 
 Helm takes real files. Apps that drag *promised* files instead (Photos, Mail attachments) don’t open a wheel yet; drag those to the desktop first.
 

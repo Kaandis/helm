@@ -20,7 +20,8 @@ final class WheelModel {
         if case .wheel(let kind) = menu { kind } else { nil }
     }
 
-    var metrics: WheelMetrics { kind == nil ? .full : .keyed }
+    /// Set when the helm opens, so drawing and hit-testing agree.
+    var metrics = WheelMetrics.keyed
 }
 
 /// Geometry shared by the drawing and the drop target: the small helm a
@@ -28,13 +29,27 @@ final class WheelModel {
 struct WheelMetrics {
     let outer: CGFloat
     let inner: CGFloat
+    /// A rounded square instead of a circle.
+    var square = false
 
     static let keyed = WheelMetrics(outer: 138, inner: 50)
     static let full = WheelMetrics(outer: 168, inner: 62)
+
+    /// The small or big helm at the size and shape chosen in settings.
+    static func chosen(full: Bool) -> WheelMetrics {
+        let base = full ? Self.full : keyed
+        let scale: CGFloat = switch Prefs.string(Prefs.helmSize) {
+        case "small": 0.85
+        case "large": 1.18
+        default: 1
+        }
+        return WheelMetrics(outer: (base.outer * scale).rounded(), inner: (base.inner * scale).rounded(),
+                            square: Prefs.string(Prefs.helmShape) == "square")
+    }
     /// How far the handles reach past the rim.
     static let handle: CGFloat = 13
     /// Room around the helm for its shadow, and for the key legend below.
-    private static let room: CGFloat = 20, legend: CGFloat = 50
+    static let room: CGFloat = 20, legend: CGFloat = 50
 
     var panel: CGSize {
         let side = (outer + Self.handle + Self.room) * 2
@@ -45,12 +60,13 @@ struct WheelMetrics {
     var center: CGPoint { CGPoint(x: panel.width / 2, y: panel.height - outer - Self.handle - Self.room) }
 
     /// Which slice a point (content coordinates, y up) is over; nil over
-    /// the hub, which cancels, or outside the helm.
+    /// the hub, which cancels, or well outside the helm. A little past the
+    /// rim still counts: a drop that lands just outside meant the slice.
     func slice(at point: CGPoint, count: Int) -> Int? {
         guard count > 0 else { return nil }
         let dx = point.x - center.x, dy = point.y - center.y
-        let distance = hypot(dx, dy)
-        guard distance > inner, distance < outer + Self.handle else { return nil }
+        let distance = square ? max(abs(dx), abs(dy)) : hypot(dx, dy)
+        guard distance > inner, distance < outer + Self.handle + Self.room else { return nil }
         // Clockwise from the top.
         var angle = atan2(dx, dy)
         if angle < 0 { angle += 2 * .pi }
@@ -81,9 +97,16 @@ final class WheelController {
             model.sections = []
             model.tools = Tool.tools(for: kind, files: drag.files)
         case .all:
-            model.sections = Tool.sections(for: drag.files)
+            // Every tool that fits, or only the ones chosen in settings.
+            let chosen = Prefs.bool(Prefs.bigHelmShowsAll) ? nil
+                : Set(UserDefaults.standard.stringArray(forKey: Prefs.bigHelmTools) ?? [])
+            model.sections = Tool.sections(for: drag.files).compactMap { section in
+                let tools = section.tools.filter { chosen?.contains($0.rawValue) ?? true }
+                return tools.isEmpty ? nil : (section.kind, tools)
+            }
             model.tools = model.sections.flatMap(\.tools)
         }
+        model.metrics = .chosen(full: model.kind == nil)
 
         let panel = panel ?? makePanel()
         // Switching between the small and the big helm re-centres it on the
@@ -99,10 +122,27 @@ final class WheelController {
         panel.setFrame(CGRect(origin: origin, size: size), display: false)
         isShown = true
         guard let content = panel.contentView else { return }
+        panel.alphaValue = 1
         anchor = panel.convertPoint(fromScreen: location)
-        PanelMotion.setHidden(content, anchor: anchor, hiddenScale: 0.8)
+        PanelMotion.setHidden(content, anchor: anchor, hiddenScale: 0.9)
         panel.orderFrontRegardless()
-        PanelMotion.animate(content, presented: true, anchor: anchor, hiddenScale: 0.8)
+        PanelMotion.animate(content, presented: true, anchor: anchor, hiddenScale: 0.9)
+    }
+
+    /// Builds the panel and draws it once, off screen, at launch, so the
+    /// first drag doesn't wait for SwiftUI and the glass to warm up.
+    func prepare() {
+        let panel = panel ?? makePanel()
+        model.menu = .all
+        model.metrics = .chosen(full: true)
+        panel.setFrame(CGRect(origin: CGPoint(x: -10_000, y: -10_000), size: model.metrics.panel), display: true)
+        panel.alphaValue = 0
+        panel.orderFrontRegardless()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self, !self.isShown else { return }
+            panel.orderOut(nil)
+            panel.alphaValue = 1
+        }
     }
 
     func hide() {

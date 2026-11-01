@@ -32,6 +32,11 @@ final class DragWatcher {
     private var files: [URL]?
     private var current: Menu?
     private var shake = ShakeDetector()
+    /// In toggle mode, the wheel a key press picked, until pressed again.
+    private var toggled: WheelKind?
+    private var lastHeld: WheelKind?
+    /// Counts drags, so a late hide doesn't close the next drag's helm.
+    private var generation = 0
 
     func start() {
         guard downMonitor == nil else { return }
@@ -51,9 +56,14 @@ final class DragWatcher {
         baseline = NSPasteboard(name: .drag).changeCount
         files = nil
         current = nil
-        shake = ShakeDetector()
+        toggled = nil
+        lastHeld = nil
+        generation += 1
+        shake = ShakeDetector(sensitivity: Prefs.string(Prefs.shakeSensitivity))
         timer?.invalidate()
-        let timer = Timer(timeInterval: 1.0 / 30, repeats: true) { [weak self] _ in
+        // Sixty times a second while the button is down, so the helm opens
+        // within a frame of the key or the shake.
+        let timer = Timer(timeInterval: 1.0 / 60, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.tick() }
         }
         RunLoop.main.add(timer, forMode: .common)
@@ -62,8 +72,17 @@ final class DragWatcher {
 
     private func tick() {
         guard NSEvent.pressedMouseButtons & 1 != 0 else {
+            let wasOpen = current != nil
             endCheck()
-            onDrag?(nil)
+            guard wasOpen else { return }
+            // The drop reaches the helm a moment after the button comes up;
+            // closing it at once could lose the drop. A drop closes it
+            // itself; this only tidies up a drag let go elsewhere.
+            let drag = generation
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+                guard let self, self.generation == drag, self.current == nil else { return }
+                self.onDrag?(nil)
+            }
             return
         }
         let pasteboard = NSPasteboard(name: .drag)
@@ -78,12 +97,26 @@ final class DragWatcher {
         }
         guard let files, !files.isEmpty else { return }
         let location = NSEvent.mouseLocation
-        if Prefs.bool(Prefs.shakeToOpen) { shake.add(location.x, at: ProcessInfo.processInfo.systemUptime) }
-        // A held key picks its wheel. Otherwise a shaken drag shows every
-        // tool, and a wheel opened by a key stays open after the key is let go.
+        if Prefs.bool(Prefs.shakeToOpen) { shake.add(location, at: ProcessInfo.processInfo.systemUptime) }
+        let held = WheelKind.held(NSEvent.modifierFlags)
         let menu: Menu
-        if let kind = WheelKind.held(NSEvent.modifierFlags) {
-            menu = .wheel(kind)
+        if Prefs.string(Prefs.keyMode) == "toggle" {
+            // A press picks a wheel and it stays; pressing it again goes back.
+            if let held, held != lastHeld { toggled = toggled == held ? nil : held }
+            lastHeld = held
+            if let toggled {
+                menu = .wheel(toggled)
+            } else if shake.isShaken {
+                menu = .all
+            } else {
+                // Pressed again before any shake: put the wheel away.
+                if current != nil { current = nil; onDrag?(nil) }
+                return
+            }
+        } else if let held {
+            // A held key picks its wheel; let go, a shaken drag goes back to
+            // every tool, and a wheel opened by a key alone stays open.
+            menu = .wheel(held)
         } else if shake.isShaken {
             menu = .all
         } else if let current {
@@ -127,29 +160,57 @@ final class DragWatcher {
     }
 }
 
-/// Tells a deliberate side-to-side shake from an ordinary drag: three quick
-/// turns, each after at least 40 points of travel, within a second.
+/// Tells a deliberate shake from an ordinary drag: there and back and
+/// there again (left, right, left, or up, down, up), each leg long enough,
+/// quickly. How long and how quick depends on the sensitivity setting.
 struct ShakeDetector {
     private(set) var isShaken = false
-    private var extreme: CGFloat?
-    private var direction: CGFloat = 0
-    private var turns: [TimeInterval] = []
+    private var x: Axis
+    private var y: Axis
 
-    mutating func add(_ x: CGFloat, at time: TimeInterval) {
-        guard !isShaken else { return }
-        guard let last = extreme else { extreme = x; return }
-        let travel = x - last
-        if direction == 0 {
-            if abs(travel) > 40 { direction = travel > 0 ? 1 : -1; extreme = x }
-        } else if travel * direction > 0 {
-            extreme = x
-        } else if abs(travel) > 40 {
-            direction = -direction
-            extreme = x
-            turns.append(time)
+    init(sensitivity: String = "normal") {
+        let (travel, window): (CGFloat, TimeInterval) = switch sensitivity {
+        case "low": (48, 0.7)
+        case "high": (22, 1.1)
+        default: (32, 0.9)
         }
-        turns.removeAll { time - $0 > 1 }
-        if turns.count >= 3 { isShaken = true }
+        x = Axis(travel: travel, window: window)
+        y = Axis(travel: travel, window: window)
+    }
+
+    mutating func add(_ point: CGPoint, at time: TimeInterval) {
+        guard !isShaken else { return }
+        if x.add(point.x, at: time) || y.add(point.y, at: time) { isShaken = true }
+    }
+
+    /// Turns along one axis; two in the window make a shake.
+    private struct Axis {
+        let travel: CGFloat
+        let window: TimeInterval
+        private var extreme: CGFloat?
+        private var direction: CGFloat = 0
+        private var turns: [TimeInterval] = []
+
+        init(travel: CGFloat, window: TimeInterval) {
+            self.travel = travel
+            self.window = window
+        }
+
+        mutating func add(_ value: CGFloat, at time: TimeInterval) -> Bool {
+            guard let last = extreme else { extreme = value; return false }
+            let moved = value - last
+            if direction == 0 {
+                if abs(moved) > travel { direction = moved > 0 ? 1 : -1; extreme = value }
+            } else if moved * direction > 0 {
+                extreme = value
+            } else if abs(moved) > travel {
+                direction = -direction
+                extreme = value
+                turns.append(time)
+            }
+            turns.removeAll { time - $0 > window }
+            return turns.count >= 2
+        }
     }
 }
 

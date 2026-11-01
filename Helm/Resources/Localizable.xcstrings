@@ -181,6 +181,16 @@
         }
       }
     },
+    "A wheel shows while you hold its key. After a shake, letting go brings the big helm back.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuşunu basılı tuttuğun sürece çark görünür. Salladıktan sonra bırakınca büyük dümen geri gelir."
+          }
+        }
+      }
+    },
     "Actions": {
       "localizations": {
         "tr": {
@@ -231,6 +241,26 @@
         }
       }
     },
+    "Audio → %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ses → %@"
+          }
+        }
+      }
+    },
+    "Big Helm": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük Dümen"
+          }
+        }
+      }
+    },
     "Close": {
       "localizations": {
         "tr": {
@@ -247,6 +277,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sıkıştır"
+          }
+        }
+      }
+    },
+    "Compress PDF": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'i sıkıştır"
+          }
+        }
+      }
+    },
+    "Compress photo": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotoğrafı sıkıştır"
+          }
+        }
+      }
+    },
+    "Compress video": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Videoyu sıkıştır"
           }
         }
       }
@@ -391,6 +451,16 @@
         }
       }
     },
+    "Every tool that fits": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uyan tüm araçlar"
+          }
+        }
+      }
+    },
     "Excluded Apps": {
       "localizations": {
         "tr": {
@@ -461,12 +531,12 @@
         }
       }
     },
-    "Helm": {
+    "Handles around the rim": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dümen"
+            "value": "Çemberin etrafında tutamaklar"
           }
         }
       }
@@ -491,32 +561,32 @@
         }
       }
     },
-    "Hold while dragging": {
+    "High": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sürüklerken basılı tut"
+            "value": "Yüksek"
           }
         }
       }
     },
-    "Hold ⇧ to convert, ⌘ for tools, or ⌃ for actions. A wheel opens under the pointer. Or shake the files side to side to see every tool at once.": {
+    "Hold to show": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dönüştürmek için ⇧, araçlar için ⌘, eylemler için ⌃ tuşuna bas; işaretçinin altında bir çark açılır. Ya da tüm araçları birden görmek için dosyaları sağa sola salla."
+            "value": "Basılı tutunca göster"
           }
         }
       }
     },
-    "How the helm looks, and how much shows through its ring.": {
+    "Hold ⇧ to convert, ⌘ for tools, or ⌃ for actions. A wheel opens under the pointer. Or shake the files, there and back and there again, to see every tool at once.": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dümenin görünümü ve halkasından ne kadarının göründüğü."
+            "value": "Dönüştürmek için ⇧, araçlar için ⌘, eylemler için ⌃ tuşuna bas; işaretçinin altında bir çark açılır. Ya da tüm araçları birden görmek için dosyaları git-gel-git şeklinde salla."
           }
         }
       }
@@ -561,12 +631,32 @@
         }
       }
     },
+    "Keys": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuşlar"
+          }
+        }
+      }
+    },
     "Language": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Dil"
+          }
+        }
+      }
+    },
+    "Large": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük"
           }
         }
       }
@@ -591,6 +681,26 @@
         }
       }
     },
+    "Look": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünüm"
+          }
+        }
+      }
+    },
+    "Low": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düşük"
+          }
+        }
+      }
+    },
     "Mail": {
       "localizations": {
         "tr": {
@@ -607,6 +717,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "PDF Yap"
+          }
+        }
+      }
+    },
+    "Medium": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orta"
           }
         }
       }
@@ -701,12 +821,62 @@
         }
       }
     },
+    "Normal": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
     "Nothing here": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Burada araç yok"
+          }
+        }
+      }
+    },
+    "Only the tools I pick": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca seçtiğim araçlar"
+          }
+        }
+      }
+    },
+    "Only tools that fit the files you drag ever show. The wheels a key opens always show all of theirs.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca sürüklediğin dosyalara uyan araçlar görünür. Tuşla açılan çarklar her zaman kendi araçlarının hepsini gösterir."
+          }
+        }
+      }
+    },
+    "Opening": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Açılış"
+          }
+        }
+      }
+    },
+    "PDF pages → %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF sayfaları → %@"
           }
         }
       }
@@ -727,6 +897,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Helm'i Duraklat"
+          }
+        }
+      }
+    },
+    "Photo → %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotoğraf → %@"
+          }
+        }
+      }
+    },
+    "Press a key once and its wheel stays; press it again to go back.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir tuşa bir kez bas, çarkı kalsın; geri dönmek için yeniden bas."
+          }
+        }
+      }
+    },
+    "Press to switch": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basınca geç"
           }
         }
       }
@@ -801,12 +1001,32 @@
         }
       }
     },
+    "Round": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yuvarlak"
+          }
+        }
+      }
+    },
     "Save results": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Sonuçları kaydet"
+          }
+        }
+      }
+    },
+    "Sensitivity": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hassasiyet"
           }
         }
       }
@@ -821,12 +1041,32 @@
         }
       }
     },
+    "Shake": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sallama"
+          }
+        }
+      }
+    },
     "Shake a drag to see every tool": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Tüm araçlar için sürüklerken salla"
+          }
+        }
+      }
+    },
+    "Shape": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şekil"
           }
         }
       }
@@ -851,12 +1091,42 @@
         }
       }
     },
+    "Size": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boyut"
+          }
+        }
+      }
+    },
+    "Small": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Küçük"
+          }
+        }
+      }
+    },
     "Split Pages": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Sayfalara Böl"
+          }
+        }
+      }
+    },
+    "Square": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kare"
           }
         }
       }
@@ -921,6 +1191,26 @@
         }
       }
     },
+    "The big helm shows": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük dümende"
+          }
+        }
+      }
+    },
+    "There and back and there again, side to side or up and down. Higher sensitivity takes a smaller, slower shake.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Git, gel, yeniden git; sağa sola ya da yukarı aşağı. Hassasiyet yükseldikçe daha küçük ve yavaş bir sallama yeter."
+          }
+        }
+      }
+    },
     "This Mac can’t write %@.": {
       "localizations": {
         "tr": {
@@ -961,6 +1251,16 @@
         }
       }
     },
+    "Video → %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video → %@"
+          }
+        }
+      }
+    },
     "Welcome to Helm": {
       "localizations": {
         "tr": {
@@ -977,6 +1277,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bu uygulamalar öndeyken çarklar açılmaz, böylece kendi sürükleme kısayolları çalışmaya devam eder."
+          }
+        }
+      }
+    },
+    "While dragging": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürüklerken"
           }
         }
       }
