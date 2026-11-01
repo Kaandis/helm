@@ -98,10 +98,9 @@ final class WheelController {
             model.tools = Tool.tools(for: kind, files: drag.files)
         case .all:
             // Every tool that fits, or only the ones chosen in settings.
-            let chosen = Prefs.bool(Prefs.bigHelmShowsAll) ? nil
-                : Set(UserDefaults.standard.stringArray(forKey: Prefs.bigHelmTools) ?? [])
+            let showsAll = Prefs.bool(Prefs.bigHelmShowsAll)
             model.sections = Tool.sections(for: drag.files).compactMap { section in
-                let tools = section.tools.filter { chosen?.contains($0.rawValue) ?? true }
+                let tools = section.tools.filter { showsAll || Prefs.bool(Prefs.bigHelm($0)) }
                 return tools.isEmpty ? nil : (section.kind, tools)
             }
             model.tools = model.sections.flatMap(\.tools)

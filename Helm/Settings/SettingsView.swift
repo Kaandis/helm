@@ -180,7 +180,6 @@ private struct LookSettings: View {
 /// your own pick.
 private struct BigHelmTools: View {
     @AppStorage(Prefs.bigHelmShowsAll) private var showsAll = true
-    @State private var chosen = Set(UserDefaults.standard.stringArray(forKey: Prefs.bigHelmTools) ?? [])
 
     var body: some View {
         Form {
@@ -199,9 +198,7 @@ private struct BigHelmTools: View {
                 ForEach(WheelKind.allCases, id: \.self) { kind in
                     Section {
                         ForEach(Tool.allCases.filter { $0.wheel == kind }, id: \.self) { tool in
-                            Toggle(isOn: binding(for: tool)) {
-                                Label(tool.longTitle, systemImage: tool.symbol)
-                            }
+                            ToolSwitch(tool: tool)
                         }
                     } header: {
                         Text(kind.title)
@@ -211,13 +208,20 @@ private struct BigHelmTools: View {
         }
         .formStyle(.grouped)
     }
+}
 
-    private func binding(for tool: Tool) -> Binding<Bool> {
-        Binding {
-            chosen.contains(tool.rawValue)
-        } set: { on in
-            if on { chosen.insert(tool.rawValue) } else { chosen.remove(tool.rawValue) }
-            UserDefaults.standard.set(Tool.allCases.map(\.rawValue).filter(chosen.contains), forKey: Prefs.bigHelmTools)
+private struct ToolSwitch: View {
+    let tool: Tool
+    @AppStorage private var on: Bool
+
+    init(tool: Tool) {
+        self.tool = tool
+        _on = AppStorage(wrappedValue: true, Prefs.bigHelm(tool))
+    }
+
+    var body: some View {
+        Toggle(isOn: $on) {
+            Label(tool.longTitle, systemImage: tool.symbol)
         }
     }
 }

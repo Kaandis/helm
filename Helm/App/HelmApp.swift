@@ -58,6 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         Prefs.registerDefaults()
+        Prefs.migrateBigHelmTools()
         SettingsBridge.listen()
         #if DEBUG
         // `Helm --run <tool> <file>…` runs one tool, prints what it made and quits.

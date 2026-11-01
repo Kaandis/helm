@@ -7,7 +7,7 @@
     "repository": "https://github.com/Kaandis/helm"
   },
   "defaultsDomain": "app.helm.Helm",
-  "notes": "Every setting is a plain UserDefaults key in defaultsDomain and Helm reads them as it needs them, so changes apply at once. Launch at login is not listed: it is an SMAppService login item that only Helm itself can register. Helm needs no permissions. bigHelmTools is an array of tool identifiers that Helm's own settings window edits.",
+  "notes": "Every setting is a plain UserDefaults key in defaultsDomain and Helm reads them as it needs them, so changes apply at once. Launch at login is not listed: it is an SMAppService login item that only Helm itself can register. Helm needs no permissions.",
   "groups": [
     {
       "id": "wheels",
@@ -437,8 +437,404 @@
             "tr": "Uyan tüm araçları göster"
           },
           "description": {
-            "en": "Turn off to choose the tools in Helm's settings (Big Helm).",
-            "tr": "Araçları Helm'in ayarlarından (Büyük Dümen) seçmek için kapat."
+            "en": "Turn off to pick the tools below. Only tools that fit the files you drag ever show.",
+            "tr": "Aşağıdaki araçları seçmek için kapat. Yalnızca sürüklediğin dosyalara uyan araçlar görünür."
+          }
+        },
+        {
+          "key": "bigHelmToJPG",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Photo → JPG",
+            "tr": "Fotoğraf → JPG"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToPNG",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Photo → PNG",
+            "tr": "Fotoğraf → PNG"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToHEIC",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Photo → HEIC",
+            "tr": "Fotoğraf → HEIC"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToTIFF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Photo → TIFF",
+            "tr": "Fotoğraf → TIFF"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToPDF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Photo → PDF",
+            "tr": "Fotoğraf → PDF"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmPagesToPNG",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "PDF pages → PNG",
+            "tr": "PDF sayfaları → PNG"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmPagesToJPG",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "PDF pages → JPG",
+            "tr": "PDF sayfaları → JPG"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToMP4",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Video → MP4",
+            "tr": "Video → MP4"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToMOV",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Video → MOV",
+            "tr": "Video → MOV"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToGIF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Video → GIF",
+            "tr": "Video → GIF"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToM4A",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Audio → M4A",
+            "tr": "Ses → M4A"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToWAV",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Audio → WAV",
+            "tr": "Ses → WAV"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmToAIFF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Audio → AIFF",
+            "tr": "Ses → AIFF"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCompressImage",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Compress photo",
+            "tr": "Fotoğrafı sıkıştır"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmHalveImage",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Half Size",
+            "tr": "Yarı Boyut"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmStripMetadata",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Strip Metadata",
+            "tr": "Bilgileri Sil"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmRemoveBackground",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Remove Background",
+            "tr": "Arka Planı Sil"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmExtractText",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Copy Text",
+            "tr": "Metni Kopyala"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmMakePDF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Make PDF",
+            "tr": "PDF Yap"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmReadQR",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Read QR",
+            "tr": "QR Oku"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmMergePDF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Merge",
+            "tr": "Birleştir"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmSplitPDF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Split Pages",
+            "tr": "Sayfalara Böl"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCompressPDF",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Compress PDF",
+            "tr": "PDF'i sıkıştır"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCompressVideo",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Compress video",
+            "tr": "Videoyu sıkıştır"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmRemoveAudio",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Mute",
+            "tr": "Sesi Kaldır"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmUnzip",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Extract",
+            "tr": "Aç"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCut",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Cut",
+            "tr": "Kes"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmAirDrop",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "AirDrop",
+            "tr": "AirDrop"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCopyPath",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Copy Path",
+            "tr": "Yolu Kopyala"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCopyImage",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Copy Image",
+            "tr": "Görseli Kopyala"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmMail",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Mail",
+            "tr": "Mail"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmOpenTerminal",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Terminal",
+            "tr": "Terminal"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmZip",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Zip",
+            "tr": "Zip'le"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
           }
         }
       ]

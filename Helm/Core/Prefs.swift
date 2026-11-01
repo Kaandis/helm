@@ -26,10 +26,22 @@ enum Prefs {
     /// "round" or "square".
     static let helmShape = "helmShape"
     static let showHandles = "showHandles"
-    /// False to show only the tools in `bigHelmTools` on the big helm.
+    /// False to show only the tools switched on with `bigHelm(_:)`.
     static let bigHelmShowsAll = "bigHelmShowsAll"
-    /// Tools (raw values) the big helm shows when it doesn't show them all.
-    static let bigHelmTools = "bigHelmTools"
+    /// Whether the big helm shows `tool` when it doesn't show them all: one
+    /// switch per tool, so Harbor can draw them too.
+    static func bigHelm(_ tool: Tool) -> String {
+        "bigHelm" + tool.rawValue.prefix(1).uppercased() + tool.rawValue.dropFirst()
+    }
+
+    /// Helm 1.0 kept the pick as one list; this turns it into the switches.
+    static func migrateBigHelmTools() {
+        let defaults = UserDefaults.standard
+        guard let old = defaults.persistentDomain(forName: Bundle.main.bundleIdentifier ?? "")?["bigHelmTools"] as? [String]
+        else { return }
+        for tool in Tool.allCases where !old.contains(tool.rawValue) { defaults.set(false, forKey: bigHelm(tool)) }
+        defaults.removeObject(forKey: "bigHelmTools")
+    }
     /// Bundle identifiers where wheels never open, for apps whose own
     /// drag shortcuts would clash (Photoshop, games).
     static let excludedApps = "excludedApps"
@@ -43,6 +55,7 @@ enum Prefs {
     static let hasCompletedOnboarding = "hasCompletedOnboarding"
 
     static func registerDefaults() {
+        UserDefaults.standard.register(defaults: Dictionary(uniqueKeysWithValues: Tool.allCases.map { (bigHelm($0), true) }))
         UserDefaults.standard.register(defaults: [
             convertKey: "shift",
             toolsKey: "command",
@@ -57,7 +70,6 @@ enum Prefs {
             helmShape: "round",
             showHandles: true,
             bigHelmShowsAll: true,
-            bigHelmTools: Tool.allCases.map(\.rawValue),
             panelStyle: Self.glassAvailable ? "glass" : "cream",
             accentColor: "graphite",
             helmTransparency: 0.3,

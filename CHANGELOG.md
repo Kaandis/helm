@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 — 2026-11-01
+
+- Picking the big helm's tools now works from Harbor too: each tool is its own switch, shown once "Show every tool that fits" is off. A pick made in Helm 1.0 carries over.
+
 ## 1.0 — 2026-11-01
 
 - First release. Drag files and hold ⇧, ⌘ or ⌃ to open the Convert, Tools or Actions wheel under the pointer; drop on a slice and the result lands next to the original.
