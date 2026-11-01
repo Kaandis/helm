@@ -120,6 +120,7 @@ final class WheelController {
         origin.x = min(max(origin.x, visible.minX), visible.maxX - size.width)
         origin.y = min(max(origin.y, visible.minY), visible.maxY - size.height)
         panel.setFrame(CGRect(origin: origin, size: size), display: false)
+        panel.contentView?.needsLayout = true
         isShown = true
         guard let content = panel.contentView else { return }
         panel.alphaValue = 1
@@ -175,6 +176,12 @@ final class WheelController {
         panel.isOpaque = false
         panel.hasShadow = false
         panel.hidesOnDeactivate = false
+        // Left to itself, a clear window lets the pointer (and drags) fall
+        // through wherever it draws nothing it counts as solid: the glass
+        // and see-through ring included. Then a drag only registers over an
+        // icon or a line. Said outright, the whole window takes them; the
+        // drop view decides which parts mean anything.
+        panel.ignoresMouseEvents = false
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
         let drop = WheelDropView(frame: CGRect(origin: .zero, size: WheelMetrics.keyed.panel))
         drop.controller = self
@@ -203,6 +210,28 @@ private final class WheelDropView: NSView {
 
     // The SwiftUI drawing on top mustn't swallow the drag.
     override func hitTest(_ point: NSPoint) -> NSView? { self }
+
+    /// A disc under the whole helm, all but invisible, so the window server
+    /// sees something to hand the drag to everywhere the helm is.
+    private let catcher = CAShapeLayer()
+
+    override func layout() {
+        super.layout()
+        guard let layer, let metrics = MainActor.assumeIsolated({ controller?.model.metrics }) else { return }
+        if catcher.superlayer == nil {
+            catcher.fillColor = NSColor(white: 0, alpha: 0.012).cgColor
+            layer.insertSublayer(catcher, at: 0)
+        }
+        let radius = metrics.outer + WheelMetrics.handle + WheelMetrics.room
+        let rect = CGRect(x: metrics.center.x - radius, y: metrics.center.y - radius, width: radius * 2, height: radius * 2)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        catcher.frame = bounds
+        catcher.path = metrics.square
+            ? CGPath(roundedRect: rect, cornerWidth: radius * HelmRing.corner, cornerHeight: radius * HelmRing.corner, transform: nil)
+            : CGPath(ellipseIn: rect, transform: nil)
+        CATransaction.commit()
+    }
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation { update(sender) }
     override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation { update(sender) }
