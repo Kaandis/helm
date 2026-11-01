@@ -105,10 +105,14 @@ private struct HelmView: View {
                 .strokeBorder(rim, lineWidth: 2.5)
                 .frame(width: outer * 2, height: outer * 2)
 
+            // Icons shrink a little when a crowded helm leaves them less room.
+            let room = 2 * .pi * (inner + outer) / 2 / CGFloat(max(count, 1))
+            let fit = isFull ? min(1, room / 38) : 1
             ForEach(Array(model.tools.enumerated()), id: \.offset) { index, tool in
                 let angle = Double(index) / Double(max(count, 1)) * 2 * .pi - .pi / 2
                 let radius = edge(at: angle, of: (inner + outer) / 2 + (isFull ? 2 : 0))
                 ToolLabel(tool: tool, highlighted: model.hovered == index, iconOnly: isFull)
+                    .scaleEffect(fit)
                     .offset(x: cos(angle) * radius, y: sin(angle) * radius)
             }
 
@@ -135,6 +139,14 @@ private struct HelmView: View {
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
                 Text(hoveredGroup?.title ?? "")
+                    .font(.system(size: 10.5, weight: .medium))
+                    .foregroundStyle(palette.ink3)
+            } else if model.files.isEmpty {
+                // The settings' preview: no files, just the tools.
+                Text("\(model.tools.count)")
+                    .font(.system(size: 19, weight: .bold).monospacedDigit())
+                    .foregroundStyle(palette.ink)
+                Text("on the big helm")
                     .font(.system(size: 10.5, weight: .medium))
                     .foregroundStyle(palette.ink3)
             } else {

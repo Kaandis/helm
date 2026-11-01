@@ -6,20 +6,28 @@ import UniformTypeIdentifiers
 /// Helm's own settings window. With Harbor installed the same settings show
 /// there too (see `settings-schema.json`); everything is a plain UserDefaults key.
 struct SettingsView: View {
+    /// The tab on show; Harbor and the menu can ask for one by name.
+    @AppStorage(Prefs.settingsTab) private var tab = "general"
+
     var body: some View {
-        TabView {
+        TabView(selection: $tab) {
             GeneralSettings()
                 .tabItem { Label("General", systemImage: "gearshape") }
+                .tag("general")
             WheelSettings()
                 .tabItem { Label("Opening", systemImage: "hand.draw") }
+                .tag("opening")
             LookSettings()
                 .tabItem { Label("Look", systemImage: "paintbrush") }
-            BigHelmTools()
+                .tag("look")
+            BigHelmEditor()
                 .tabItem { Label("Big Helm", systemImage: "circle.grid.cross") }
+                .tag("bighelm")
             ExcludedApps()
                 .tabItem { Label("Excluded Apps", systemImage: "nosign") }
+                .tag("excluded")
         }
-        .frame(width: 520)
+        .frame(width: 520, height: 640)
     }
 }
 
@@ -173,56 +181,6 @@ private struct LookSettings: View {
             }
         }
         .formStyle(.grouped)
-    }
-}
-
-/// Which tools the big helm shows when you shake: everything that fits, or
-/// your own pick.
-private struct BigHelmTools: View {
-    @AppStorage(Prefs.bigHelmShowsAll) private var showsAll = true
-
-    var body: some View {
-        Form {
-            Section {
-                Picker("The big helm shows", selection: $showsAll) {
-                    Text("Every tool that fits").tag(true)
-                    Text("Only the tools I pick").tag(false)
-                }
-                .pickerStyle(.radioGroup)
-                Text("Only tools that fit the files you drag ever show. The wheels a key opens always show all of theirs.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            if !showsAll {
-                ForEach(WheelKind.allCases, id: \.self) { kind in
-                    Section {
-                        ForEach(Tool.allCases.filter { $0.wheel == kind }, id: \.self) { tool in
-                            ToolSwitch(tool: tool)
-                        }
-                    } header: {
-                        Text(kind.title)
-                    }
-                }
-            }
-        }
-        .formStyle(.grouped)
-    }
-}
-
-private struct ToolSwitch: View {
-    let tool: Tool
-    @AppStorage private var on: Bool
-
-    init(tool: Tool) {
-        self.tool = tool
-        _on = AppStorage(wrappedValue: true, Prefs.bigHelm(tool))
-    }
-
-    var body: some View {
-        Toggle(isOn: $on) {
-            Label(tool.longTitle, systemImage: tool.symbol)
-        }
     }
 }
 

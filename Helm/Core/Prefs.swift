@@ -34,6 +34,18 @@ enum Prefs {
         "bigHelm" + tool.rawValue.prefix(1).uppercased() + tool.rawValue.dropFirst()
     }
 
+    /// The big helm's order, clockwise from the top: tool raw values.
+    static let bigHelmOrder = "bigHelmOrder"
+
+    /// `tools` in the order chosen for the big helm; tools the order doesn't
+    /// know yet keep their place after it.
+    static func inBigHelmOrder(_ tools: [Tool]) -> [Tool] {
+        let order = UserDefaults.standard.stringArray(forKey: bigHelmOrder) ?? []
+        let rank = Dictionary(order.enumerated().map { ($1, $0) }, uniquingKeysWith: { a, _ in a })
+        let fallback = Dictionary(Tool.allCases.enumerated().map { ($1, $0 + order.count) }, uniquingKeysWith: { a, _ in a })
+        return tools.sorted { (rank[$0.rawValue] ?? fallback[$0]!) < (rank[$1.rawValue] ?? fallback[$1]!) }
+    }
+
     /// Helm 1.0 kept the pick as one list; this turns it into the switches.
     static func migrateBigHelmTools() {
         let defaults = UserDefaults.standard
@@ -52,6 +64,8 @@ enum Prefs {
     /// How see-through the helm's ring is, 0 (solid) to 0.8.
     static let helmTransparency = "helmTransparency"
     static let isPaused = "isPaused"
+    /// The Settings window's tab: "general", "opening", "look", "bighelm" or "excluded".
+    static let settingsTab = "settingsTab"
     static let hasCompletedOnboarding = "hasCompletedOnboarding"
 
     static func registerDefaults() {

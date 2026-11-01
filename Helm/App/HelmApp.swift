@@ -42,6 +42,7 @@ private struct MenuContent: View {
         Divider()
         Button("Settings…") { AppDelegate.showSettings() }
             .keyboardShortcut(",")
+        Button("Arrange the Big Helm…") { AppDelegate.showOwnSettings(tab: "bighelm") }
         Button("How to Use Helm…") { Guide.show() }
         Divider()
         Button("Quit Helm") { NSApp.terminate(nil) }
@@ -79,8 +80,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // `Helm --settings <tab>` opens Helm's own settings window on a tab.
         if let i = args.firstIndex(of: "--settings") {
-            if i + 1 < args.count { UserDefaults.standard.set(Int(args[i + 1]) ?? 0, forKey: "com_apple_SwiftUI_Settings_selectedTabIndex") }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { Self.showOwnSettings() }
+            let tab = i + 1 < args.count ? args[i + 1] : nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { Self.showOwnSettings(tab: tab) }
         }
         // `Helm --cut <file>…` puts files on the shelf, as the Cut tool does.
         if let i = args.firstIndex(of: "--cut"), i + 1 < args.count {
@@ -113,6 +114,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         watcher.start()
         wheel.prepare()
+        listenForHarbor()
 
         if !Prefs.bool(Prefs.hasCompletedOnboarding) { Guide.show() }
         log.notice("Launched")
@@ -163,8 +165,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         showOwnSettings()
     }
 
-    static func showOwnSettings() {
+    /// Helm's own window, on `tab` if given. Harbor sends people here for
+    /// what its schema can't draw, like arranging the big helm.
+    static func showOwnSettings(tab: String? = nil) {
+        if let tab { UserDefaults.standard.set(tab, forKey: Prefs.settingsTab) }
         NSApp.activate()
         openSettingsWindow?()
+    }
+
+    /// Harbor asks running apps by notification, and launches others with
+    /// `--open-settings <section>`.
+    private func listenForHarbor() {
+        DistributedNotificationCenter.default().addObserver(forName: Notification.Name("app.harbor.openOwnSettings"),
+                                                            object: Bundle.main.bundleIdentifier, queue: .main) { note in
+            let section = note.userInfo?["section"] as? String
+            MainActor.assumeIsolated { Self.showOwnSettings(tab: section) }
+        }
+        let args = CommandLine.arguments
+        if let i = args.firstIndex(of: "--open-settings"), i + 1 < args.count {
+            let section = args[i + 1]
+            // The menu bar icon has to be drawn before Settings can open.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { Self.showOwnSettings(tab: section) }
+        }
     }
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2 — 2026-11-01
+
+- Arrange the big helm by hand: in Settings › Big Helm (or from Harbor, or the menu bar’s Arrange the Big Helm…), drag tool tiles onto a live helm in your shape and look, drag them round it to reorder, or off it to remove.
+- The big helm keeps your order, and shades each run of one wheel’s tools.
+
 ## 1.0.1 — 2026-11-01
 
 - Picking the big helm's tools now works from Harbor too: each tool is its own switch, shown once "Show every tool that fits" is off. A pick made in Helm 1.0 carries over.

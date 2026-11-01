@@ -211,6 +211,26 @@
         }
       }
     },
+    "Add from %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ araçlarından ekle"
+          }
+        }
+      }
+    },
+    "Adds it to the big helm": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük dümene ekler"
+          }
+        }
+      }
+    },
     "All Tools": {
       "localizations": {
         "tr": {
@@ -237,6 +257,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Arşiv"
+          }
+        }
+      }
+    },
+    "Arrange the Big Helm…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük Dümeni Düzenle…"
           }
         }
       }
@@ -417,6 +447,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rafı bir klasöre sürükle ya da orada ⌥⌘V'ye bas."
+          }
+        }
+      }
+    },
+    "Drag tiles onto the helm, round it to reorder, or off it to remove. Only tools that fit the files you drag ever show.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kareleri dümene sürükle, sırasını değiştirmek için dümende gezdir, çıkarmak için dışarı sürükle. Yalnızca sürüklediğin dosyalara uyan araçlar görünür."
           }
         }
       }
@@ -851,16 +891,6 @@
         }
       }
     },
-    "Only tools that fit the files you drag ever show. The wheels a key opens always show all of theirs.": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yalnızca sürüklediğin dosyalara uyan araçlar görünür. Tuşla açılan çarklar her zaman kendi araçlarının hepsini gösterir."
-          }
-        }
-      }
-    },
     "Opening": {
       "localizations": {
         "tr": {
@@ -967,6 +997,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Arka Planı Sil"
+          }
+        }
+      }
+    },
+    "Remove from Big Helm": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük Dümenden Çıkar"
           }
         }
       }
@@ -1347,6 +1387,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "sessiz"
+          }
+        }
+      }
+    },
+    "on the big helm": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "büyük dümende"
           }
         }
       }

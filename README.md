@@ -35,7 +35,7 @@ Or just shake the files while you drag, there and back and there again, side to 
 - **Cut, at last.** Finder has no Cut. Drop files on Cut and they wait on a small shelf in the corner, untouched; drag the shelf into any folder to move them there, or press ⌥⌘V in that folder. Close the shelf to forget them.
 - **Only what fits.** Each wheel shows just the tools for the files you’re holding, and never offers a format they’re already in.
 - **Your keys.** Give each wheel the key you like (⇧, ⌘, ⌃ or ⌥), turn Helm off for apps whose own drag shortcuts clash, or pause it from the menu bar.
-- **Your way.** Liquid Glass or Harbor’s cream, the rim in any of eight colours, as see-through as you like, small to large, round or square, with or without handles. Hold a key to filter or press it once; pick which tools the big helm shows; make the shake as gentle or as firm as you like.
+- **Your way.** Liquid Glass or Harbor’s cream, the rim in any of eight colours, as see-through as you like, small to large, round or square, with or without handles. Hold a key to filter or press it once; arrange the big helm by dragging tool tiles onto it and round it; make the shake as gentle or as firm as you like.
 - **Works with Harbor.** With [Harbor](https://kaandis.github.io/harbor/) installed, Helm’s settings appear there and apply at once.
 
 ## Why it works this way

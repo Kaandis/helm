@@ -4,7 +4,14 @@
     "id": "app.helm.Helm",
     "name": "Helm",
     "site": "https://kaandis.github.io/helm/",
-    "repository": "https://github.com/Kaandis/helm"
+    "repository": "https://github.com/Kaandis/helm",
+    "ownSettings": {
+      "title": {
+        "en": "Arrange the Big Helm…",
+        "tr": "Büyük Dümeni Düzenle…"
+      },
+      "section": "bighelm"
+    }
   },
   "defaultsDomain": "app.helm.Helm",
   "notes": "Every setting is a plain UserDefaults key in defaultsDomain and Helm reads them as it needs them, so changes apply at once. Launch at login is not listed: it is an SMAppService login item that only Helm itself can register. Helm needs no permissions.",

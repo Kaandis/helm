@@ -99,11 +99,9 @@ final class WheelController {
         case .all:
             // Every tool that fits, or only the ones chosen in settings.
             let showsAll = Prefs.bool(Prefs.bigHelmShowsAll)
-            model.sections = Tool.sections(for: drag.files).compactMap { section in
-                let tools = section.tools.filter { showsAll || Prefs.bool(Prefs.bigHelm($0)) }
-                return tools.isEmpty ? nil : (section.kind, tools)
-            }
-            model.tools = model.sections.flatMap(\.tools)
+            let fitting = Tool.sections(for: drag.files).flatMap(\.tools)
+            model.tools = Prefs.inBigHelmOrder(fitting.filter { showsAll || Prefs.bool(Prefs.bigHelm($0)) })
+            model.sections = Tool.runs(model.tools)
         }
         model.metrics = .chosen(full: model.kind == nil)
 

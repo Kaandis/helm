@@ -152,6 +152,16 @@ enum Tool: String, CaseIterable, Sendable {
         }
     }
 
+    /// Tools split where one wheel's run gives way to the next, for the big
+    /// helm's shading when the order mixes them.
+    static func runs(_ tools: [Tool]) -> [(kind: WheelKind, tools: [Tool])] {
+        var runs: [(kind: WheelKind, tools: [Tool])] = []
+        for tool in tools {
+            if runs.last?.kind == tool.wheel { runs[runs.count - 1].tools.append(tool) } else { runs.append((tool.wheel, [tool])) }
+        }
+        return runs
+    }
+
     /// Every tool that fits, by wheel: what a shaken drag shows.
     static func sections(for files: [URL]) -> [(kind: WheelKind, tools: [Tool])] {
         WheelKind.allCases.map { ($0, tools(for: $0, files: files)) }.filter { !$0.tools.isEmpty }
