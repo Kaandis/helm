@@ -1,70 +1,88 @@
 import HarborKit
 import SwiftUI
 
-/// The helm: a ring of tools around a hub, with the wheel keys below; or,
-/// after a shake, the palette of every tool.
+/// The helm: a ring of tools around a hub, with handles past its rim and
+/// the wheel keys below. A held key shows one wheel; a shake shows the big
+/// helm with every tool that fits, grouped by wheel.
 struct WheelView: View {
-    let model: WheelModel
-
-    var body: some View {
-        if model.kind == nil {
-            PaletteView(model: model)
-        } else {
-            RingView(model: model)
-        }
-    }
-}
-
-private struct RingView: View {
     let model: WheelModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private var metrics: WheelMetrics { model.metrics }
+    private var isFull: Bool { model.kind == nil }
+
+    /// The wheel's centre in SwiftUI's top-left coordinates.
     private var center: CGPoint {
-        CGPoint(x: WheelMetrics.panel.width / 2, y: WheelMetrics.panel.height - WheelMetrics.center.y)
+        CGPoint(x: metrics.panel.width / 2, y: metrics.panel.height - metrics.center.y)
     }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
             ring
-                .frame(width: WheelMetrics.outer * 2, height: WheelMetrics.outer * 2)
+                .frame(width: (metrics.outer + WheelMetrics.handle) * 2, height: (metrics.outer + WheelMetrics.handle) * 2)
                 .position(center)
             legend
-                .position(x: center.x, y: center.y + WheelMetrics.outer + 34)
+                .position(x: center.x, y: center.y + metrics.outer + WheelMetrics.handle + 24)
         }
-        .frame(width: WheelMetrics.panel.width, height: WheelMetrics.panel.height)
+        .frame(width: metrics.panel.width, height: metrics.panel.height)
     }
 
     private var ring: some View {
         let count = model.tools.count
+        let outer = metrics.outer, inner = metrics.inner
         return ZStack {
-            // The ring itself: material with Harbor's warm tint, and a hairline.
-            Annulus(inner: WheelMetrics.inner)
+            // Handles past the rim, as on a ship's wheel: one between every
+            // two tools, heavier where one wheel's tools give way to the next.
+            ForEach(handles, id: \.self) { handle in
+                Handle(angle: handle.angle, from: outer - 2, to: outer + WheelMetrics.handle - (handle.major ? 0 : 6))
+                    .stroke(Theme.ink.opacity(0.88), style: StrokeStyle(lineWidth: handle.major ? 12 : 9, lineCap: .round))
+            }
+
+            // The ring itself: material with Harbor's warm tint.
+            Annulus(inner: inner)
                 .fill(.regularMaterial, style: FillStyle(eoFill: true))
-                .overlay(Annulus(inner: WheelMetrics.inner).fill(Theme.surfaceTint, style: FillStyle(eoFill: true)))
-                .overlay(Annulus(inner: WheelMetrics.inner).stroke(Theme.hairline, lineWidth: 1))
-                .shadow(color: .black.opacity(0.18), radius: 22, y: 10)
+                .overlay(Annulus(inner: inner).fill(Theme.surfaceTint, style: FillStyle(eoFill: true)))
+                .frame(width: outer * 2, height: outer * 2)
+
+            // On the big helm, every other wheel's tools sit a shade darker.
+            if isFull {
+                ForEach(Array(groups.enumerated()), id: \.offset) { index, group in
+                    if index % 2 == 1 {
+                        Arc(first: group.first, last: group.last, count: count, inner: inner + 2, outer: outer - 4)
+                            .fill(Theme.ink.opacity(0.06))
+                            .frame(width: outer * 2, height: outer * 2)
+                    }
+                }
+            }
 
             if let hovered = model.hovered, count > 0 {
-                Sector(index: hovered, count: count, inner: WheelMetrics.inner + 4, outer: WheelMetrics.outer - 4)
+                Arc(first: hovered, last: hovered, count: count, inner: inner + 4, outer: outer - 7)
                     .fill(Theme.ink.opacity(0.1))
+                    .frame(width: outer * 2, height: outer * 2)
                     .transition(.opacity)
             }
 
-            // Spokes between the slices.
+            // Spokes between the tools.
             ForEach(0..<count, id: \.self) { index in
-                Spoke(index: index, count: count, inner: WheelMetrics.inner + 10, outer: WheelMetrics.outer - 10)
+                Handle(angle: Self.boundary(index, count), from: inner + 10, to: outer - 12)
                     .stroke(Theme.hairline, lineWidth: 1)
             }
 
-            ForEach(Array(model.tools.enumerated()), id: \.element) { index, tool in
-                ToolLabel(tool: tool, highlighted: model.hovered == index)
-                    .offset(WheelView.offset(index: index, count: count, radius: (WheelMetrics.inner + WheelMetrics.outer) / 2))
+            // The rim.
+            Circle()
+                .strokeBorder(Theme.ink.opacity(0.88), lineWidth: isFull ? 6 : 5)
+                .frame(width: outer * 2, height: outer * 2)
+
+            ForEach(Array(model.tools.enumerated()), id: \.offset) { index, tool in
+                ToolLabel(tool: tool, highlighted: model.hovered == index, compact: isFull)
+                    .offset(WheelView.offset(index: index, count: count, radius: (inner + outer) / 2 + (isFull ? 4 : 0)))
             }
 
             hub
         }
+        .compositingGroup()
+        .shadow(color: .black.opacity(0.2), radius: 22, y: 10)
         .animation(reduceMotion ? nil : .harborSelect, value: model.hovered)
-        .animation(reduceMotion ? nil : .harborPresent, value: model.kind)
     }
 
     private var hub: some View {
@@ -75,37 +93,72 @@ private struct RingView: View {
                     .foregroundStyle(Theme.ink2)
             } else {
                 Text(model.files.count == 1 ? model.files[0].pathExtension.uppercased() : "\(model.files.count)")
-                    .font(.system(size: 15, weight: .bold).monospacedDigit())
+                    .font(.system(size: isFull ? 19 : 15, weight: .bold).monospacedDigit())
                     .foregroundStyle(Theme.ink)
                     .lineLimit(1)
-                Text(model.kind?.title ?? "")
-                    .font(.system(size: 10.5, weight: .medium))
+                Text(model.kind?.title ?? String(localized: "All Tools"))
+                    .font(.system(size: isFull ? 11.5 : 10.5, weight: .medium))
                     .foregroundStyle(Theme.ink3)
             }
         }
-        .frame(width: WheelMetrics.inner * 2, height: WheelMetrics.inner * 2)
+        .frame(width: metrics.inner * 2, height: metrics.inner * 2)
         .background(Circle().fill(Theme.card))
-        .overlay(Circle().strokeBorder(Theme.hairline))
+        .overlay(Circle().strokeBorder(Theme.ink.opacity(0.88), lineWidth: isFull ? 6 : 5))
         .transaction { $0.animation = nil }
     }
 
-    /// Which key opens which wheel, the open one stronger.
+    /// Which key opens which wheel: the open one, or on the big helm the
+    /// one the pointer is over, stronger.
     private var legend: some View {
-        KeyLegend(selected: model.kind)
+        KeyLegend(selected: model.kind ?? hoveredGroup)
             .padding(.horizontal, 12)
             .padding(.vertical, 7)
             .background(Capsule().fill(Theme.card))
             .overlay(Capsule().strokeBorder(Theme.hairline))
             .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
-        .transaction { $0.animation = nil }
+            .animation(reduceMotion ? nil : .harborSelect, value: hoveredGroup)
     }
 
-    static func offset(index: Int, count: Int, radius: CGFloat) -> CGSize {
-        WheelView.offset(index: index, count: count, radius: radius)
+    /// Each wheel's run of tools on the big helm.
+    private var groups: [(kind: WheelKind, first: Int, last: Int)] {
+        var start = 0
+        return model.sections.map { section in
+            defer { start += section.tools.count }
+            return (section.kind, start, start + section.tools.count - 1)
+        }
     }
-}
 
-extension WheelView {
+    private var hoveredGroup: WheelKind? {
+        guard let hovered = model.hovered else { return nil }
+        return groups.first { (it) in (it.first...it.last).contains(hovered) }?.kind
+    }
+
+    private struct HandleSpot: Hashable {
+        let angle: Double
+        let major: Bool
+    }
+
+    private var handles: [HandleSpot] {
+        let count = model.tools.count
+        // Too few tools to space handles by: four, like a plain wheel.
+        guard count >= 3 else {
+            return (0..<4).map { HandleSpot(angle: Double($0) * .pi / 2 - .pi / 4, major: false) }
+        }
+        // The last tool of each wheel, where the next wheel begins.
+        // The big helm holds too many tools for a handle at every gap; it
+        // gets eight, evenly round, like a real one, the top one heavier.
+        if isFull {
+            return (0..<8).map { HandleSpot(angle: Double($0) * .pi / 4 - .pi / 2, major: $0 == 0) }
+        }
+        return (0..<count).map { HandleSpot(angle: Self.boundary($0, count), major: false) }
+    }
+
+    /// The angle (radians, clockwise from the top) between tool `index`
+    /// and the next.
+    static func boundary(_ index: Int, _ count: Int) -> Double {
+        (-90 + (Double(index) + 0.5) * 360 / Double(max(count, 1))) * .pi / 180
+    }
+
     static func offset(index: Int, count: Int, radius: CGFloat) -> CGSize {
         let angle = Double(index) / Double(max(count, 1)) * 2 * .pi
         return CGSize(width: sin(angle) * radius, height: -cos(angle) * radius)
@@ -134,83 +187,25 @@ private struct KeyLegend: View {
     }
 }
 
-/// Every tool that fits, grouped under the key that narrows to it. The card
-/// sits just off the pointer, so letting go where it opened cancels.
-private struct PaletteView: View {
-    let model: WheelModel
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    var body: some View {
-        let layout = model.palette
-        let card = layout.card
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(.regularMaterial)
-                .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(Theme.surfaceTint))
-                .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(Theme.hairline))
-                .shadow(color: .black.opacity(0.18), radius: 22, y: 10)
-                .frame(width: card.width, height: card.height)
-                .offset(x: card.minX, y: card.minY)
-
-            ForEach(Array(model.sections.enumerated()), id: \.offset) { index, section in
-                if layout.headers.indices.contains(index) {
-                    HStack(spacing: 6) {
-                        Text(section.kind.title)
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Theme.ink2)
-                        Text(WheelKind.symbol(for: Prefs.string(section.kind.prefKey)))
-                            .font(.system(size: 10.5, weight: .semibold))
-                            .foregroundStyle(Theme.ink3)
-                    }
-                    .offset(x: layout.headers[index].x, y: layout.headers[index].y + 2)
-                }
-            }
-
-            ForEach(Array(model.tools.enumerated()), id: \.offset) { index, tool in
-                if layout.tiles.indices.contains(index) {
-                    let rect = layout.tiles[index]
-                    let on = model.hovered == index
-                    ToolLabel(tool: tool, highlighted: on, lines: 2)
-                        .frame(width: rect.width, height: rect.height)
-                        .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(on ? Theme.ink.opacity(0.1) : Theme.ink.opacity(0.035)))
-                        .offset(x: rect.minX, y: rect.minY)
-                }
-            }
-
-            HStack(spacing: 8) {
-                Text("Hold a key to narrow it down")
-                Text("·")
-                Text("Drop outside to cancel")
-            }
-            .font(.system(size: 11))
-            .foregroundStyle(Theme.ink3)
-            .frame(width: card.width, height: PaletteMetrics.footer)
-            .offset(x: card.minX, y: card.maxY - PaletteMetrics.footer - 6)
-        }
-        .frame(width: layout.size.width, height: layout.size.height, alignment: .topLeading)
-        .animation(reduceMotion ? nil : .harborSelect, value: model.hovered)
-    }
-}
-
 private struct ToolLabel: View {
     let tool: Tool
     let highlighted: Bool
     var lines = 2
+    var compact = false
 
     var body: some View {
         VStack(spacing: 4) {
             Image(systemName: tool.symbol)
-                .font(.system(size: 18, weight: .medium))
-                .frame(height: 22)
+                .font(.system(size: compact ? 16 : 18, weight: .medium))
+                .frame(height: compact ? 19 : 22)
             Text(tool.title)
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: compact ? 10 : 11, weight: .semibold))
                 .lineLimit(lines)
                 .multilineTextAlignment(.center)
                 .minimumScaleFactor(0.8)
                 .fixedSize(horizontal: false, vertical: lines > 1)
         }
-        .frame(width: lines > 1 ? 80 : 74)
+        .frame(width: compact ? 66 : 76)
         .foregroundStyle(highlighted ? Theme.ink : Theme.ink2)
         .scaleEffect(highlighted ? 1.08 : 1)
     }
@@ -237,18 +232,19 @@ private struct Annulus: Shape {
     }
 }
 
-/// One slice of the ring, centred on its tool.
-private struct Sector: Shape {
-    let index: Int
+/// A run of slices, from tool `first` to tool `last`, centred on them.
+private struct Arc: Shape {
+    let first: Int
+    let last: Int
     let count: Int
     let inner: CGFloat
     let outer: CGFloat
 
     func path(in rect: CGRect) -> Path {
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        let width = 360 / Double(count)
-        let mid = -90 + Double(index) * width
-        let start = Angle.degrees(mid - width / 2 + 1), end = Angle.degrees(mid + width / 2 - 1)
+        let width = 360 / Double(max(count, 1))
+        let start = Angle.degrees(-90 + (Double(first) - 0.5) * width + 1)
+        let end = Angle.degrees(-90 + (Double(last) + 0.5) * width - 1)
         var path = Path()
         path.addArc(center: center, radius: outer, startAngle: start, endAngle: end, clockwise: false)
         path.addArc(center: center, radius: inner, startAngle: end, endAngle: start, clockwise: true)
@@ -257,20 +253,17 @@ private struct Sector: Shape {
     }
 }
 
-/// The line between two slices.
-private struct Spoke: Shape {
-    let index: Int
-    let count: Int
-    let inner: CGFloat
-    let outer: CGFloat
+/// A straight line out from the centre at `angle`: a spoke, or a handle.
+private struct Handle: Shape {
+    let angle: Double
+    let from: CGFloat
+    let to: CGFloat
 
     func path(in rect: CGRect) -> Path {
-        guard count > 1 else { return Path() }
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        let angle = (-90 + (Double(index) + 0.5) * 360 / Double(count)) * .pi / 180
         var path = Path()
-        path.move(to: CGPoint(x: center.x + cos(angle) * inner, y: center.y + sin(angle) * inner))
-        path.addLine(to: CGPoint(x: center.x + cos(angle) * outer, y: center.y + sin(angle) * outer))
+        path.move(to: CGPoint(x: center.x + cos(angle) * from, y: center.y + sin(angle) * from))
+        path.addLine(to: CGPoint(x: center.x + cos(angle) * to, y: center.y + sin(angle) * to))
         return path
     }
 }

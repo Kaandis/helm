@@ -735,7 +735,7 @@ h2 {
 .desk-file.fresh .fi { animation: none; }
 
 /* The file under the pointer */
-.ghost { position: absolute; left: -26px; top: -6px; z-index: 18; pointer-events: none; opacity: 0.92; }
+.ghost { position: absolute; left: -26px; top: -6px; z-index: 28; pointer-events: none; opacity: 0.92; }
 .ghost .fi { box-shadow: 0 0 0 1px rgba(35, 31, 28, 0.12), 0 18px 30px -12px rgba(60, 30, 20, 0.55); }
 .ghost.back { transition: transform 320ms cubic-bezier(.2, .9, .25, 1); }
 .ghost.gone { transition: opacity 220ms ease, scale 220ms ease; opacity: 0; scale: 0.6; }
@@ -759,17 +759,21 @@ h2 {
 /* The wheel */
 .wheel {
   position: absolute;
-  z-index: 17;
+  z-index: 27; /* above the Dock, as on a Mac */
   width: 320px;
   height: 320px;
-  margin: -160px 0 0 -160px;
   pointer-events: none;
   opacity: 0;
   transform: scale(0.8);
   transition: opacity 180ms ease, transform 300ms cubic-bezier(.2, .9, .25, 1);
 }
 .wheel.open { opacity: 1; transform: none; }
-.wheel-ring { position: absolute; inset: 0; width: 320px; height: 320px; overflow: visible; filter: drop-shadow(0 12px 22px rgba(60, 30, 20, 0.28)); }
+.wheel-ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 12px 22px rgba(60, 30, 20, 0.28)); }
+.wheel .handle { stroke: rgba(35, 31, 28, 0.88); stroke-width: 9; stroke-linecap: round; }
+.wheel .handle.major { stroke-width: 12; }
+.wheel .rim { fill: none; stroke: rgba(35, 31, 28, 0.88); stroke-width: 5; }
+.wheel.full .rim { stroke-width: 6; }
+.wheel .group { fill: rgba(35, 31, 28, 0.06); }
 .wheel .ring { fill: rgba(255, 249, 241, 0.94); stroke: rgba(35, 31, 28, 0.1); stroke-width: 1; }
 .wheel .sector { fill: rgba(35, 31, 28, 0); transition: fill 140ms ease; }
 .wheel .sector.on { fill: rgba(35, 31, 28, 0.1); }
@@ -790,6 +794,9 @@ h2 {
   transition: color 140ms ease, transform 200ms cubic-bezier(.2, .9, .25, 1);
 }
 .wl svg { width: 22px; height: 22px; }
+.wheel.full .wl { width: 66px; margin: -22px 0 0 -33px; font-size: 10px; }
+.wheel.full .wl svg { width: 18px; height: 18px; }
+.wheel.full .hub b { font-size: 18px; }
 .wl.on { color: var(--ink); transform: scale(1.08); }
 .hub {
   position: absolute;
@@ -804,7 +811,7 @@ h2 {
   margin: -54px 0 0 -54px;
   border-radius: 50%;
   background: #fffdf9;
-  box-shadow: inset 0 0 0 1px rgba(35, 31, 28, 0.1);
+  box-shadow: inset 0 0 0 5px rgba(35, 31, 28, 0.88);
   text-align: center;
 }
 .hub b { font-size: 16px; letter-spacing: -0.01em; line-height: 1.1; }
@@ -812,7 +819,7 @@ h2 {
 .legend {
   position: absolute;
   left: 50%;
-  top: calc(100% + 12px);
+  top: calc(100% + 2px);
   display: flex;
   gap: 14px;
   padding: 6px 12px;
@@ -900,46 +907,6 @@ kbd {
   .wheel .sector.on { fill: rgba(35, 31, 28, 0.22); }
 }
 
-/* The palette a shake opens */
-.palette {
-  position: absolute;
-  z-index: 17;
-  padding: 12px 14px 8px;
-  border-radius: 20px;
-  background: rgba(255, 249, 241, 0.94);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: inset 0 0 0 1px rgba(35, 31, 28, 0.08), 0 18px 40px -16px rgba(60, 30, 20, 0.45);
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 180ms ease, transform 300ms cubic-bezier(.2, .9, .25, 1);
-}
-.palette.open { opacity: 1; transform: none; }
-.pal-head { display: flex; align-items: center; gap: 6px; margin: 2px 4px 6px; color: var(--ink-2); font-size: 12px; font-weight: 650; }
-.pal-head kbd { min-width: 18px; height: 18px; font-size: 10px; }
-.pal-grid { display: grid; grid-template-columns: repeat(7, 76px); gap: 5px; margin-bottom: 8px; }
-.pal-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 64px;
-  padding: 0 4px;
-  border-radius: 11px;
-  background: rgba(35, 31, 28, 0.035);
-  color: var(--ink-2);
-  font-size: 10.5px;
-  font-weight: 650;
-  line-height: 1.15;
-  text-align: center;
-  transition: background-color 120ms ease, color 120ms ease, transform 200ms cubic-bezier(.2, .9, .25, 1);
-}
-.pal-tile svg { width: 20px; height: 20px; flex: none; }
-.pal-tile.on { background: rgba(35, 31, 28, 0.1); color: var(--ink); transform: scale(1.04); }
-.pal-foot { padding: 2px 0 2px; color: var(--ink-3); font-size: 11px; text-align: center; }
-
 /* Cut */
 .desk-file.cut .fi { opacity: 0.5; }
 .desk-file.target .fi { box-shadow: 0 0 0 3px rgba(35, 31, 28, 0.35); transform: scale(1.06); }
@@ -994,8 +961,8 @@ kbd {
 .sh-close:active { transform: scale(0.9); }
 
 @media (prefers-reduced-motion: reduce) {
-  .palette, .shelf { transform: none; transition: opacity 150ms ease; }
+  .shelf { transform: none; transition: opacity 150ms ease; }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .palette, .shelf { background: #fffbf6; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .shelf { background: #fffbf6; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }

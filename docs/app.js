@@ -57,7 +57,7 @@
       cut: 'Cut', mail: 'Mail', copyImage: 'Copy Image', copyText: 'Copy Text', removeBG: 'Remove Background', sCutout: 'cutout',
       mailOpen: 'Mail opens a new message', imageCopied: 'Image copied', textCopied: 'Text copied, 3 lines',
       cutDone: 'Drag the shelf onto a folder', items: 'items', itemsMoved: 'items moved', moved: 'Moved', shelfHint: 'Drag onto a folder to move',
-      narrow: 'Hold a key to narrow it down', outside: 'Drop outside to cancel',
+      allTools: 'All Tools',
     },
     tr: {
       convert: 'Dönüştür', tools: 'Araçlar', actions: 'Eylemler', nothing: 'Burada araç yok',
@@ -69,7 +69,7 @@
       cut: 'Kes', mail: 'Mail', copyImage: 'Görseli Kopyala', copyText: 'Metni Kopyala', removeBG: 'Arka Planı Sil', sCutout: 'dekupe',
       mailOpen: 'Mail yeni bir ileti açar', imageCopied: 'Görsel kopyalandı', textCopied: 'Metin kopyalandı, 3 satır',
       cutDone: 'Rafı bir klasörün üstüne sürükle', items: 'öğe', itemsMoved: 'öğe taşındı', moved: 'Taşındı', shelfHint: 'Taşımak için bir klasöre sürükle',
-      narrow: 'Daraltmak için bir tuşa bas', outside: 'Vazgeçmek için dışarı bırak',
+      allTools: 'Tüm Araçlar',
     },
   };
 
@@ -206,105 +206,105 @@
   const KINDS = ['convert', 'tools', 'actions'];
   const KEYS = { convert: '⇧', tools: '⌘', actions: '⌃' };
 
-  // ---------- The menu: a wheel, or every tool after a shake ----------
+  // ---------- The helm: one wheel, or every tool after a shake ----------
 
-  const OUTER = 150, INNER = 54;
+  // The big helm is scaled down from the app's to fit this little screen.
+  const SIZES = { wheel: { outer: 150, inner: 54 }, all: { outer: 186, inner: 60 } };
+  const HANDLE = 22;
   const wheel = $('#wheel');
+  const ringSvg = $('#wheelRing');
   const sectors = $('#wheelSectors');
   const labels = $('#wheelLabels');
-  const palette = $('#palette');
-  let menu = null; // { mode: 'wheel'|'palette', kind, tools, file, cx, cy, hovered }
+  let menu = null; // { mode: 'wheel'|'all', kind, tools, groups, file, cx, cy, hovered, size }
 
-  function arc(i, n, r0, r1) {
+  const polar = (r, a) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
+  // Slices `first` to `last`, angles clockwise from the top.
+  function arc(first, last, n, r0, r1) {
     const width = (2 * Math.PI) / n;
-    const mid = -Math.PI / 2 + i * width;
-    const a0 = mid - width / 2 + 0.012, a1 = mid + width / 2 - 0.012;
-    const p = (r, a) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
-    const large = width > Math.PI ? 1 : 0;
-    return `M${p(r1, a0)} A${r1} ${r1} 0 ${large} 1 ${p(r1, a1)} L${p(r0, a1)} A${r0} ${r0} 0 ${large} 0 ${p(r0, a0)} Z`;
+    const a0 = -Math.PI / 2 + (first - 0.5) * width + 0.012, a1 = -Math.PI / 2 + (last + 0.5) * width - 0.012;
+    const large = a1 - a0 > Math.PI ? 1 : 0;
+    return `M${polar(r1, a0)} A${r1} ${r1} 0 ${large} 1 ${polar(r1, a1)} L${polar(r0, a1)} A${r0} ${r0} 0 ${large} 0 ${polar(r0, a0)} Z`;
   }
+  const boundary = (i, n) => -Math.PI / 2 + (i + 0.5) * (2 * Math.PI) / n;
   const legendHTML = (kind) => KINDS.map((key) => `<span class="${key === kind ? 'on' : ''}"><kbd>${KEYS[key]}</kbd>${w(key)}</span>`).join('');
+  function hoveredGroup() {
+    const h = menu?.hovered;
+    return h == null ? null : menu.groups.find((g) => h >= g.first && h <= g.last)?.kind ?? null;
+  }
   function drawWheel() {
-    const { kind, tools, file } = menu;
+    const { mode, kind, tools, file, groups } = menu;
+    const { outer, inner } = menu.size;
+    const R = outer + HANDLE + 6;
     const n = tools.length;
-    sectors.innerHTML = `<path class="ring" fill-rule="evenodd" d="M${OUTER} 0A${OUTER} ${OUTER} 0 1 1 -${OUTER} 0A${OUTER} ${OUTER} 0 1 1 ${OUTER} 0ZM${INNER} 0A${INNER} ${INNER} 0 1 0 -${INNER} 0A${INNER} ${INNER} 0 1 0 ${INNER} 0Z"/>`
-      + tools.map((_, i) => `<path class="sector" data-i="${i}" d="${arc(i, n, INNER + 4, OUTER - 4)}"/>`).join('')
-      + (n > 1 ? tools.map((_, i) => {
-        const a = -Math.PI / 2 + (i + 0.5) * (2 * Math.PI) / n;
-        return `<line class="spoke" x1="${(INNER + 10) * Math.cos(a)}" y1="${(INNER + 10) * Math.sin(a)}" x2="${(OUTER - 10) * Math.cos(a)}" y2="${(OUTER - 10) * Math.sin(a)}"/>`;
-      }).join('') : '');
-    const radius = (INNER + OUTER) / 2;
+    wheel.style.width = wheel.style.height = `${R * 2}px`;
+    wheel.style.margin = `${-R}px 0 0 ${-R}px`;
+    wheel.classList.toggle('full', mode === 'all');
+    ringSvg.setAttribute('viewBox', `${-R} ${-R} ${R * 2} ${R * 2}`);
+    // Handles past the rim: one per gap on a small wheel, eight on the big helm.
+    const spots = mode === 'all' || n < 3
+      ? Array.from({ length: mode === 'all' ? 8 : 4 }, (_, i) => ({ a: -Math.PI / 2 + i * (mode === 'all' ? Math.PI / 4 : Math.PI / 2) + (mode === 'all' ? 0 : Math.PI / 4), major: mode === 'all' && i === 0 }))
+      : tools.map((_, i) => ({ a: boundary(i, n), major: false }));
+    sectors.innerHTML = spots.map((s) => `<line class="handle${s.major ? ' major' : ''}" x1="${(outer - 2) * Math.cos(s.a)}" y1="${(outer - 2) * Math.sin(s.a)}" x2="${(outer + HANDLE - (s.major ? 0 : 5)) * Math.cos(s.a)}" y2="${(outer + HANDLE - (s.major ? 0 : 5)) * Math.sin(s.a)}"/>`).join('')
+      + `<path class="ring" fill-rule="evenodd" d="M${outer} 0A${outer} ${outer} 0 1 1 -${outer} 0A${outer} ${outer} 0 1 1 ${outer} 0ZM${inner} 0A${inner} ${inner} 0 1 0 -${inner} 0A${inner} ${inner} 0 1 0 ${inner} 0Z"/>`
+      + (mode === 'all' ? groups.filter((_, i) => i % 2 === 1).map((g) => `<path class="group" d="${arc(g.first, g.last, n, inner + 2, outer - 4)}"/>`).join('') : '')
+      + tools.map((_, i) => `<path class="sector" data-i="${i}" d="${arc(i, i, n, inner + 4, outer - 7)}"/>`).join('')
+      + (n > 1 ? tools.map((_, i) => `<line class="spoke" x1="${(inner + 10) * Math.cos(boundary(i, n))}" y1="${(inner + 10) * Math.sin(boundary(i, n))}" x2="${(outer - 12) * Math.cos(boundary(i, n))}" y2="${(outer - 12) * Math.sin(boundary(i, n))}"/>`).join('') : '')
+      + `<circle class="rim" r="${outer - 2.5}"/>`;
+    const radius = (inner + outer) / 2 + (mode === 'all' ? 4 : 0);
     labels.innerHTML = tools.map((t, i) => {
       const a = -Math.PI / 2 + i * (2 * Math.PI) / n;
-      return `<span class="wl" data-i="${i}" style="left:${160 + radius * Math.cos(a)}px;top:${160 + radius * Math.sin(a)}px"><svg><use href="#${t.glyph}"/></svg>${t.label}</span>`;
+      return `<span class="wl" data-i="${i}" style="left:${R + radius * Math.cos(a)}px;top:${R + radius * Math.sin(a)}px"><svg><use href="#${t.glyph}"/></svg>${t.label}</span>`;
     }).join('');
+    const hub = $('.hub', wheel);
+    hub.style.width = hub.style.height = `${inner * 2}px`;
+    hub.style.margin = `${-inner}px 0 0 ${-inner}px`;
     $('#hubTop').textContent = n ? (file.ext || '').toUpperCase() || '—' : '';
-    $('#hubSub').textContent = n ? w(kind) : w('nothing');
+    $('#hubSub').textContent = n ? (mode === 'all' ? w('allTools') : w(kind)) : w('nothing');
     $('#legend').innerHTML = legendHTML(kind);
-  }
-  function drawPalette() {
-    let index = 0;
-    const sections = KINDS.map((kind) => ({ kind, tools: toolsFor(kind, menu.file) })).filter((s) => s.tools.length);
-    menu.tools = sections.flatMap((s) => s.tools);
-    palette.innerHTML = sections.map((s) => `<div class="pal-head">${w(s.kind)} <kbd>${KEYS[s.kind]}</kbd></div><div class="pal-grid">${s.tools.map((t) => `<span class="pal-tile" data-i="${index++}"><svg><use href="#${t.glyph}"/></svg>${t.label}</span>`).join('')}</div>`).join('')
-      + `<div class="pal-foot">${w('narrow')} · ${w('outside')}</div>`;
   }
   function highlight() {
     const h = menu?.hovered;
     $$('.sector', sectors).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
     $$('.wl', labels).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
-    $$('.pal-tile', palette).forEach((s) => s.classList.toggle('on', Number(s.dataset.i) === h));
+    if (menu?.mode === 'all') $('#legend').innerHTML = legendHTML(hoveredGroup());
   }
-  // `kind` is a wheel, or 'all' for the palette.
+  // `kind` is a wheel, or 'all' for the big helm.
   function openMenu(kind, file, at) {
-    const mode = kind === 'all' ? 'palette' : 'wheel';
+    const mode = kind === 'all' ? 'all' : 'wheel';
     const reseat = !menu || menu.mode !== mode;
-    menu = { mode, kind, file, tools: mode === 'wheel' ? toolsFor(kind, file) : [], cx: menu?.cx, cy: menu?.cy, hovered: null };
-    if (mode === 'wheel') {
-      drawWheel();
-      if (reseat) {
-        // Centred on the pointer, kept inside the screen.
-        menu.cx = Math.min(Math.max(at.x, 170), 960 - 170);
-        menu.cy = Math.min(Math.max(at.y, 190), 600 - 275);
-        wheel.style.left = `${menu.cx}px`;
-        wheel.style.top = `${menu.cy}px`;
-        wheel.style.transformOrigin = `${160 + at.x - menu.cx}px ${160 + at.y - menu.cy}px`;
-      }
-      palette.classList.remove('open');
-      wheel.classList.add('open');
+    let tools = [], groups = [];
+    if (mode === 'all') {
+      KINDS.forEach((k) => {
+        const list = toolsFor(k, file);
+        if (list.length) groups.push({ kind: k, first: tools.length, last: tools.length + list.length - 1 });
+        tools = tools.concat(list);
+      });
     } else {
-      drawPalette();
-      // Just above the pointer (below it near the top), so letting go where it opened cancels.
-      const width = palette.offsetWidth, height = palette.offsetHeight;
-      const left = Math.min(Math.max(at.x - width / 2, 12), 960 - width - 12);
-      let top = at.y - 18 - height;
-      if (top < 36) top = Math.min(at.y + 18, 600 - height - 8);
-      palette.style.left = `${left}px`;
-      palette.style.top = `${top}px`;
-      palette.style.transformOrigin = `${at.x - left}px ${at.y - top}px`;
-      wheel.classList.remove('open');
-      palette.classList.add('open');
+      tools = toolsFor(kind, file);
     }
+    menu = { mode, kind, file, tools, groups, cx: menu?.cx, cy: menu?.cy, hovered: null, size: SIZES[mode] };
+    drawWheel();
+    if (reseat) {
+      // Centred on the pointer, kept inside the screen.
+      const R = menu.size.outer + HANDLE + 6;
+      menu.cx = Math.min(Math.max(at.x, R + 8), 960 - R - 8);
+      menu.cy = Math.min(Math.max(at.y, 28 + R), 600 - R - 44);
+      wheel.style.left = `${menu.cx}px`;
+      wheel.style.top = `${menu.cy}px`;
+      wheel.style.transformOrigin = `${R + at.x - menu.cx}px ${R + at.y - menu.cy}px`;
+    }
+    wheel.classList.add('open');
     highlight();
   }
   function closeMenu() {
     wheel.classList.remove('open');
-    palette.classList.remove('open');
     menu = null;
   }
-  function indexAt(p, client) {
+  function indexAt(p) {
     if (!menu || !menu.tools.length) return null;
-    if (menu.mode === 'palette') {
-      // The palette ignores the pointer (the drag owns it), so hit-test by its tiles' boxes.
-      const hit = $$('.pal-tile', palette).find((t) => {
-        const r = t.getBoundingClientRect();
-        return client.x >= r.left - 3 && client.x <= r.right + 3 && client.y >= r.top - 3 && client.y <= r.bottom + 3;
-      });
-      return hit ? Number(hit.dataset.i) : null;
-    }
     const dx = p.x - menu.cx, dy = p.y - menu.cy;
     const d = Math.hypot(dx, dy);
-    if (d <= INNER || d >= OUTER + 24) return null;
+    if (d <= menu.size.inner || d >= menu.size.outer + HANDLE) return null;
     let a = Math.atan2(dx, -dy);
     if (a < 0) a += 2 * Math.PI;
     const width = (2 * Math.PI) / menu.tools.length;
@@ -314,7 +314,7 @@
   // ---------- Which menu ----------
 
   // A key held on the keyboard wins, then the wheel picked below; after a
-  // shake, every tool; a wheel opened by a key stays open after it.
+  // shake, the big helm; a wheel opened by a key stays open after it.
   let picked = null;
   const held = { shift: false, meta: false, ctrl: false };
   function heldKind() {
@@ -398,7 +398,7 @@
     const kind = heldKind() ?? picked ?? (drag.shaken ? 'all' : menu?.kind);
     if (kind && (!menu || menu.kind !== kind)) openMenu(kind, drag.file, drag.pointer);
     if (menu) {
-      const h = indexAt(drag.pointer, drag.client);
+      const h = indexAt(drag.pointer);
       if (h !== menu.hovered) { menu.hovered = h; highlight(); }
     }
     mac.classList.toggle('want-key', !menu);
@@ -415,7 +415,7 @@
     mac.classList.remove('want-key');
     if (!d.moved) return;
     const at = e ? local(e) : d.pointer;
-    const index = e ? indexAt(at, { x: e.clientX, y: e.clientY }) : null;
+    const index = e ? indexAt(at) : null;
     const tool = index != null ? menu.tools[index] : null;
     closeMenu();
     if (!tool) {

@@ -27,7 +27,7 @@
 
 Start dragging files in Finder or on the desktop and hold a key. A wheel opens under the pointer; drop the files on a slice and the result lands next to the original. Drop on the middle to cancel.
 
-Or just shake the files side to side while you drag: a palette opens with every tool that fits, and holding a key narrows it down to that wheel.
+Or just shake the files side to side while you drag: a big helm opens with every tool that fits, grouped by wheel, and holding a key narrows it down to that wheel.
 
 - **⇧ Convert.** Photos to JPG, PNG, HEIC, PDF or TIFF. PDF pages to PNG or JPG. Videos to MP4, MOV, a GIF or just their sound. Audio to M4A, WAV or AIFF.
 - **⌘ Tools.** Compress or halve photos, strip their location and camera data, remove the background, copy the text in them, put them in one PDF, or read a QR code. Merge, split, compress or copy the text of PDFs. Compress or mute videos. Extract archives.
@@ -77,7 +77,7 @@ Releases are built with `scripts/release.sh`, which signs them with the “Harbo
 Helm/
   App/          app entry, menu bar and launch
   Core/         drag watching and preferences
-  Wheel/        the wheel, the palette, the Cut shelf and the progress toast
+  Wheel/        the helm, the Cut shelf and the progress toast
   Tools/        conversions and tools (ImageIO, PDFKit, AVFoundation, Vision)
   Settings/     the settings window
   Onboarding/   the guide

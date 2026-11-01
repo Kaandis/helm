@@ -142,8 +142,8 @@
             "tr": "Tüm araçlar için sürüklerken salla"
           },
           "description": {
-            "en": "Shake the files side to side while dragging to open a palette of every tool that fits; hold a wheel key to narrow it down.",
-            "tr": "Sürüklerken dosyaları sağa sola salla, uyan tüm araçların olduğu palet açılsın; daraltmak için bir çark tuşuna bas."
+            "en": "Shake the files side to side while dragging to open a big helm with every tool that fits; hold a wheel key to narrow it down.",
+            "tr": "Sürüklerken dosyaları sağa sola salla, uyan tüm araçların olduğu büyük dümen açılsın; daraltmak için bir çark tuşuna bas."
           }
         },
         {

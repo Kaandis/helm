@@ -201,6 +201,16 @@
         }
       }
     },
+    "All Tools": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm Araçlar"
+          }
+        }
+      }
+    },
     "Archive": {
       "localizations": {
         "tr": {
@@ -361,16 +371,6 @@
         }
       }
     },
-    "Drop outside to cancel": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vazgeçmek için dışarı bırak"
-          }
-        }
-      }
-    },
     "Excluded Apps": {
       "localizations": {
         "tr": {
@@ -457,16 +457,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Helm dosyalarını sürüklediğin yerde dönüştürür, küçültür ve gönderir; önce hiçbir şey açman gerekmez."
-          }
-        }
-      }
-    },
-    "Hold a key to narrow it down": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daraltmak için bir tuşa bas"
           }
         }
       }
@@ -977,16 +967,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "sessiz"
-          }
-        }
-      }
-    },
-    "·": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "·"
           }
         }
       }
