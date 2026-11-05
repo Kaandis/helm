@@ -438,7 +438,7 @@
         {
           "key": "bigHelmShowsAll",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Show every tool that fits",
             "tr": "Uyan tüm araçları göster"
@@ -475,7 +475,7 @@
         {
           "key": "bigHelmToHEIC",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Photo → HEIC",
             "tr": "Fotoğraf → HEIC"
@@ -487,7 +487,7 @@
         {
           "key": "bigHelmToTIFF",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Photo → TIFF",
             "tr": "Fotoğraf → TIFF"
@@ -499,7 +499,7 @@
         {
           "key": "bigHelmToPDF",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Photo → PDF",
             "tr": "Fotoğraf → PDF"
@@ -523,7 +523,7 @@
         {
           "key": "bigHelmPagesToJPG",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "PDF pages → JPG",
             "tr": "PDF sayfaları → JPG"
@@ -547,7 +547,7 @@
         {
           "key": "bigHelmToMOV",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Video → MOV",
             "tr": "Video → MOV"
@@ -583,7 +583,7 @@
         {
           "key": "bigHelmToWAV",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Audio → WAV",
             "tr": "Ses → WAV"
@@ -595,7 +595,7 @@
         {
           "key": "bigHelmToAIFF",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Audio → AIFF",
             "tr": "Ses → AIFF"
@@ -619,7 +619,7 @@
         {
           "key": "bigHelmHalveImage",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Half Size",
             "tr": "Yarı Boyut"
@@ -631,7 +631,7 @@
         {
           "key": "bigHelmStripMetadata",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Strip Metadata",
             "tr": "Bilgileri Sil"
@@ -667,7 +667,7 @@
         {
           "key": "bigHelmMakePDF",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Make PDF",
             "tr": "PDF Yap"
@@ -679,7 +679,7 @@
         {
           "key": "bigHelmReadQR",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Read QR",
             "tr": "QR Oku"
@@ -703,7 +703,7 @@
         {
           "key": "bigHelmSplitPDF",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Split Pages",
             "tr": "Sayfalara Böl"
@@ -739,7 +739,7 @@
         {
           "key": "bigHelmRemoveAudio",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Mute",
             "tr": "Sesi Kaldır"
@@ -761,9 +761,57 @@
           }
         },
         {
-          "key": "bigHelmCut",
+          "key": "bigHelmCopyFiles",
           "type": "bool",
           "default": true,
+          "title": {
+            "en": "Copy",
+            "tr": "Kopyala"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmMoveTo",
+          "type": "bool",
+          "default": true,
+          "title": {
+            "en": "Move to…",
+            "tr": "Taşı…"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCopyTo",
+          "type": "bool",
+          "default": false,
+          "title": {
+            "en": "Copy to…",
+            "tr": "Şuraya kopyala…"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmDuplicate",
+          "type": "bool",
+          "default": false,
+          "title": {
+            "en": "Duplicate",
+            "tr": "Çoğalt"
+          },
+          "visibleWhen": {
+            "bigHelmShowsAll": false
+          }
+        },
+        {
+          "key": "bigHelmCut",
+          "type": "bool",
+          "default": false,
           "title": {
             "en": "Cut",
             "tr": "Kes"
@@ -787,7 +835,7 @@
         {
           "key": "bigHelmCopyPath",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Copy Path",
             "tr": "Yolu Kopyala"
@@ -799,7 +847,7 @@
         {
           "key": "bigHelmCopyImage",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Copy Image",
             "tr": "Görseli Kopyala"
@@ -811,7 +859,7 @@
         {
           "key": "bigHelmMail",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Mail",
             "tr": "Mail"
@@ -823,7 +871,7 @@
         {
           "key": "bigHelmOpenTerminal",
           "type": "bool",
-          "default": true,
+          "default": false,
           "title": {
             "en": "Terminal",
             "tr": "Terminal"

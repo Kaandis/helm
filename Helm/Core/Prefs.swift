@@ -46,6 +46,17 @@ enum Prefs {
         return tools.sorted { (rank[$0.rawValue] ?? fallback[$0]!) < (rank[$1.rawValue] ?? fallback[$1]!) }
     }
 
+    /// Helm 1.0.3 starts the big helm with the everyday tools instead of
+    /// all of them. Someone who had it show everything (the old default)
+    /// moves to the new start; a pick made by hand stays.
+    static func migrateToEverydayHelm() {
+        let defaults = UserDefaults.standard
+        guard !defaults.bool(forKey: "everydayHelm") else { return }
+        defaults.set(true, forKey: "everydayHelm")
+        let stored = defaults.persistentDomain(forName: Bundle.main.bundleIdentifier ?? "") ?? [:]
+        if stored[bigHelmShowsAll] as? Bool == true { defaults.removeObject(forKey: bigHelmShowsAll) }
+    }
+
     /// Helm 1.0 kept the pick as one list; this turns it into the switches.
     static func migrateBigHelmTools() {
         let defaults = UserDefaults.standard
@@ -63,13 +74,15 @@ enum Prefs {
     static let accentColor = "accentColor"
     /// How see-through the helm's ring is, 0 (solid) to 0.8.
     static let helmTransparency = "helmTransparency"
+    /// Where Move to… and Copy to… last put something.
+    static let lastFolder = "lastFolder"
     static let isPaused = "isPaused"
     /// The Settings window's tab: "general", "opening", "look", "bighelm" or "excluded".
     static let settingsTab = "settingsTab"
     static let hasCompletedOnboarding = "hasCompletedOnboarding"
 
     static func registerDefaults() {
-        UserDefaults.standard.register(defaults: Dictionary(uniqueKeysWithValues: Tool.allCases.map { (bigHelm($0), true) }))
+        UserDefaults.standard.register(defaults: Dictionary(uniqueKeysWithValues: Tool.allCases.map { (bigHelm($0), Tool.everyday.contains($0)) }))
         UserDefaults.standard.register(defaults: [
             convertKey: "shift",
             toolsKey: "command",
@@ -83,7 +96,7 @@ enum Prefs {
             helmSize: "medium",
             helmShape: "round",
             showHandles: true,
-            bigHelmShowsAll: true,
+            bigHelmShowsAll: false,
             panelStyle: Self.glassAvailable ? "glass" : "cream",
             accentColor: "graphite",
             helmTransparency: 0.3,

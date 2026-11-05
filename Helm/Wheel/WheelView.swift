@@ -39,6 +39,8 @@ private struct HelmView: View {
     private var metrics: WheelMetrics { model.metrics }
     private var square: Bool { metrics.square }
     private var isFull: Bool { model.kind == nil }
+    /// The big helm drops the names only when it's too crowded for them.
+    private var iconsOnly: Bool { isFull && model.tools.count > 10 }
     private var rim: Color { accent.color }
 
     /// The helm's centre in SwiftUI's top-left coordinates.
@@ -107,11 +109,11 @@ private struct HelmView: View {
 
             // Icons shrink a little when a crowded helm leaves them less room.
             let room = 2 * .pi * (inner + outer) / 2 / CGFloat(max(count, 1))
-            let fit = isFull ? min(1, room / 38) : 1
+            let fit = iconsOnly ? min(1, room / 38) : 1
             ForEach(Array(model.tools.enumerated()), id: \.offset) { index, tool in
                 let angle = Double(index) / Double(max(count, 1)) * 2 * .pi - .pi / 2
-                let radius = edge(at: angle, of: (inner + outer) / 2 + (isFull ? 2 : 0))
-                ToolLabel(tool: tool, highlighted: model.hovered == index, iconOnly: isFull)
+                let radius = edge(at: angle, of: (inner + outer) / 2 + (iconsOnly ? 2 : 0))
+                ToolLabel(tool: tool, highlighted: model.hovered == index, iconOnly: iconsOnly)
                     .scaleEffect(fit)
                     .offset(x: cos(angle) * radius, y: sin(angle) * radius)
             }
@@ -130,7 +132,7 @@ private struct HelmView: View {
                 Text("Nothing here")
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundStyle(palette.ink2)
-            } else if isFull, let hovered {
+            } else if iconsOnly, let hovered {
                 // The big helm shows icons only; the hub names the one you're on.
                 Text(hovered.title)
                     .font(.system(size: 13, weight: .semibold))

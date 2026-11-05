@@ -60,6 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         Prefs.registerDefaults()
         Prefs.migrateBigHelmTools()
+        Prefs.migrateToEverydayHelm()
         SettingsBridge.listen()
         #if DEBUG
         // `Helm --run <tool> <file>…` runs one tool, prints what it made and quits.
@@ -82,6 +83,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let i = args.firstIndex(of: "--settings") {
             let tab = i + 1 < args.count ? args[i + 1] : nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { Self.showOwnSettings(tab: tab) }
+        }
+        // `Helm --transfer move|copy <folder> <file>…` runs Move to… or Copy to… without the panel.
+        if let i = args.firstIndex(of: "--transfer"), i + 3 < args.count {
+            let files = args[(i + 3)...].map { URL(fileURLWithPath: $0) }
+            let outcome = try? ToolRunner.transfer(files, to: URL(fileURLWithPath: args[i + 2]), move: args[i + 1] == "move")
+            print("transfer: \(outcome?.outputs.map(\.path) ?? []) \(outcome?.message ?? "failed")")
+            exit(0)
         }
         // `Helm --cut <file>…` puts files on the shelf, as the Cut tool does.
         if let i = args.firstIndex(of: "--cut"), i + 1 < args.count {
@@ -126,6 +134,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func run(_ tool: Tool, on files: [URL]) {
+        if tool == .moveTo || tool == .copyTo {
+            chooseFolder(for: tool, files: files)
+            return
+        }
         if tool == .cut {
             shelf.add(files)
             toast.start(tool)
@@ -152,6 +164,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 log.error("\(tool.rawValue, privacy: .public) failed: \(error.localizedDescription, privacy: .public)")
                 toast.start(tool)
                 toast.fail(error)
+            }
+        }
+    }
+
+    /// Asks where, starting where you last put something, then moves or
+    /// copies there and says so, with a button to show the result.
+    private func chooseFolder(for tool: Tool, files: [URL]) {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.canCreateDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.prompt = tool == .moveTo ? String(localized: "Move Here") : String(localized: "Copy Here")
+        panel.message = files.count == 1 ? files[0].lastPathComponent : String(localized: "\(files.count) items")
+        if let last = UserDefaults.standard.url(forKey: Prefs.lastFolder) { panel.directoryURL = last }
+        NSApp.activate()
+        panel.begin { [weak self] response in
+            guard response == .OK, let folder = panel.url, let self else { return }
+            UserDefaults.standard.set(folder, forKey: Prefs.lastFolder)
+            do {
+                let outcome = try ToolRunner.transfer(files, to: folder, move: tool == .moveTo)
+                self.toast.start(tool)
+                self.toast.finish(outcome)
+            } catch {
+                self.toast.start(tool)
+                self.toast.fail(error)
             }
         }
     }

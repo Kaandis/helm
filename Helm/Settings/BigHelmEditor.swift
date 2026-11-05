@@ -7,7 +7,7 @@ import UniformTypeIdentifiers
 /// the helm where you want it, drag a tool round the helm to move it, drag
 /// it off to take it away. A click on a tile adds it at the end.
 struct BigHelmEditor: View {
-    @AppStorage(Prefs.bigHelmShowsAll) private var showsAll = true
+    @AppStorage(Prefs.bigHelmShowsAll) private var showsAll = false
     @AppStorage(Prefs.helmShape) private var shape = "round"
     @AppStorage(Prefs.helmSize) private var size = "medium"
     @AppStorage(Prefs.panelStyle) private var style = "glass"
@@ -31,6 +31,8 @@ struct BigHelmEditor: View {
                 Text("Drag tiles onto the helm, round it to reorder, or off it to remove. Only tools that fit the files you drag ever show.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                Button("Start Over with Everyday Tools") { startOver() }
+                    .help("A short helm: a couple of conversions, the most useful tools, copy and move.")
             }
 
             Section {
@@ -141,6 +143,13 @@ struct BigHelmEditor: View {
         if tools.count < Tool.allCases.count { showsAll = false }
         withAnimation(.harborSelect) { onHelm = tools }
         rebuild()
+    }
+
+    /// Back to what a new Helm starts with, in the usual order.
+    private func startOver() {
+        UserDefaults.standard.removeObject(forKey: Prefs.bigHelmOrder)
+        showsAll = false
+        save(Tool.allCases.filter(Tool.everyday.contains))
     }
 
     private func load() {

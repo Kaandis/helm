@@ -42,6 +42,13 @@ enum Output {
         }
         return url
     }
+
+    /// Finder's name for a duplicate: "Photo copy.jpg".
+    static func duplicateName(of source: URL) -> String {
+        let base = source.deletingPathExtension().lastPathComponent
+        let name = String(localized: "\(base) copy")
+        return source.pathExtension.isEmpty ? name : "\(name).\(source.pathExtension)"
+    }
 }
 
 enum ToolError: LocalizedError {

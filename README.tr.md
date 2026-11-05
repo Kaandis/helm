@@ -27,11 +27,11 @@
 
 Finder'da ya da masaüstünde dosyaları sürüklemeye başla ve bir tuşa bas. İşaretçinin altında bir çark açılır; dosyaları bir dilimin üstüne bırak, sonuç orijinalin yanına gelir. Vazgeçmek için ortaya bırak.
 
-Ya da sürüklerken dosyaları git-gel-git şeklinde, sağa sola ya da yukarı aşağı salla: uyan tüm araçların çarklara göre gruplandığı büyük bir dümen açılır; bir tuşa basınca o çarka daralır.
+Ya da sürüklerken dosyaları git-gel-git şeklinde, sağa sola ya da yukarı aşağı salla: o dosyalara uyan günlük araçlarınla büyük dümen açılır. Ayarlardan istediğin gibi düzenle; bir tuşa basınca tek bir çarka daralır.
 
 - **⇧ Dönüştür.** Fotoğrafları JPG, PNG, HEIC, PDF ya da TIFF'e. PDF sayfalarını PNG ya da JPG'ye. Videoları MP4, MOV, GIF'e ya da yalnızca seslerine. Sesleri M4A, WAV ya da AIFF'e.
 - **⌘ Araçlar.** Fotoğrafları sıkıştır ya da yarıya indir, konum ve kamera bilgilerini sil, arka planı sil, içindeki metni kopyala, hepsini tek PDF yap ya da QR kodu oku. PDF'leri birleştir, sayfalara böl, sıkıştır ya da metnini kopyala. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.
-- **⌃ Eylemler.** Kes, AirDrop, yolu kopyala, Mail, zip'le, orada Terminal aç ya da bir görseli her yere yapıştırmak için kopyala.
+- **⌃ Eylemler.** Kopyala, Taşı…, Çoğalt, AirDrop, zip'le, Kes, yolu kopyala ya da bir görseli her yere yapıştırmak için kopyala. Şuraya kopyala…, Mail ve Terminal büyük dümenin ekstralarında.
 - **Sonunda Kes.** Finder'da Kes yok. Dosyaları Kes'e bırak, köşedeki küçük bir rafta dokunulmadan beklesinler; rafı herhangi bir klasöre sürükleyince oraya taşınırlar, ya da o klasörde ⌥⌘V'ye bas. Rafı kapatırsan unutulurlar.
 - **Yalnızca uyanlar.** Her çark yalnızca tuttuğun dosyalara uyan araçları gösterir; dosyaların zaten olduğu biçimi hiç önermez.
 - **Senin tuşların.** Her çarka istediğin tuşu ver (⇧, ⌘, ⌃ ya da ⌥), kendi sürükleme kısayolları çakışan uygulamalarda Helm'i kapat ya da menü çubuğundan duraklat.

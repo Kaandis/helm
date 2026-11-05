@@ -30,7 +30,7 @@
     'list.title': 'Çarklarda neler var',
     'list.convert': 'Fotoğrafları JPG, PNG, HEIC, PDF ya da TIFF’e. PDF sayfalarını PNG ya da JPG’ye. Videoları MP4, MOV, GIF’e ya da seslerine. Sesleri M4A, WAV ya da AIFF’e.',
     'list.tools': 'Fotoğrafları sıkıştır, yarıya indir ya da bilgilerini sil, arka planı sil, metnini kopyala, tek PDF yap, QR kod oku. PDF’leri birleştir, böl, sıkıştır ya da metnini kopyala. Videoları sıkıştır ya da sesini kaldır. Arşivleri aç.',
-    'list.actions': 'Kes, AirDrop, yolu kopyala, Mail, zip’le, orada Terminal aç ya da bir görseli her yere yapıştırmak için kopyala.',
+    'list.actions': 'Kopyala, Taşı…, Çoğalt, AirDrop, zip’le, Kes, yolu kopyala ya da bir görseli her yere yapıştırmak için kopyala.',
     'cta.title': 'Ücretsiz. Hızlı. Elinin altında.',
     'cta.lead': 'Hesap yok, takip yok, izin yok.',
     'cta.note': 'macOS 15 veya üstü. Zip’i aç, Helm’i Uygulamalar’a taşı; ilk seferde sağ tıklayıp Aç’ı seç.',
@@ -54,6 +54,7 @@
       sCompressed: 'compressed', sHalf: 'half', sClean: 'clean', sMuted: 'muted', sPages: 'pages', images: 'Images',
       noQR: 'No QR code found', pathCopied: 'Path copied', airdrop: 'AirDrop opens with', termOpen: 'Terminal opens on the Desktop',
       pick: 'Shake it, or hold ⇧, ⌘ or ⌃', desktop: 'Desktop',
+      copy: 'Copy', moveTo: 'Move to…', duplicate: 'Duplicate', sCopy: 'copy', copied: 'Copied. Press ⌘V in a folder to paste.', movedTo: 'Moved to',
       cut: 'Cut', mail: 'Mail', copyImage: 'Copy Image', copyText: 'Copy Text', removeBG: 'Remove Background', sCutout: 'cutout',
       mailOpen: 'Mail opens a new message', imageCopied: 'Image copied', textCopied: 'Text copied, 3 lines',
       cutDone: 'Drag the shelf onto a folder', items: 'items', itemsMoved: 'items moved', moved: 'Moved', shelfHint: 'Drag onto a folder to move',
@@ -66,6 +67,7 @@
       sCompressed: 'sıkıştırılmış', sHalf: 'yarım', sClean: 'temiz', sMuted: 'sessiz', sPages: 'sayfaları', images: 'Görseller',
       noQR: 'QR kod bulunamadı', pathCopied: 'Yol kopyalandı', airdrop: 'AirDrop şununla açılır:', termOpen: 'Terminal Masaüstü’nde açılır',
       pick: 'Salla ya da ⇧, ⌘, ⌃ tuşuna bas', desktop: 'Masaüstü',
+      copy: 'Kopyala', moveTo: 'Taşı…', duplicate: 'Çoğalt', sCopy: 'kopyası', copied: 'Kopyalandı. Yapıştırmak için bir klasörde ⌘V’ye bas.', movedTo: 'Taşındı:',
       cut: 'Kes', mail: 'Mail', copyImage: 'Görseli Kopyala', copyText: 'Metni Kopyala', removeBG: 'Arka Planı Sil', sCutout: 'dekupe',
       mailOpen: 'Mail yeni bir ileti açar', imageCopied: 'Görsel kopyalandı', textCopied: 'Metin kopyalandı, 3 satır',
       cutDone: 'Rafı bir klasörün üstüne sürükle', items: 'öğe', itemsMoved: 'öğe taşındı', moved: 'Taşındı', shelfHint: 'Taşımak için bir klasöre sürükle',
@@ -158,12 +160,13 @@
     const list = (() => {
       if (kind === 'actions') {
         return [
-          T('cut', w('cut'), 'g-scissors', () => ({ cut: true })),
+          T('copy', w('copy'), 'g-copy', () => ({ msg: w('copied') })),
+          T('move', w('moveTo'), 'g-folder', () => ({ moveTo: true })),
+          T('dup', w('duplicate'), 'g-dup', (x) => ({ out: [{ name: `${x.name} ${w('sCopy')}`, ext: x.ext, type: x.type }] })),
           T('airdrop', 'AirDrop', 'g-airdrop', (x) => ({ msg: `${w('airdrop')} ${fullName(x)}` })),
-          T('path', w('copyPath'), 'g-link', () => ({ msg: w('pathCopied') })),
-          T('mail', w('mail'), 'g-mail', () => ({ msg: w('mailOpen') })),
           T('zip', w('zip'), 'g-zip', (x) => ({ out: [{ name: x.name, ext: 'zip', type: 'zip' }] })),
-          T('term', w('terminal'), 'g-term', () => ({ msg: w('termOpen') })),
+          T('cut', w('cut'), 'g-scissors', () => ({ cut: true })),
+          T('path', w('copyPath'), 'g-link', () => ({ msg: w('pathCopied') })),
         ].concat(f.type === 'image' ? [T('copyimg', w('copyImage'), 'g-photos', () => ({ msg: w('imageCopied') }))] : []);
       }
       const suffix = (x, s, ext = x.ext, type = x.type) => ({ out: [{ name: `${x.name} ${w(s)}`, ext, type }] });
@@ -237,7 +240,11 @@
     const n = tools.length;
     wheel.style.width = wheel.style.height = `${R * 2}px`;
     wheel.style.margin = `${-R}px 0 0 ${-R}px`;
+    // The big helm drops the names only when it's too crowded for them.
+    const iconsOnly = mode === 'all' && n > 10;
+    menu.iconsOnly = iconsOnly;
     wheel.classList.toggle('full', mode === 'all');
+    wheel.classList.toggle('icons', iconsOnly);
     ringSvg.setAttribute('viewBox', `${-R} ${-R} ${R * 2} ${R * 2}`);
     // Handles past the rim: one per gap on a small wheel, eight on the big helm.
     const spots = mode === 'all' || n < 3
@@ -249,11 +256,11 @@
       + tools.map((_, i) => `<path class="sector" data-i="${i}" d="${arc(i, i, n, inner + 4, outer - 5)}"/>`).join('')
       + (n > 1 ? tools.map((_, i) => `<line class="spoke" x1="${(inner + 10) * Math.cos(boundary(i, n))}" y1="${(inner + 10) * Math.sin(boundary(i, n))}" x2="${(outer - 10) * Math.cos(boundary(i, n))}" y2="${(outer - 10) * Math.sin(boundary(i, n))}"/>`).join('') : '')
       + `<circle class="rim" r="${outer - 1.25}"/>`;
-    const radius = (inner + outer) / 2 + (mode === 'all' ? 2 : 0);
+    const radius = (inner + outer) / 2 + (iconsOnly ? 2 : 0);
     labels.innerHTML = tools.map((t, i) => {
       const a = -Math.PI / 2 + i * (2 * Math.PI) / n;
       // The big helm shows icons only; the hub names the one you're on.
-      return `<span class="wl" data-i="${i}" style="left:${R + radius * Math.cos(a)}px;top:${R + radius * Math.sin(a)}px" aria-label="${t.label}"><svg><use href="#${t.glyph}"/></svg>${mode === 'all' ? '' : t.label}</span>`;
+      return `<span class="wl" data-i="${i}" style="left:${R + radius * Math.cos(a)}px;top:${R + radius * Math.sin(a)}px" aria-label="${t.label}"><svg><use href="#${t.glyph}"/></svg>${iconsOnly ? '' : t.label}</span>`;
     }).join('');
     const hub = $('.hub', wheel);
     hub.style.width = hub.style.height = `${inner * 2}px`;
@@ -263,7 +270,7 @@
   }
   function drawHub() {
     const { mode, kind, tools, file } = menu;
-    const on = mode === 'all' && menu.hovered != null ? tools[menu.hovered] : null;
+    const on = menu.iconsOnly && menu.hovered != null ? tools[menu.hovered] : null;
     $('.hub', wheel).classList.toggle('naming', !!on);
     $('#hubTop').textContent = on ? on.label : tools.length ? (file.ext || '').toUpperCase() || '—' : '';
     $('#hubSub').textContent = on ? w(hoveredGroup()) : tools.length ? (mode === 'all' ? w('allTools') : w(kind)) : w('nothing');
@@ -280,8 +287,10 @@
     const reseat = !menu || menu.mode !== mode;
     let tools = [], groups = [];
     if (mode === 'all') {
+      // Like a new Helm: the big helm starts with the everyday tools.
+      const EVERYDAY = new Set(['to-jpg', 'to-png', 'pages-png', 'to-mp4', 'to-gif', 'to-m4a', 'compress', 'cutout', 'text', 'extract', 'copy', 'move', 'airdrop', 'zip']);
       KINDS.forEach((k) => {
-        const list = toolsFor(k, file);
+        const list = toolsFor(k, file).filter((t) => EVERYDAY.has(t.id));
         if (list.length) groups.push({ kind: k, first: tools.length, last: tools.length + list.length - 1 });
         tools = tools.concat(list);
       });
@@ -458,6 +467,14 @@
   function run(tool, file, at) {
     clearTimeout(toastTimer);
     const result = tool.run(file);
+    if (result.moveTo) {
+      // As if Projects were picked in the folder panel.
+      const index = files.indexOf(file);
+      if (index >= 0) files.splice(index, 1);
+      render();
+      say('g-check', tool.label, `${w('movedTo')} Projects`);
+      return;
+    }
     if (result.cut) {
       cutFiles(file);
       say('g-scissors', tool.label, w('cutDone'));

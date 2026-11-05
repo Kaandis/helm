@@ -1,6 +1,16 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ copy": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kopyası"
+          }
+        }
+      }
+    },
     "%@ has no sound.": {
       "localizations": {
         "tr": {
@@ -181,6 +191,16 @@
         }
       }
     },
+    "A short helm: a couple of conversions, the most useful tools, copy and move.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kısa bir dümen: birkaç dönüştürme, en kullanışlı araçlar, kopyala ve taşı."
+          }
+        }
+      }
+    },
     "A wheel shows while you hold its key. After a shake, letting go brings the big helm back.": {
       "localizations": {
         "tr": {
@@ -351,6 +371,46 @@
         }
       }
     },
+    "Copied to %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ klasörüne kopyalandı"
+          }
+        }
+      }
+    },
+    "Copied. Press ⌘V in a folder to paste.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopyalandı. Yapıştırmak için bir klasörde ⌘V'ye bas."
+          }
+        }
+      }
+    },
+    "Copy": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopyala"
+          }
+        }
+      }
+    },
+    "Copy Here": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buraya Kopyala"
+          }
+        }
+      }
+    },
     "Copy Image": {
       "localizations": {
         "tr": {
@@ -381,12 +441,32 @@
         }
       }
     },
+    "Copy to…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şuraya kopyala…"
+          }
+        }
+      }
+    },
     "Couldn’t convert the audio.": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Ses dönüştürülemedi."
+          }
+        }
+      }
+    },
+    "Couldn’t put %@ in %@.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@ içine konamadı."
           }
         }
       }
@@ -487,6 +567,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bir aracın üstüne bırak. Sonuç orijinalin yanına gelir; vazgeçmek için ortaya ya da dışarı bırak."
+          }
+        }
+      }
+    },
+    "Duplicate": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çoğalt"
           }
         }
       }
@@ -791,12 +881,42 @@
         }
       }
     },
+    "Move Here": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buraya Taşı"
+          }
+        }
+      }
+    },
+    "Move to…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taşı…"
+          }
+        }
+      }
+    },
     "Moved": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Taşındı"
+          }
+        }
+      }
+    },
+    "Moved to %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ klasörüne taşındı"
           }
         }
       }
@@ -1167,6 +1287,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kare"
+          }
+        }
+      }
+    },
+    "Start Over with Everyday Tools": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Günlük Araçlarla Baştan Başla"
           }
         }
       }

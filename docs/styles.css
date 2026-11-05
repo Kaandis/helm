@@ -794,9 +794,9 @@ h2 {
   transition: color 140ms ease, transform 200ms cubic-bezier(.2, .9, .25, 1);
 }
 .wl svg { width: 22px; height: 22px; }
-.wheel.full .wl { width: 30px; margin: -11px 0 0 -15px; }
-.wheel.full .wl svg { width: 19px; height: 19px; }
-.wheel.full .wl.on { transform: scale(1.18); }
+.wheel.icons .wl { width: 30px; margin: -11px 0 0 -15px; }
+.wheel.icons .wl svg { width: 19px; height: 19px; }
+.wheel.icons .wl.on { transform: scale(1.18); }
 .hub.naming b { max-width: 100px; font-size: 13px; line-height: 1.15; }
 .wl.on { color: var(--ink); transform: scale(1.08); }
 .hub {

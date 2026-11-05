@@ -185,9 +185,25 @@ enum ToolRunner {
             return Outcome(outputs: [destination])
 
         // Actions
-        case .cut:
-            // The shelf takes these; see AppDelegate.
+        case .cut, .moveTo, .copyTo:
+            // These ask where first (or go to the shelf); see AppDelegate.
             return Outcome()
+        case .copyFiles:
+            // As ⌘C in Finder: ⌘V in a folder puts copies there.
+            await MainActor.run {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.writeObjects(files as [NSURL])
+            }
+            return Outcome(message: String(localized: "Copied. Press ⌘V in a folder to paste."))
+        case .duplicate:
+            return try each(files, progress: progress) { source in
+                let copy = Output.unique(source.deletingLastPathComponent()
+                    .appendingPathComponent(Output.duplicateName(of: source)))
+                do { try FileManager.default.copyItem(at: source, to: copy) } catch {
+                    throw ToolError.failed(String(localized: "Couldn’t save \(copy.lastPathComponent)."))
+                }
+                return copy
+            }
         case .copyImage:
             await MainActor.run {
                 let images = files.compactMap(NSImage.init(contentsOf:))
@@ -215,6 +231,26 @@ enum ToolRunner {
             }
             return Outcome()
         }
+    }
+
+    /// Moves or copies files into `folder`, never over anything already there.
+    static func transfer(_ files: [URL], to folder: URL, move: Bool) throws -> Outcome {
+        var outcome = Outcome()
+        let fm = FileManager.default
+        for source in files {
+            let destination = Output.unique(folder.appendingPathComponent(source.lastPathComponent))
+            // Already where it was asked to go: nothing to do.
+            if move, source.deletingLastPathComponent().standardizedFileURL == folder.standardizedFileURL { continue }
+            do {
+                if move { try fm.moveItem(at: source, to: destination) } else { try fm.copyItem(at: source, to: destination) }
+            } catch {
+                throw ToolError.failed(String(localized: "Couldn’t put \(source.lastPathComponent) in \(folder.lastPathComponent)."))
+            }
+            outcome.outputs.append(destination)
+        }
+        let place = folder.lastPathComponent
+        outcome.message = move ? String(localized: "Moved to \(place)") : String(localized: "Copied to \(place)")
+        return outcome
     }
 
     // MARK: Helpers

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 — 2026-11-05
+
+- Copy, Move to…, Copy to… and Duplicate: the everyday file moves, right on the ⌃ wheel (Copy to… on the big helm). Move to… and Copy to… remember the last folder.
+- A lighter start: the big helm begins with the everyday tools (a couple of conversions, the most useful tools, copy and move) and shows their names when it has room. Start Over with Everyday Tools in Settings › Big Helm brings that back any time.
+- The ⌃ wheel is shorter: Mail and Terminal moved to the big helm’s extras.
+
 ## 1.0.2 — 2026-11-01
 
 - Arrange the big helm by hand: in Settings › Big Helm (or from Harbor, or the menu bar’s Arrange the Big Helm…), drag tool tiles onto a live helm in your shape and look, drag them round it to reorder, or off it to remove.

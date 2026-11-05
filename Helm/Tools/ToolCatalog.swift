@@ -14,6 +14,7 @@ enum Tool: String, CaseIterable, Sendable {
     case compressVideo, removeAudio
     case unzip
     // Actions
+    case copyFiles, moveTo, copyTo, duplicate
     case cut, airDrop, copyPath, copyImage, mail, openTerminal, zip
 
     var title: String {
@@ -40,6 +41,10 @@ enum Tool: String, CaseIterable, Sendable {
         case .splitPDF: String(localized: "Split Pages")
         case .removeAudio: String(localized: "Mute")
         case .unzip: String(localized: "Extract")
+        case .copyFiles: String(localized: "Copy")
+        case .moveTo: String(localized: "Move to…")
+        case .copyTo: String(localized: "Copy to…")
+        case .duplicate: String(localized: "Duplicate")
         case .cut: String(localized: "Cut")
         case .airDrop: "AirDrop"
         case .copyPath: String(localized: "Copy Path")
@@ -63,10 +68,14 @@ enum Tool: String, CaseIterable, Sendable {
         case .removeBackground: "person.and.background.dotted"
         case .extractText: "text.viewfinder"
         case .readQR: "qrcode.viewfinder"
-        case .mergePDF: "doc.on.doc"
+        case .mergePDF: "rectangle.stack"
         case .splitPDF: "square.split.2x1"
         case .removeAudio: "speaker.slash"
         case .unzip: "archivebox"
+        case .copyFiles: "doc.on.doc"
+        case .moveTo: "folder"
+        case .copyTo: "folder.badge.plus"
+        case .duplicate: "plus.square.on.square"
         case .cut: "scissors"
         case .airDrop: "dot.radiowaves.left.and.right"
         case .copyPath: "link"
@@ -82,7 +91,8 @@ enum Tool: String, CaseIterable, Sendable {
         switch self {
         case .toJPG, .toPNG, .toHEIC, .toTIFF, .toPDF, .pagesToPNG, .pagesToJPG,
              .toMP4, .toMOV, .toGIF, .toM4A, .toWAV, .toAIFF: .convert
-        case .cut, .airDrop, .copyPath, .copyImage, .mail, .openTerminal, .zip: .actions
+        case .copyFiles, .moveTo, .copyTo, .duplicate,
+             .cut, .airDrop, .copyPath, .copyImage, .mail, .openTerminal, .zip: .actions
         default: .tools
         }
     }
@@ -148,9 +158,21 @@ enum Tool: String, CaseIterable, Sendable {
             default: return []
             }
         case .actions:
-            return [.cut, .airDrop, .copyPath, .mail, .zip, .openTerminal] + (one == .image ? [.copyImage] : [])
+            return [.copyFiles, .moveTo, .duplicate, .airDrop, .zip, .cut, .copyPath] + (one == .image ? [.copyImage] : [])
         }
     }
+
+    /// Kept off the ⌃ wheel so it stays short; the big helm can still have
+    /// them, picked in its editor.
+    static let extras: [Tool] = [.copyTo, .mail, .openTerminal]
+
+    /// The tools a few everyday drags need, which the big helm starts with:
+    /// a couple of conversions, the most useful tools, copy and move.
+    static let everyday: Set<Tool> = [
+        .toJPG, .toPNG, .pagesToPNG, .toMP4, .toGIF, .toM4A,
+        .compressImage, .removeBackground, .extractText, .mergePDF, .compressPDF, .compressVideo, .unzip,
+        .copyFiles, .moveTo, .airDrop, .zip,
+    ]
 
     /// Tools split where one wheel's run gives way to the next, for the big
     /// helm's shading when the order mixes them.
@@ -164,7 +186,9 @@ enum Tool: String, CaseIterable, Sendable {
 
     /// Every tool that fits, by wheel: what a shaken drag shows.
     static func sections(for files: [URL]) -> [(kind: WheelKind, tools: [Tool])] {
-        WheelKind.allCases.map { ($0, tools(for: $0, files: files)) }.filter { !$0.tools.isEmpty }
+        WheelKind.allCases.map { kind in
+            (kind, tools(for: kind, files: files) + (kind == .actions ? extras : []))
+        }.filter { !$0.tools.isEmpty }
     }
 }
 
