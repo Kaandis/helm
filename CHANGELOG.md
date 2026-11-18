@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 — 2026-11-18
+
+- Helm no longer disappears on its own: macOS 27 sometimes quit it as an idle background app; Helm now turns that quit down.
+
 ## 1.0.3 — 2026-11-05
 
 - Copy, Move to…, Copy to… and Duplicate: the everyday file moves, right on the ⌃ wheel (Copy to… on the big helm). Move to… and Copy to… remember the last folder.

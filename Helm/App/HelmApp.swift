@@ -57,6 +57,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let toast = Toast()
     private let shelf = Shelf()
 
+    /// macOS 27 can quit a running menu bar app as idle; turn that down.
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        QuitGuard.reply()
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         Prefs.registerDefaults()
         Prefs.migrateBigHelmTools()
